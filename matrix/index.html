@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+
+  <!-- www.phpied.com/conditional-comments-block-downloads/ -->
+  <!--[if IE]><![endif]-->
+
+  <title>The CSS3 Matrix Construction Set</title>
+  
+
+  <!-- CSS : implied media="all" -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="../shared/css/visibleIf.css">
+
+
+  <script type="text/javascript" src="../shared/js/helpers.js">
+  </script>
+  <script type="text/javascript" src="../shared/js/cssQuery-p.js">
+  </script>
+  <script type="text/javascript" src="../shared/js/config-2.0.js">
+  </script>
+  <script type="text/javascript" src="../shared/js/modernizr.com/modernizr-1.6pre.js">
+  </script>
+  
+  
+  <script type="text/javascript" src="../shared/js/visibleIf.js">
+  </script>
+  
+  <script type="text/javascript" src="../shared/js/weston.ruter.net/webforms2/webforms2_src.js">
+  </script>
+  
+  <script type="text/javascript" src="../shared/js/html5Widgets.js">
+  </script>
+  
+  <script type="text/javascript" src="../shared/js/jcoglan.com/sylvester.js">
+  </script>
+  <script type="text/javascript" src="../shared/js/cssSandpaper.js">
+  </script>
+  
+  
+  
+  <script type="text/javascript" src="../shared/js/DragDropHelpers-1.1.js"></script>
+
+ 
+  
+  <script type="text/javascript" src="js/solveMatrix.js">
+  </script>
+
+</head>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+
+<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
+
+<div id="exampleBlurb">
+	<h1>The Matrix Construction Set</h1>
+		<p>
+				This tool will allow developer to do pixel perfect CSS3 Transforms by dragging and dropping
+				objects on the screen (or filling out the form below).  The red box is the object before transformation, the green one is the box after
+				transformaton.  You can drag the red box around as well as resize it using the resizer widget in the bottom
+				right corner.  You can also transform the green object by dragging the three control points
+				around the grid.
+				<a href="http://www.useragentman.com/blog/2011/01/07/css3-matrix-transform-for-the-mathematically-challenged/">Back to User Agent Man CSS3 Matrrix Transform Article </a>
+			</p>
+		</div>
+
+
+<form id="matrixForm">
+  <fieldset id="input">
+  	<legend>Points</legend>
+	
+	
+	<!-- <input type="checkbox" name="do3D" id="do3D" value="true" /> I want to use 3D transform -->
+	
+	<table class="dataTable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>From</th>
+				<th>To</th>
+			</tr>
+			
+		</thead>
+		<!--<tbody >
+			<tr  id="i" repeat="template" repeat-start="3" repeat-max="3">
+				<th>Point</th>
+				<td>(<input type="text" name="from_[i]_x" required="required" />, <input type="text" name="from_[i]_y" required="required" />)</td>
+				<td>(<input type="text" name="to_[i]_x" required="required" />, <input type="text" name="to_[i]_y" required="required" />)</td>
+			</tr>
+		</tbody> --> 
+		<tbody>
+			<tr>
+				<th>Point</th>
+				<td>(<input required="required" name="from0x" type="text" value="10">, <input required="required" name="from0y" type="text" value="10">)</td>
+				<td>(<input required="required" name="to0x" type="text" value="100">, <input required="required" name="to0y" type="text" value="100">)</td>
+			</tr><tr>
+
+				<th>Point</th>
+				<td>(<output onforminput="this.value = from0x.value">-</output>, <input required="required" name="from1y" type="text" value="100">)</td>
+				<td>(<input required="required" name="to1x" type="text" value="100">, <input required="required" name="to1y" type="text" value="400">)</td>
+			</tr><tr>
+				<th>Point</th>
+
+				<td>(<input required="required" name="from2x" type="text" value="100">, <output onforminput="this.value = from0y.value">-</output>)</td>
+				<td>(<input required="required" name="to2x" type="text" value="400">, <input required="required" name="to2y" type="text" value="100">)</td>
+			</tr>
+			<tr class="visibleIf visibleIf-doNotReset" data-visibleif-rule="do3D == 'true'">
+				<th>Point</th>
+				<td>(<output onforminput="this.value = from0x.value">-</output>, <output onforminput="this.value = from0y.value">-</output>)</td>
+				<td>(<input required="required" name="to3x" type="text" value="400">, <input required="required" name="to3y" type="text" value="400">)</td>
+			</tr>
+		</tbody>
+
+
+	</table>
+	
+	<input type="submit" value="Submit Changes" />
+	<input type="reset" id="reset" value="Reset Form" />
+	
+  </fieldset>
+  
+  <fieldset id="answerFieldset">
+  	<legend>Answer</legend>
+  	<pre id="answer">
+  		
+  	</pre>
+  </fieldset>
+  
+  <fieldset >
+  	<legend>Diagram</legend>
+	<div id="grid">
+		
+		<!-- Begin original box -->
+		<div class="block" draggable="true" id="o1"><p>This is a block element.</p></div>
+		<img draggable="true" id="o1Resizer" class="resize" src="images/corner_resize.gif" />
+		<!-- End original box -->
+		
+		<div id="gridBlocks">
+			<div href="#" class="block"  id="o2"><p>This is a block element.</p></div>
+		</div>
+		
+		<div id="points">
+			<a id="point1" draggable="true" class="point"></a>
+			<a id="point2" draggable="true" class="point"></a>
+			<a id="point3" draggable="true" class="point"></a>
+			<a id="point4" draggable="true" class="point visibleIf" data-visibleif-rule="do3D == 'true'"></a>
+		</div>
+		
+	</div>
+	
+  </fieldset>
+</form>
+  <!-- Javascript at the bottom for fast page loading -->
+
+
+<div id="config">
+<!--
+	
+<config>
+	<solveMatrix>
+		<css><![CDATA[
+/* One transform entry for each different brower.  Firefox needs px in the last two entries */<br />
+-moz-transform:    @mozCSS@;<br />
+-webkit-transform: @webkitCSS@;<br />
+-o-transform:      @webkitCSS@;<br />
+transform:         @webkitCSS@;<br />
+<br />
+/* The transform origin is needed to place the transformed object in the right place. */<br />
+transform-origin: @origin@;<br />
+		]]></css>
+	</solveMatrix>
+</config> 
+-->
+</div>
+
+
+  <!--[if lt IE 7 ]>
+    <script src="js/dd_belatedpng.js?v=1"></script>
+  <![endif]-->
+
+<div id="unSupportedMessage">
+	<p>Unfortunately, this tool only works in browsers that support <code>transform-origin</code> 
+	(which doesn't include any present version of IE) and HTML5 Drag and Drop (which excludes Opera at the moment).
+	When I update <a href="http://www.useragentman.com/blog/csssandpaper-a-css3-javascript-library/">cssSandpaper</a> with a <code>transform-origin</code> polyfill, I'll refactor this tool to use it
+	so IE will work.  Opera users will have to wait for HTML5 Drag and Drop support in the future.</p>
+</div>
+
+  
+</body>
+</html>

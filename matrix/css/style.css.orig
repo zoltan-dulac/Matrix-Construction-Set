@@ -1,0 +1,157 @@
+@import url("/shared/css/useragentmanExample.css");
+
+body {
+	font-family: "Arial", sans-serif;
+	
+}
+
+form {
+	margin: 1em 1em 1em 1em;
+}
+
+h1 {
+	margin-left: 10px;
+	margin-bottom: 0px;
+	
+}
+
+#input {
+	width: 20em;
+	margin: 0 0.8em 0.3em 0;
+	float: left;
+}
+
+#answerFieldset {
+	margin-bottom: 0.3em;
+}
+
+#o1 {
+	text-decoration: none;
+}
+
+
+
+#input, #answerFieldset {
+	height: 10em;
+}
+
+output {
+	display: inline-block;
+	
+}
+
+.dataTable input, output {
+	
+	width: 3em;
+}
+
+table {
+	border: solid 1px black;
+	border-collapse: collapse;
+	
+}
+
+table th, table td {
+	padding: 0.3em;
+}
+
+table th {
+	background: #cccccc;
+	color: white;
+}
+
+table tbody td {
+	border: solid 1px black;
+}
+
+#grid {
+	background: url("/tests/cssSandpaper/images/background.gif") repeat scroll 0 0 white;
+	height: 800px;
+	position: relative;
+	overflow: hidden;
+	
+}
+
+.resize {
+	position: absolute;
+	top: 90px;
+	left: 90px;
+	z-index: 100;
+	cursor: se-resize !important;
+	
+}
+
+.block .resize img {
+	border: 0;
+	z-index: 10;
+}
+
+.block {
+	
+	background: #ffcccc;
+	color: black;
+	position: absolute;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.top {
+	z-index: 10;
+}
+
+.hidden #o2 {
+	display: none;
+}
+
+#o2 {
+	background: #ccffcc;
+}
+
+.block p {
+	margin: 0;
+	padding: 10px;
+}
+
+
+
+#points {
+	border: solid 1px green;
+	height: 800px;
+	position: relative;
+	
+}
+
+.point {
+	
+	background-image: url(../images/crosshair.png);
+	width: 35px;
+	height: 35px;
+	
+	margin-left: -17px;
+	margin-top: -17px;
+	position: absolute;
+	display: block;
+	z-index: 100;
+}
+
+body.ie6 #matrixForm,
+body.ie7 #matrixForm,
+body.ie8 #matrixForm,
+body.ie9 #matrixForm,
+html.no-draganddrop #matrixForm
+ {
+	display: none;
+}
+
+#unSupportedMessage {
+	display: none;
+}
+
+body.ie6 #unSupportedMessage,
+body.ie7 #unSupportedMessage,
+body.ie8 #unSupportedMessage,
+body.ie9 #unSupportedMessage,
+html.no-draganddrop #unSupportedMessage {
+	display: block;
+	margin: 1em;
+}
