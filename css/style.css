@@ -1,8 +1,8 @@
-@import url("../../shared/css/useragentmanExample.css");
+@import url("useragentmanExample.css");
 
 body {
 	font-family: "Arial", sans-serif;
-	
+
 }
 
 form {
@@ -12,7 +12,7 @@ form {
 h1 {
 	margin-left: 10px;
 	margin-bottom: 0px;
-	
+
 }
 
 #input {
@@ -37,18 +37,18 @@ h1 {
 
 output {
 	display: inline-block;
-	
+
 }
 
 .dataTable input, output {
-	
+
 	width: 3em;
 }
 
 table {
 	border: solid 1px black;
 	border-collapse: collapse;
-	
+
 }
 
 table th, table td {
@@ -65,11 +65,11 @@ table tbody td {
 }
 
 #grid {
-	background: url("../../tests/cssSandpaper/images/background.gif") repeat scroll 0 0 white;
+	background: url("../images/background.gif") repeat scroll 0 0 white;
 	height: 800px;
 	position: relative;
 	overflow: hidden;
-	
+
 }
 
 .resize {
@@ -78,7 +78,7 @@ table tbody td {
 	left: 90px;
 	z-index: 100;
 	cursor: se-resize !important;
-	
+
 }
 
 .block .resize img {
@@ -87,7 +87,7 @@ table tbody td {
 }
 
 .block {
-	
+
 	background: #ffcccc;
 	color: black;
 	position: absolute;
@@ -118,15 +118,15 @@ table tbody td {
 	border: solid 1px green;
 	height: 800px;
 	position: relative;
-	
+
 }
 
 .point {
-	
+
 	background-image: url(../images/crosshair.png);
 	width: 35px;
 	height: 35px;
-	
+
 	margin-left: -17px;
 	margin-top: -17px;
 	position: absolute;

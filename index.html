@@ -7,43 +7,43 @@
   <!--[if IE]><![endif]-->
 
   <title>The CSS3 Matrix Construction Set</title>
-  
+
 
   <!-- CSS : implied media="all" -->
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="../shared/css/visibleIf.css">
+  <link rel="stylesheet" href="css/visibleIf.css">
 
 
-  <script type="text/javascript" src="../shared/js/helpers.js">
+  <script type="text/javascript" src="js/helpers.js">
   </script>
-  <script type="text/javascript" src="../shared/js/cssQuery-p.js">
+  <script type="text/javascript" src="js/cssQuery-p.js">
   </script>
-  <script type="text/javascript" src="../shared/js/config-2.0.js">
+  <script type="text/javascript" src="js/config-2.0.js">
   </script>
-  <script type="text/javascript" src="../shared/js/modernizr.com/modernizr-1.6pre.js">
+  <script type="text/javascript" src="js/modernizr.com/modernizr-1.6pre.js">
   </script>
-  
-  
-  <script type="text/javascript" src="../shared/js/visibleIf.js">
-  </script>
-  
-  <script type="text/javascript" src="../shared/js/weston.ruter.net/webforms2/webforms2_src.js">
-  </script>
-  
-  <script type="text/javascript" src="../shared/js/html5Widgets.js">
-  </script>
-  
-  <script type="text/javascript" src="../shared/js/jcoglan.com/sylvester.js">
-  </script>
-  <script type="text/javascript" src="../shared/js/cssSandpaper.js">
-  </script>
-  
-  
-  
-  <script type="text/javascript" src="../shared/js/DragDropHelpers-1.1.js"></script>
 
- 
-  
+
+  <script type="text/javascript" src="js/visibleIf.js">
+  </script>
+
+  <script type="text/javascript" src="js/weston.ruter.net/webforms2/webforms2_src.js">
+  </script>
+
+  <script type="text/javascript" src="js/html5Widgets.js">
+  </script>
+
+  <script type="text/javascript" src="js/jcoglan.com/sylvester.js">
+  </script>
+  <script type="text/javascript" src="js/cssSandpaper.js">
+  </script>
+
+
+
+  <script type="text/javascript" src="js/DragDropHelpers-1.1.js"></script>
+
+
+
   <script type="text/javascript" src="js/solveMatrix.js">
   </script>
 
@@ -73,10 +73,10 @@
 <form id="matrixForm">
   <fieldset id="input">
   	<legend>Points</legend>
-	
-	
+
+
 	<!-- <input type="checkbox" name="do3D" id="do3D" value="true" /> I want to use 3D transform -->
-	
+
 	<table class="dataTable">
 		<thead>
 			<tr>
@@ -84,7 +84,7 @@
 				<th>From</th>
 				<th>To</th>
 			</tr>
-			
+
 		</thead>
 		<!--<tbody >
 			<tr  id="i" repeat="template" repeat-start="3" repeat-max="3">
@@ -92,7 +92,7 @@
 				<td>(<input type="text" name="from_[i]_x" required="required" />, <input type="text" name="from_[i]_y" required="required" />)</td>
 				<td>(<input type="text" name="to_[i]_x" required="required" />, <input type="text" name="to_[i]_y" required="required" />)</td>
 			</tr>
-		</tbody> --> 
+		</tbody> -->
 		<tbody>
 			<tr>
 				<th>Point</th>
@@ -118,41 +118,41 @@
 
 
 	</table>
-	
+
 	<input type="submit" value="Submit Changes" />
 	<input type="reset" id="reset" value="Reset Form" />
-	
+
   </fieldset>
-  
+
   <fieldset id="answerFieldset">
   	<legend>Answer</legend>
   	<pre id="answer">
-  		
+
   	</pre>
   </fieldset>
-  
+
   <fieldset >
   	<legend>Diagram</legend>
 	<div id="grid">
-		
+
 		<!-- Begin original box -->
 		<div class="block" draggable="true" id="o1"><p>This is a block element.</p></div>
 		<img draggable="true" id="o1Resizer" class="resize" src="images/corner_resize.gif" />
 		<!-- End original box -->
-		
+
 		<div id="gridBlocks">
 			<div href="#" class="block"  id="o2"><p>This is a block element.</p></div>
 		</div>
-		
+
 		<div id="points">
 			<a id="point1" draggable="true" class="point"></a>
 			<a id="point2" draggable="true" class="point"></a>
 			<a id="point3" draggable="true" class="point"></a>
 			<a id="point4" draggable="true" class="point visibleIf" data-visibleif-rule="do3D == 'true'"></a>
 		</div>
-		
+
 	</div>
-	
+
   </fieldset>
 </form>
   <!-- Javascript at the bottom for fast page loading -->
@@ -160,7 +160,7 @@
 
 <div id="config">
 <!--
-	
+
 <config>
 	<solveMatrix>
 		<css><![CDATA[
@@ -174,7 +174,7 @@ transform:         @webkitCSS@;<br />
 transform-origin: @origin@;<br />
 		]]></css>
 	</solveMatrix>
-</config> 
+</config>
 -->
 </div>
 
@@ -184,12 +184,12 @@ transform-origin: @origin@;<br />
   <![endif]-->
 
 <div id="unSupportedMessage">
-	<p>Unfortunately, this tool only works in browsers that support <code>transform-origin</code> 
+	<p>Unfortunately, this tool only works in browsers that support <code>transform-origin</code>
 	(which doesn't include any present version of IE) and HTML5 Drag and Drop (which excludes Opera at the moment).
 	When I update <a href="http://www.useragentman.com/blog/csssandpaper-a-css3-javascript-library/">cssSandpaper</a> with a <code>transform-origin</code> polyfill, I'll refactor this tool to use it
 	so IE will work.  Opera users will have to wait for HTML5 Drag and Drop support in the future.</p>
 </div>
 
-  
+
 </body>
 </html>
