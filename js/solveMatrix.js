@@ -119,6 +119,55 @@ var matrixSolver = new function () {
 			me.submitEvent(e);
 		}, 1)
 	}
+	
+	function get3DMatrix(x0, y0, x1, y1, x2, y2, x3, y3, w, h)
+    {
+      var v = [],
+          cx = 1024/2,
+          cy = 768/2,
+          cz = 983,
+          result,
+          i;
+ 
+      console.log('getMatrix3D', x0, y0, x1, y1, x2, y2, x3, y3, w, h);
+      v[0] = -(cx*x0*y2-cx*x2*y0-cx*x0*y3-cx*x1*y2+cx*x2*y1+cx*x3*y0+cx*x1*y3-cx*x3*y1-x0*x2*y1+x1*x2*y0+x0*x3*y1-x1*x3*y0+x0*x2*y3-x0*x3*y2-x1*x2*y3+x1*x3*y2)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / w;
+      v[1] = -(cy*x0*y2-cy*x2*y0-cy*x0*y3-cy*x1*y2+cy*x2*y1+cy*x3*y0+cy*x1*y3-cy*x3*y1-x0*y1*y2+x1*y0*y2+x0*y1*y3-x1*y0*y3+x2*y0*y3-x3*y0*y2-x2*y1*y3+x3*y1*y2)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / w;
+      v[2] = (cz*x0*y2-cz*x2*y0-cz*x0*y3-cz*x1*y2+cz*x2*y1+cz*x3*y0+cz*x1*y3-cz*x3*y1)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / w;
+      v[3] = 0;
+      v[4] = (cx*x0*y1-cx*x1*y0-cx*x0*y3+cx*x1*y2-cx*x2*y1+cx*x3*y0+cx*x2*y3-cx*x3*y2-x0*x1*y2+x1*x2*y0+x0*x1*y3-x0*x3*y1+x0*x3*y2-x2*x3*y0-x1*x2*y3+x2*x3*y1)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / h;
+      v[5] = (cy*x0*y1-cy*x1*y0-cy*x0*y3+cy*x1*y2-cy*x2*y1+cy*x3*y0+cy*x2*y3-cy*x3*y2-x0*y1*y2+x2*y0*y1+x1*y0*y3-x3*y0*y1+x0*y2*y3-x2*y0*y3-x1*y2*y3+x3*y1*y2)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / h;
+      v[6] = -(cz*x0*y1-cz*x1*y0-cz*x0*y3+cz*x1*y2-cz*x2*y1+cz*x3*y0+cz*x2*y3-cz*x3*y2)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / h;
+      v[7] = 0;
+      v[8] = 0;
+      v[9] = 0;
+      v[10] = 1;
+      v[11] = 0;
+      v[12] = x0;
+      v[13] = y0;
+      v[14] = 0;
+      v[15] = 1;
+ 
+      /* result = 'matrix3d(';
+ 
+      for (i = 0; i < 16; i++ ) {
+        result += v[i];
+ 
+        if ( i != 15 ) {
+          result += ', ';
+        }
+      }
+ 
+      result += ')'; */
+      
+      result =  $M([
+        [v[0], v[1], v[2], v[3]], 
+        [v[4], v[5], v[6], v[7]],  
+        [v[8], v[9], v[10], v[11]],
+        [v[12], v[13], v[14], v[15]] 
+      ]);
+ 
+      return result;
+    }
 
 	me.submitEvent = function (e, ignorePoints) {
 		var transform;
@@ -129,31 +178,82 @@ var matrixSolver = new function () {
 		
 		if (me.form['do3D'] && me.form['do3D'].checked) {
 			/* Uses info from http://www.physicsforums.com/showthread.php?t=360963 */
+			var fromPts = [
+    			     {
+    			         x: formEl("from0x"),
+    			         y: formEl("from0y")
+    			     },
+    			     {
+    			         x: formEl("from0x"),
+    			         y: formEl("from1y")
+    			     },
+    			     {
+    			         x: formEl("from2x"), 
+    			         y: formEl("from0y")
+    			     },
+    			     {
+    			         x: formEl("from2x"), 
+    			         y: formEl("from1y")
+    			     }
+			     ],
+			     toPts = [
+			         {
+			             x: formEl('to0x'),
+			             y: formEl('to0y')
+			         },
+			         {
+                         x: formEl('to1x'),
+                         y: formEl('to1y')
+                     },
+                     {
+                         x: formEl('to2x'),
+                         y: formEl('to2y')
+                     },
+                     {
+                         x: formEl('to3x'),
+                         y: formEl('to3y')
+                     }
+                 
+			     ]
+			
+			
+			
 			var E = $M([
-				[formEl("from0x"), formEl("from0y"), 1, 0, 0, 0, - formEl("from0x")*formEl("to0x"), -formEl("from0y")*formEl("to0x")],
-				[formEl("from0x"), formEl("from1y"), 1, 0, 0, 0, - formEl("from0x")*formEl("to1x"), -formEl("from1y")*formEl("to1x")],
-				[formEl("from2x"), formEl("from0y"), 1, 0, 0, 0, - formEl("from2x")*formEl("to2x"), -formEl("from0y")*formEl("to2x")],
-				[formEl("from2x"), formEl("from1y"), 1, 0, 0, 0, - formEl("from2x")*formEl("to3x"), -formEl("from1y")*formEl("to3x")],
-				[0, 0, 0, formEl("from0x"), formEl("from0y"), 1, - formEl("from0x")*formEl("to0y"), -formEl("from0y")*formEl("to0y")],
-				[0, 0, 0, formEl("from0x"), formEl("from1y"), 1, - formEl("from0x")*formEl("to1y"), -formEl("from1y")*formEl("to1y")],
-				[0, 0, 0, formEl("from2x"), formEl("from0y"), 1, - formEl("from2x")*formEl("to2y"), -formEl("from0y")*formEl("to2y")],
-				[0, 0, 0, formEl("from2x"), formEl("from1y"), 1, - formEl("from2x")*formEl("to3y"), -formEl("from1y")*formEl("to3y")] 
+				[fromPts[0].x, fromPts[0].y, 1, 0, 0, 0, - fromPts[0].x * toPts[0].x, - fromPts[0].y * toPts[0].x],
+				[0, 0, 0, fromPts[0].x, fromPts[0].y, 1, - fromPts[0].x * toPts[0].y, - fromPts[0].y * toPts[0].y],
+				[fromPts[1].x, fromPts[1].y, 1, 0, 0, 0, - fromPts[1].x * toPts[1].x, - fromPts[1].y * toPts[1].x],
+				[0, 0, 0, fromPts[1].x, fromPts[1].y, 1, - fromPts[1].x * toPts[1].y, - fromPts[1].y * toPts[1].y],
+				[fromPts[2].x, fromPts[2].y, 1, 0, 0, 0, - fromPts[2].x * toPts[2].x, - fromPts[2].y * toPts[2].x],
+				[0, 0, 0, fromPts[2].x, fromPts[2].y, 1, - fromPts[2].x * toPts[2].y, - fromPts[2].y * toPts[2].y],
+				[fromPts[3].x, fromPts[3].y, 1, 0, 0, 0, - fromPts[3].x * toPts[3].x, - fromPts[3].y * toPts[3].x],
+				[0, 0, 0, fromPts[3].x, fromPts[3].y, 1, - fromPts[3].x * toPts[3].y, - fromPts[3].y * toPts[3].y] 
 			
 			]);
 			
 			E_inv = E.inverse();
 			
-			var vector = $V([formEl("to0x"), formEl("to1x"), formEl("to2x"), formEl("to3x"), formEl("to0y"), formEl("to1y"), formEl("to2y"), formEl("to3y")]);
+			var vector = $V([toPts[0].x, toPts[0].y, toPts[1].x, toPts[1].y, toPts[2].x, toPts[2].y, toPts[3].x, toPts[3].y]);
 			
 			var r = E_inv.x(vector); 
 			
 			var transform = $M([
-				[r.e(1), r.e(2), r.e(3), r.e(4)], 
-				[r.e(5), r.e(6), r.e(7), r.e(8)], 
+				[r.e(1), r.e(2), 0, r.e(3)], 
+				[r.e(4), r.e(5), 0, r.e(6)], 
 				[0, 0, 1, 0],
-				[0, 0, 0, 1]
-			])
+				[r.e(7), r.e(8), 0, 1]
+			]);
 			
+			/* 
+			var w = $('o1').innerWidth,
+			    h = $('o1').innerHeight;
+			    
+			var transform = get3DMatrix(
+			    formEl("to0x"), formEl("to0y"),
+			    formEl("to1x"), formEl("to1y"),
+			    formEl("to2x"), formEl("to2y"),
+			    formEl("to3x"), formEl("to3y"),
+			    w, h)
+			*/
 			
 			if (!ignorePoints) { 
 				doTransform3D(transform);
@@ -162,7 +262,10 @@ var matrixSolver = new function () {
 		// do nothin;
 		} else {
 			/* Uses info from http://www.physicsforums.com/showthread.php?t=360963 */
-			var M = $M([[formEl("from0x"), formEl("from0y"), 1], [formEl("from0x"), formEl("from1y"), 1], [formEl("from2x"), formEl("from0y"), 1]]);
+			var M = $M(
+			    [[formEl("from0x"), formEl("from0y"), 1], 
+			     [formEl("from0x"), formEl("from1y"), 1], 
+			     [formEl("from2x"), formEl("from0y"), 1]]);
 			
 			var M_inv = M.inverse();
 			
@@ -209,7 +312,7 @@ var matrixSolver = new function () {
 		webkitMatrixCSS = matrixCSS.replace(/px/g, '');
 		
 		
-		origin = StringHelpers.sprintf("%0.1fpx %0.1fpx", - formEl('from0x'), - formEl('from0y'));
+		origin = StringHelpers.sprintf("%0.1fpx %0.1fpx 0", - formEl('from0x'), - formEl('from0y'));
 		//origin = "0 0"
 
 		$('answer').innerHTML = config.getScriptedValue(
@@ -268,8 +371,7 @@ var matrixSolver = new function () {
 		me.o1.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
 		o2.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
 		
-		alert(matrixCSS)
-		o2.el.style.WebkitTransform = matrixCSS;  
+		o2.el.style.transform = matrixCSS;  
 		
 		
 		
@@ -296,7 +398,7 @@ var matrixSolver = new function () {
 	
 	function drawPoints3D(transformMatrix) {
 		// Now vectors for the points
-		var fromPts = [ $V([formEl("from0x"), formEl("from0y"), 0, 1]),
+		/* var fromPts = [ $V([formEl("from0x"), formEl("from0y"), 0, 1]),
 						$V([formEl("from0x"), formEl("from1y"), 0, 1]),
 						$V([formEl("from2x"), formEl("from0y"), 0, 1]),
 						$V([formEl("from2x"), formEl("from1y"), 0, 1])];
@@ -307,7 +409,17 @@ var matrixSolver = new function () {
 			toP1[i] = transformMatrix.x(fromPts[i])
 			$('point' + (i+1)).style.left = toP1[i].e(1) + 'px';
 			$('point' + (i+1)).style.top = toP1[i].e(2) + 'px'
-		}
+		} */
+		
+		for (var i=0; i<4; i++) {
+            var pt = {
+                x: formEl("to" + i + "x"),
+                y: formEl("to" + i + "y")
+            }
+            
+            $('point' + (i+1)).style.left = pt.x + 'px';
+            $('point' + (i+1)).style.top = pt.y + 'px'
+        }
 	}
 }
 
@@ -431,13 +543,12 @@ function Block (el) {
 	}
 	
 	me.setTransform = function (origin, matrixCSS) {
-		//cssSandpaper.setTransformOrigin(me.el, origin)
-		me.el.style.MozTransformOrigin = origin; 
-		me.el.style.WebkitTransformOrigin = origin; 
-		me.el.style.OTransformOrigin = origin;
-		
-		cssSandpaper.setTransform(me.el, matrixCSS);
-	}
+        //cssSandpaper.setTransformOrigin(me.el, origin)
+        me.el.style.transformOrigin = origin;
+        
+        
+        me.el.style.transform = matrixCSS;
+    }
 	
 	
 	
@@ -475,14 +586,17 @@ function Point(pointEl) {
 		grid.draggingObject = EventHelpers.getEventTarget(e);
 		//CSSHelpers.addClass($('gridBlocks'), 'hidden');
 		grid.dragStartCoords = DragDropHelpers.getEventCoords(e);
+		console.log('start', grid.dragStartCoords);
 		$('o2').style.visibility = 'hidden'
-		grid.draggingObject.style.zIndex = '-1';
+		//grid.draggingObject.style.zIndex = '-1';
+		//grid.draggingObject.style.marginTop = '-1px';
 		e.dataTransfer.effectAllowed="move"; 
 	}
 	
 	
    function dragEvent(e) {
      	//CSSHelpers.removeClass($('gridBlocks'), 'hidden');
+     	console.log('drag', grid.dragStartCoords);
 		
    }
 

@@ -14,39 +14,6 @@
   <link rel="stylesheet" href="css/visibleIf.css">
 
 
-  <script type="text/javascript" src="js/helpers.js">
-  </script>
-  <script type="text/javascript" src="js/cssQuery-p.js">
-  </script>
-  <script type="text/javascript" src="js/config-2.0.js">
-  </script>
-  <script type="text/javascript" src="js/modernizr.com/modernizr-1.6pre.js">
-  </script>
-
-
-  <script type="text/javascript" src="js/visibleIf.js">
-  </script>
-
-  <script type="text/javascript" src="js/weston.ruter.net/webforms2/webforms2_src.js">
-  </script>
-
-  <script type="text/javascript" src="js/html5Widgets.js">
-  </script>
-
-  <script type="text/javascript" src="js/jcoglan.com/sylvester.js">
-  </script>
-  <script type="text/javascript" src="js/cssSandpaper.js">
-  </script>
-
-
-
-  <script type="text/javascript" src="js/DragDropHelpers-1.1.js"></script>
-
-
-
-  <script type="text/javascript" src="js/solveMatrix.js">
-  </script>
-
 </head>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -75,7 +42,7 @@
   	<legend>Points</legend>
 
 
-	<!-- <input type="checkbox" name="do3D" id="do3D" value="true" /> I want to use 3D transform -->
+	<label for="do3D"><input type="checkbox" name="do3D" id="do3D" value="true" /> I want to use 3D transform.</label>
 
 	<table class="dataTable">
 		<thead>
@@ -86,13 +53,7 @@
 			</tr>
 
 		</thead>
-		<!--<tbody >
-			<tr  id="i" repeat="template" repeat-start="3" repeat-max="3">
-				<th>Point</th>
-				<td>(<input type="text" name="from_[i]_x" required="required" />, <input type="text" name="from_[i]_y" required="required" />)</td>
-				<td>(<input type="text" name="to_[i]_x" required="required" />, <input type="text" name="to_[i]_y" required="required" />)</td>
-			</tr>
-		</tbody> -->
+		
 		<tbody>
 			<tr>
 				<th>Point</th>
@@ -111,7 +72,7 @@
 			</tr>
 			<tr class="visibleIf visibleIf-doNotReset" data-visibleif-rule="do3D == 'true'">
 				<th>Point</th>
-				<td>(<output onforminput="this.value = from0x.value">-</output>, <output onforminput="this.value = from0y.value">-</output>)</td>
+				<td>(<output onforminput="this.value = from2x.value">-</output>, <output onforminput="this.value = from1y.value">-</output>)</td>
 				<td>(<input required="required" name="to3x" type="text" value="400">, <input required="required" name="to3y" type="text" value="400">)</td>
 			</tr>
 		</tbody>
@@ -190,6 +151,35 @@ transform-origin: @origin@;<br />
 	so IE will work.  Opera users will have to wait for HTML5 Drag and Drop support in the future.</p>
 </div>
 
+	<script src="bower_components/html5Forms/shared/js/EventHelpers.js"></script>
+  <script src="bower_components/config/js/config.js">
+  </script>
+  <script src="js/modernizr.com/modernizr-1.6pre.js">
+  </script>
+
+
+  <script src="bower_components/visibleIf/shared/js/visibleIf.js">
+  </script>
+
+  <script src="bower_components/html5Forms/shared/js/weston.ruter.net/webforms2/webforms2_src.js">
+  </script>
+
+  <script src="bower_components/html5Forms/shared/js/html5Widgets.js">
+  </script>
+
+  <script src="js/jcoglan.com/sylvester.js">
+  </script>
+  <script src="js/cssSandpaper.js">
+  </script>
+
+
+
+  <script src="js/DragDropHelpers-1.1.js"></script>
+
+
+
+  <script src="js/solveMatrix.js">
+  </script>
 
 </body>
 </html>
