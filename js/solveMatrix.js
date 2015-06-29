@@ -52,7 +52,8 @@ var matrixSolver = new function () {
 		
 		if (me.form) {
 			EventHelpers.addEvent(me.form, 'submit', me.submitEvent);
-			EventHelpers.addEvent(me.form, 'reset', me.resetEvent)
+			EventHelpers.addEvent(me.form, 'reset', me.resetEvent);
+			EventHelpers.addEvent(me.form['do3D'], 'change', me.submitEvent);
 			me.submitEvent(null, false)
 		}
 		
