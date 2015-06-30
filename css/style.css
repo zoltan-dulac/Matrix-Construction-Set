@@ -23,6 +23,7 @@ h1 {
 
 #answerFieldset {
 	margin-bottom: 0.3em;
+	
 }
 
 #o1 {
@@ -105,6 +106,7 @@ table tbody td {
 
 #o2 {
 	background: #ccffcc;
+	pointer-events: none;
 }
 
 .block p {
@@ -136,8 +138,7 @@ table tbody td {
 
 body.ie6 #matrixForm,
 body.ie7 #matrixForm,
-body.ie8 #matrixForm,
-body.ie9 #matrixForm,
+body.ie8 #matrixForm
 html.no-draganddrop #matrixForm
  {
 	display: none;
@@ -149,8 +150,7 @@ html.no-draganddrop #matrixForm
 
 body.ie6 #unSupportedMessage,
 body.ie7 #unSupportedMessage,
-body.ie8 #unSupportedMessage,
-body.ie9 #unSupportedMessage,
+body.ie8 #unSupportedMessage
 html.no-draganddrop #unSupportedMessage {
 	display: block;
 	margin: 1em;
