@@ -155,3 +155,18 @@ html.no-draganddrop #unSupportedMessage {
 	display: block;
 	margin: 1em;
 }
+
+.no-pointer-events {
+  pointer-events: none;
+}
+
+html.no-csstransforms3d [for=do3D] {
+  display: none;
+}
+
+#no-3D {
+    display: none;
+}
+html.no-csstransforms3d #no-3D {
+  display: block;
+}

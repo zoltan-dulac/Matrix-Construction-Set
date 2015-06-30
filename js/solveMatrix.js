@@ -1,5 +1,9 @@
 /**
- * @author haw5855
+ * @author Zoltan Hawryluk
+ * 
+ * Issue with IE10: dragover event doesn't have clientX/Y or layerX/Y updating.
+ * https://connect.microsoft.com/IE/feedback/details/797359/datatransfer-in-dragover-dragenter-events-is-not-accessible-in-ie10
+ * http://msdn.developer-works.com/article/12301904/IE+10+dragover+event%3A+clientX,+clientY,+pageX,+pageY,+dataTransfer.getData+are+not+refreshed
  */
 
 
@@ -9,7 +13,7 @@ var $ = function(s){
 
 var matrixSolver = new function () {
     var me = this;
-    me.o1;
+    me.isIE10 = document.documentMode ? document.documentMode === 10 : false;
     
     var o2, resizer;
     var prop, pointsContainer;
@@ -20,7 +24,6 @@ var matrixSolver = new function () {
     me.transformProp = Modernizr.prefixed('transform');
     me.transformOriginProp = Modernizr.prefixed('transformOrigin');
     
-    console.log('!!!!' + me.transformOriginProp);
     
     me.init = function () {
         if (EventHelpers.hasPageLoadHappened(arguments)) {
@@ -76,7 +79,6 @@ var matrixSolver = new function () {
     
     function pointsMutationObserver(mutations) {
         mutations.forEach(function(mutation) {
-            console.log(mutation.type);
             if (mutation.type == 'childList' && mutation.removedNodes.length > 0) {
                 for (var i=0; i<mutation.removedNodes.length; i++) {
                     var node = mutation.removedNodes[i];
@@ -152,63 +154,10 @@ var matrixSolver = new function () {
         }, 1)
     }
     
-    function get3DMatrix(x0, y0, x1, y1, x2, y2, x3, y3, w, h)
-    {
-      var v = [],
-          cx = 1024/2,
-          cy = 768/2,
-          cz = 983,
-          result,
-          i;
- 
-      console.log('getMatrix3D', x0, y0, x1, y1, x2, y2, x3, y3, w, h);
-      v[0] = -(cx*x0*y2-cx*x2*y0-cx*x0*y3-cx*x1*y2+cx*x2*y1+cx*x3*y0+cx*x1*y3-cx*x3*y1-x0*x2*y1+x1*x2*y0+x0*x3*y1-x1*x3*y0+x0*x2*y3-x0*x3*y2-x1*x2*y3+x1*x3*y2)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / w;
-      v[1] = -(cy*x0*y2-cy*x2*y0-cy*x0*y3-cy*x1*y2+cy*x2*y1+cy*x3*y0+cy*x1*y3-cy*x3*y1-x0*y1*y2+x1*y0*y2+x0*y1*y3-x1*y0*y3+x2*y0*y3-x3*y0*y2-x2*y1*y3+x3*y1*y2)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / w;
-      v[2] = (cz*x0*y2-cz*x2*y0-cz*x0*y3-cz*x1*y2+cz*x2*y1+cz*x3*y0+cz*x1*y3-cz*x3*y1)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / w;
-      v[3] = 0;
-      v[4] = (cx*x0*y1-cx*x1*y0-cx*x0*y3+cx*x1*y2-cx*x2*y1+cx*x3*y0+cx*x2*y3-cx*x3*y2-x0*x1*y2+x1*x2*y0+x0*x1*y3-x0*x3*y1+x0*x3*y2-x2*x3*y0-x1*x2*y3+x2*x3*y1)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / h;
-      v[5] = (cy*x0*y1-cy*x1*y0-cy*x0*y3+cy*x1*y2-cy*x2*y1+cy*x3*y0+cy*x2*y3-cy*x3*y2-x0*y1*y2+x2*y0*y1+x1*y0*y3-x3*y0*y1+x0*y2*y3-x2*y0*y3-x1*y2*y3+x3*y1*y2)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / h;
-      v[6] = -(cz*x0*y1-cz*x1*y0-cz*x0*y3+cz*x1*y2-cz*x2*y1+cz*x3*y0+cz*x2*y3-cz*x3*y2)/(x1*y2-x2*y1-x1*y3+x3*y1+x2*y3-x3*y2) / h;
-      v[7] = 0;
-      v[8] = 0;
-      v[9] = 0;
-      v[10] = 1;
-      v[11] = 0;
-      v[12] = x0;
-      v[13] = y0;
-      v[14] = 0;
-      v[15] = 1;
- 
-      /* result = 'matrix3d(';
- 
-      for (i = 0; i < 16; i++ ) {
-        result += v[i];
- 
-        if ( i != 15 ) {
-          result += ', ';
-        }
-      }
- 
-      result += ')'; */
-      
-      result =  $M([
-        [v[0], v[1], v[2], v[3]], 
-        [v[4], v[5], v[6], v[7]],  
-        [v[8], v[9], v[10], v[11]],
-        [v[12], v[13], v[14], v[15]] 
-      ]);
- 
-      return result;
-    }
+    
     
     me.to3D = function(e) {
-        /* var rise = formEl('to0y') - formEl('to2y');
-        
-        console.log(formEl('to2x'), formEl('to1y'));
-        if (me.form['do3D'].checked) {
-            me.form['to3x'].value = formEl('to2x');
-            me.form['to3y'].value = formEl('to1y') - rise;
-        } */
+       
         
         me.submitEvent(e);
     }
@@ -410,7 +359,7 @@ var matrixSolver = new function () {
     
     
     function drawPoints(transformMatrix) {
-        console.log('drawPoints');
+        
         // Now vectors for the points
         var fromPts = [ $V([formEl("from0x"), formEl("from0y"), 1]),
                         $V([formEl("from0x"), formEl("from1y"), 1]),
@@ -422,7 +371,7 @@ var matrixSolver = new function () {
             toP1[i] = transformMatrix.x(fromPts[i])
             $('point' + (i+1)).style.left = toP1[i].e(1) + 'px';
             $('point' + (i+1)).style.top = toP1[i].e(2) + 'px';
-            console.log(toP1[i].e(1) + ', ' + toP1[i].e(2));
+            
         }
         
     }
@@ -474,6 +423,8 @@ function Block (el) {
     }
     
     function dragStartEvent(e) {
+        
+        console.log('dragStartTarget', e.target);
         e.dataTransfer.effectAllowed="move"; 
         
         // you must set some data in order to drag an arbitrary block element like a <div>
@@ -494,7 +445,7 @@ function Block (el) {
         var zIndex = CSSHelpers.getCurrentStyle(me.el).zIndex;
         
         CSSHelpers.addClass(me.el, 'top');
-        
+       
         
     }
     
@@ -517,6 +468,7 @@ function Block (el) {
     }
     
     function dragOverEvent(e) {
+        console.log('block drag over');
         e.dataTransfer.dropEffect = "move";
         
         switch(grid.draggingObject.id) {
@@ -558,7 +510,6 @@ function Block (el) {
     function dropEvent(e) {
         EventHelpers.preventDefault(e);
         EventHelpers.cancelBubble(e);
-        console.log('block drop')
     }
     
     
@@ -598,6 +549,7 @@ function Block (el) {
 function Point(pointEl) {
     var me = this;
     
+    me.el = pointEl;
     
     function init(){
             //EventHelpers.addEvent(pointEl, 'mousedown', mousedownEvent);
@@ -617,14 +569,14 @@ function Point(pointEl) {
     }
     
     function dragStartEvent(e) {
+        var coords = DragDropHelpers.getEventCoords(e);
         // you must set some data in order to drag an arbitrary block element like a <div>
         e.dataTransfer.setData('Text', 'ffff')
-        
+        console.log('dragStartEvent', coords.x , ',' , coords.y , ',' , e.layerX , ',' , e.layerY);
         
         grid.draggingObject = EventHelpers.getEventTarget(e);
         //CSSHelpers.addClass($('gridBlocks'), 'hidden');
-        grid.dragStartCoords = DragDropHelpers.getEventCoords(e);
-        console.log('start', grid.dragStartCoords);
+        grid.dragStartCoords = coords;
         $('o2').style.visibility = 'hidden'
         //grid.draggingObject.style.zIndex = '-1';
         //grid.draggingObject.style.marginTop = '-1px';
@@ -640,12 +592,25 @@ function Point(pointEl) {
 
     
     function dragEndEvent(e) {
-        
         //CSSHelpers.removeClass($('gridBlocks'), 'hidden');
         
         grid.draggingObject.zIndex = '';
-        console.log('point drag end event', document.getElementById('points').innerHTML);
         
+        /*
+         * IE10 has a bug which can't grab the coordinates from the grid's
+         * drag event, so we have to move the point here. We do it only
+         * for IE10 because most browsers will report bad numbers for 
+         * e.layerX/Y,
+         */
+        if (matrixSolver.isIE10) {
+            me.el.style.left = e.layerX + 'px';
+            me.el.style.top = e.layerY + 'px';
+            matrixSolver.setForm({
+                x: e.layerX,
+                y: e.layerY
+            });
+            matrixSolver.submitEvent(e, false);
+        }
         EventHelpers.preventDefault(e);
         EventHelpers.cancelBubble(e);
         
@@ -676,29 +641,37 @@ function Resizer(el, block) {
     }
     
     function dragStartEvent(e) {
+        console.log('resizer dragStart')
+        CSSHelpers.addClass($('o1'), 'no-pointer-events');
+        
         // you must set some data in order to drag an arbitrary block element like a <div>
         e.dataTransfer.setData('Text', 'ffff')
         
         //matrixSolver.o1.el.style.left = '-1000px'
         grid.draggingObject = el;
-        grid.draggingObject.style.zIndex = '-1';
+        
         $('o2').style.visibility = 'hidden';
         grid.dragStartCoords = DragDropHelpers.getEventCoords(e);
-        e.dataTransfer.effectAllowed="move"; 
+        e.dataTransfer.effectAllowed="move";
+        
         EventHelpers.cancelBubble(e);
+         console.log('dragStartEvent end')
     }
     
     function dragEvent(e) {
-        
+        console.log('resizer drag');
         // do nothing
         //EventHelpers.preventDefault(e);
         grid.coords = DragDropHelpers.getEventCoords(e);
     }
     
     function dragEndEvent(e) {
+        console.log('resizer dragend' ,e);
         //matrixSolver.o1.el.style.visibility = 'visible'
         grid.draggingObject.style.zIndex = '';
+        
         grid.dropEvent(e);
+        CSSHelpers.removeClass($('o1'), 'no-pointer-events');
     }
     
     me.resize = function(){
@@ -739,14 +712,16 @@ var grid = new function () {
     }
     
     me.dragEnterEvent = function(e){
+        //console.log('grid drag enter event');
         EventHelpers.preventDefault(e);
     }
     
     me.dragOverEvent = function (e) {
         
         e.dataTransfer.dropEffect = "move";
-        me.coords = DragDropHelpers.getEventCoords(e);
-        
+        me.coords = DragDropHelpers.getEventCoords(e); 
+        console.log('dragOverEvent ' + e.screenX); //DebugHelpers.getProperties(e));
+        //console.log('grid drag over event ' + me.draggingObject.id + ' ' + me.coords.x + ', ' + me.coords.y);
         switch (me.draggingObject.id) {
             case "o1Resizer":
             
@@ -786,6 +761,8 @@ var grid = new function () {
                     y: me.coords.y
                 }
         }
+        
+         
         
         if (me.draggingObject.id != 'o1Resizer') {
             //alert(DebugHelpers.getProperties(moveCoords))

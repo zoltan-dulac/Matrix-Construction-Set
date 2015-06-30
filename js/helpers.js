@@ -983,3 +983,36 @@ function RGBColor(color_string){
     
     
 }
+
+var DebugHelpers = new function () {
+
+    var me = this;
+      
+    /**
+     * Get all properties and methods in any javascript object and place them inside a 
+     * string.  Useful for debugging, especially in IE.
+     * 
+     * @param {Object} obj - a javascript object.
+     * @param {Object} objName - used to display an object name before properties and methods
+     *      in the string.  Optional.
+     * @return {String} - a string containing the properties of the object
+     */
+    me.getProperties = function (obj, objName)
+    {
+        var result = ""
+        
+        if (!obj) {
+            return result;
+        }
+        
+        for (var i in obj)
+        {
+            try {
+                result += objName + "." + i.toString() + " = " + obj[i] + ", \n";
+            } catch (ex) {
+                // nothing
+            }
+        }
+        return result
+    }
+}

@@ -29,6 +29,8 @@ var DragDropHelpers = new function () {
 	
 	var cachedShowVisualCues = null;
 	
+	var isIE10 = document.documentMode ? document.documentMode === 10 : false;
+	
 	/*
 	 * If set to true, this will show a draggable visual cue in IE and Chrome.
 	 */
@@ -99,6 +101,8 @@ var DragDropHelpers = new function () {
 			EventHelpers.addEvent(document.body, 'drag', dragEvent);
 		}
 		
+		
+		
 	}
 	
 	
@@ -113,6 +117,13 @@ var DragDropHelpers = new function () {
 			CSSHelpers.setOpacity(dragEffectNode, 50);
 			
 			currentlyDragged = this;
+			
+			ie10MouseStartCoords = ie10MouseCoords;
+			ie10DeltaLayerCoords = {
+			    x: ie10MouseStartCoords.x - e.layerX,
+			    y: ie10MouseStartCoords.y - e.layerY
+			}
+			
 		}
 	}
 	
@@ -181,6 +192,7 @@ var DragDropHelpers = new function () {
 	me.getEventCoords = function (e) {
 		
 		var r;
+		
 		if (e.layerX) {
 		
 			r = {
