@@ -13,9 +13,11 @@ var matrixSolver = new function () {
     var me = this;
     me.isIE10 = document.documentMode ? document.documentMode === 10 : false;
     me.isIE11 = document.documentMode ? document.documentMode === 11 : false;
+    me.blankImage = new Image();
+    me.blankImage.src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     
-    var o2, resizer;
-    var prop, pointsContainer;
+    var o2, resizer, prop, pointsContainer, dialogLinks,
+        maxURLLength = 2083;
     
     me.points = [];
     me.form = null;
@@ -53,14 +55,33 @@ var matrixSolver = new function () {
         
         grid.init();
         me.form = $('matrixForm');
+        dialogLinks = document.getElementsByClassName('dialog-link');
         
         if (me.form) {
+            populateForm();
+            console.log(me.form.htmlContent.value);
+            
+            // populate dialog text areas
+            if (location.hash === '#' || location.hash === '') {
+                populateLinkDialogs();
+            }
+            
+            console.log(me.form.htmlContent.value);
             EventHelpers.addEvent(me.form, 'submit', me.submitEvent);
             EventHelpers.addEvent(me.form, 'reset', me.resetEvent);
             EventHelpers.addEvent(me.form['do3D'], 'change', me.to3D);
-            me.submitEvent(null, false)
+            EventHelpers.addEvent(window, 'hashchange', hashChangeEvent);
+            me.submitEvent(null, false, true);
+            console.log(me.form.htmlContent.value);
         }
         
+        
+        
+        
+        
+        for (var i=0; i<dialogLinks.length; i++) {
+            EventHelpers.addEvent(dialogLinks[i], 'click', setDialogVisibility);
+        }
         
         // for some reason, IE10+ removes the grid points after dragging.
         // this puts them back in.
@@ -78,6 +99,19 @@ var matrixSolver = new function () {
         } else if (window.MutationEvent) {
             EventHelpers.addEvent(pointsContainer, 'DOMNodeRemoved', pointsChildRemovedEvent);
         }
+        
+        
+        // initialize dialogs in unsupported browsers
+        var dialog = document.querySelector('dialog');
+        if (!dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+        }
+    }
+    
+    function hashChangeEvent(e) {
+        console.log('hashchange');
+        populateForm();
+        me.submitEvent(null, false, true);
     }
     
     function pointsMutationObserver(mutations) {
@@ -101,6 +135,109 @@ var matrixSolver = new function () {
             pointsContainer.appendChild(node);
         }
     }
+    
+    function populateForm() {
+        
+        if (location.hash === '#' || location.hash === '') {
+            return;
+        }
+        
+        var qs = LZString.decompressFromEncodedURIComponent(location.hash.substring(1));
+        
+        setFormFromQS(me.form, qs);
+        
+        
+    }
+    
+    function populateLinkDialogs() {
+        me.form.htmlContent.value = $('o1').innerHTML;
+        me.form.cssContent.value = $('custom-html').innerHTML;
+    }
+    
+    function changeObjectHTMLandCSS() {
+        
+        $('o1').innerHTML = me.form.htmlContent.value;
+        $('o2').innerHTML = me.form.htmlContent.value;
+        $('custom-html').innerHTML = me.form.cssContent.value;
+    }
+    
+    function getStylesheetContent(node) {
+        var list, sheet = node.sheet;
+        if (typeof node.sheet.cssRules != "undefined")
+            list = sheet.cssRules;
+        else if (typeof node.sheet.rules != "undefined")
+            list = rules;
+            
+        return list;
+    }
+    
+    /* From http://stackoverflow.com/questions/316781/how-to-build-query-string-with-javascript */
+    function generateQueryString(form) {
+      if (!form || !form.elements) return;
+    
+      var serial = [], i, j, first;
+      var add = function (name, value) {
+        serial.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
+      }
+    
+      var elems = form.elements;
+      for (i = 0; i < elems.length; i += 1, first = false) {
+        if (elems[i].name.length > 0) { /* don't include unnamed elements */
+          switch (elems[i].type) {
+            case 'select-one': first = true;
+            case 'select-multiple':
+              for (j = 0; j < elems[i].options.length; j += 1)
+                if (elems[i].options[j].selected) {
+                  add(elems[i].name, elems[i].options[j].value);
+                  if (first) break; /* stop searching for select-one */
+                }
+              break;
+            case 'checkbox':
+            case 'radio': if (!elems[i].checked) break; /* else continue */
+            default: add(elems[i].name, elems[i].value); break;
+          }
+        }
+      }
+    
+      return serial.join('&');
+    }
+    
+    /* From https://lightignite.com/help-your-customers-fill-out-web-forms-with-url-query-strings/ */
+    function setFormFromQS(form, query) {
+        query = decodeURI(query);
+        //extract each field/value pair
+        query = query.split('&');
+        
+        //run through each pair
+        for (var i = 0; i < query.length; i++) {
+        
+          //split up the field/value pair into an array
+          var field = query[i].split("=");
+          
+          //target the field and assign its value
+          var name = field[0], value=decodeURIComponent(decodeURIComponent(field[1])).replace(/\+/g,  " ");
+          //console.log(name, value);
+          form[field[0]].value = value;
+        
+        }
+    }
+    
+    function setDialogVisibility(e) {
+        
+        if (e.target.nodeName === 'A') {
+            EventHelpers.preventDefault(e);
+        }
+        
+        var dialogID = e.target.getAttribute('data-dialog-id');
+        
+        
+        if (CSSHelpers.isMemberOfClass(e.target,'close')) {
+            document.getElementById(dialogID).close();
+        } else {
+            document.getElementById(dialogID).showModal();
+        }
+    }
+    
     
     function getMatrixProperty() {
         var style = document.body.style;
@@ -172,7 +309,7 @@ var matrixSolver = new function () {
         me.submitEvent(e);
     }
 
-    me.submitEvent = function (e, ignorePoints) {
+    me.submitEvent = function (e, ignorePoints, isLoadEvent) {
         var transform;
         
         if (e && e.type != 'reset') {
@@ -282,7 +419,16 @@ var matrixSolver = new function () {
         
     
         
-        
+         changeObjectHTMLandCSS();
+         
+         if (!isLoadEvent) {   
+            var qs = generateQueryString(me.form),
+                compress_qs = LZString.compressToEncodedURIComponent(qs);
+            console.log('setting hash');
+            EventHelpers.removeEvent(window, 'hashchange', hashChangeEvent);
+            location.hash=compress_qs;
+            EventHelpers.addEvent(window, 'hashchange', hashChangeEvent);
+        }
         
         
             
@@ -582,7 +728,13 @@ function Point(pointEl) {
     function dragStartEvent(e) {
         var coords = DragDropHelpers.getEventCoords(e);
         // you must set some data in order to drag an arbitrary block element like a <div>
-        e.dataTransfer.setData('Text', 'ffff')
+        e.dataTransfer.setData('Text', 'ffff');
+        
+        // get rid of drag effect
+        var dt = e.dataTransfer;
+        if (dt.setDragImage) {
+            dt.setDragImage(matrixSolver.blankImage, 0, 0);
+        }
         
         grid.draggingObject = EventHelpers.getEventTarget(e);
         //CSSHelpers.addClass($('gridBlocks'), 'hidden');

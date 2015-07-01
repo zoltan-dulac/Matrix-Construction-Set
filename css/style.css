@@ -33,7 +33,7 @@ h1 {
 
 
 #input, #answerFieldset {
-	height: 13em;
+	height: 14em;
 }
 
 output {
@@ -46,6 +46,15 @@ output {
 	width: 3em;
 }
 
+.dataTable textarea {
+  width: 50em;
+  height: 10em;
+}
+
+#content-dialog input {
+  width: 50em;
+}
+
 table {
 	border: solid 1px black;
 	border-collapse: collapse;
@@ -54,6 +63,10 @@ table {
 
 table th, table td {
 	padding: 0.3em;
+}
+
+table th, table td, table input {
+  font-size: 0.7em;
 }
 
 table th {
@@ -65,13 +78,7 @@ table tbody td {
 	border: solid 1px black;
 }
 
-#grid {
-	background: url("../images/background.gif") repeat scroll 0 0 white;
-	height: 800px;
-	position: relative;
-	overflow: hidden;
 
-}
 
 .resize {
 	position: absolute;
@@ -169,4 +176,8 @@ html.no-csstransforms3d [for=do3D] {
 }
 html.no-csstransforms3d #no-3D {
   display: block;
+}
+
+dialog[open] {
+  top: 20px !important;
 }

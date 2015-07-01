@@ -1,0 +1,35 @@
+
+/* Uncomment if you want to override the default styles */
+#o1 {
+  background: #ffcccc;
+visibility: hidden;
+}
+
+#o2 {
+  background: #ccccff;
+}
+
+#o1, #o2 {
+  background: url('http://media3.giphy.com/media/fJ1eCBjmMoEvu/giphy.gif') black;
+  color: white;
+  font-size: inherit;
+  width: 400px;
+  height: 400px;
+} 
+
+.container {
+  padding: 10px;
+}
+
+/* CSS for the grid */
+#grid {
+  background: url("https://upload.wikimedia.org/wikipedia/commons/6/68/Sony_Television_Set.JPG")  0 0 white;
+  background-size: 100%;
+  height: 1600px;
+  position: relative;
+  overflow: hidden;
+
+}
+
+
+  
