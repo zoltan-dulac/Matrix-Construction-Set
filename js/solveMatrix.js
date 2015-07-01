@@ -1,9 +1,7 @@
 /**
  * @author Zoltan Hawryluk
  * 
- * Issue with IE10: dragover event doesn't have clientX/Y or layerX/Y updating.
- * https://connect.microsoft.com/IE/feedback/details/797359/datatransfer-in-dragover-dragenter-events-is-not-accessible-in-ie10
- * http://msdn.developer-works.com/article/12301904/IE+10+dragover+event%3A+clientX,+clientY,+pageX,+pageY,+dataTransfer.getData+are+not+refreshed
+ * BUGS: IE10 needs to do a mutation event hack like the IE11 mutation events fix.
  */
 
 
@@ -14,6 +12,7 @@ var $ = function(s){
 var matrixSolver = new function () {
     var me = this;
     me.isIE10 = document.documentMode ? document.documentMode === 10 : false;
+    me.isIE11 = document.documentMode ? document.documentMode === 11 : false;
     
     var o2, resizer;
     var prop, pointsContainer;
@@ -63,17 +62,21 @@ var matrixSolver = new function () {
         }
         
         
-        // for some reason, IE11 removes the grid points after dragging.
+        // for some reason, IE10+ removes the grid points after dragging.
         // this puts them back in.
         
         pointsContainer = document.querySelector('#points');
         
+        // IE11 and newer browsers
         if (window.MutationObserver) {
             var observer = new MutationObserver(pointsMutationObserver);
             
             observer.observe(pointsContainer, {
                 childList: true
             });
+        // IE9-10 and older browsers.
+        } else if (window.MutationEvent) {
+            EventHelpers.addEvent(pointsContainer, 'DOMNodeRemoved', pointsChildRemovedEvent);
         }
     }
     
@@ -81,16 +84,23 @@ var matrixSolver = new function () {
         mutations.forEach(function(mutation) {
             if (mutation.type == 'childList' && mutation.removedNodes.length > 0) {
                 for (var i=0; i<mutation.removedNodes.length; i++) {
-                    var node = mutation.removedNodes[i];
-                    if (node.nodeType === 1) {
-                        pointsContainer.appendChild(node);
-                    }
+                    pointsChildRemovedHelper(mutation.removedNodes[i]);
                 };
-                
             }
         });
     }
     
+    function pointsChildRemovedEvent(e) {
+        setTimeout(function () {
+            pointsChildRemovedHelper(e.target);
+        }, 1);
+    }
+    
+    function pointsChildRemovedHelper (node) {
+        if (node.nodeType === 1) {
+            pointsContainer.appendChild(node);
+        }
+    }
     
     function getMatrixProperty() {
         var style = document.body.style;
@@ -289,7 +299,7 @@ var matrixSolver = new function () {
         webkitMatrixCSS = matrixCSS.replace(/px/g, '');
         
         
-        origin = StringHelpers.sprintf("%0.1fpx %0.1fpx 0", - formEl('from0x'), - formEl('from0y'));
+        origin = StringHelpers.sprintf("%0.1fpx %0.1fpx", - formEl('from0x'), - formEl('from0y'));
         //origin = "0 0"
 
         $('answer').innerHTML = config.getScriptedValue(
@@ -348,7 +358,8 @@ var matrixSolver = new function () {
         me.o1.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         o2.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         
-        o2.el.style[matrixSolver.transformProp] = matrixCSS;  
+        o2.el.style[matrixSolver.transformProp] = matrixCSS;
+        o2.el.style[matrixSolver.transformOriginProp] = origin;
         
         
         
@@ -572,13 +583,15 @@ function Point(pointEl) {
         var coords = DragDropHelpers.getEventCoords(e);
         // you must set some data in order to drag an arbitrary block element like a <div>
         e.dataTransfer.setData('Text', 'ffff')
-        console.log('dragStartEvent', coords.x , ',' , coords.y , ',' , e.layerX , ',' , e.layerY);
         
         grid.draggingObject = EventHelpers.getEventTarget(e);
         //CSSHelpers.addClass($('gridBlocks'), 'hidden');
         grid.dragStartCoords = coords;
-        $('o2').style.visibility = 'hidden'
-        //grid.draggingObject.style.zIndex = '-1';
+        // Need pointer-events? 
+        if (!Modernizr.csspointerevents || matrixSolver.isIE11) {
+            $('o2').style.visibility = 'hidden'
+            grid.draggingObject.style.zIndex = '-1';
+        }
         //grid.draggingObject.style.marginTop = '-1px';
         e.dataTransfer.effectAllowed="move"; 
     }
@@ -593,14 +606,21 @@ function Point(pointEl) {
     
     function dragEndEvent(e) {
         //CSSHelpers.removeClass($('gridBlocks'), 'hidden');
-        
+        console.log('dragEndEvent', e);
         grid.draggingObject.zIndex = '';
         
         /*
          * IE10 has a bug which can't grab the coordinates from the grid's
          * drag event, so we have to move the point here. We do it only
          * for IE10 because most browsers will report bad numbers for 
-         * e.layerX/Y,
+         * e.layerX/Y.
+         * 
+         * More information about this bug is here:
+         * 
+         * https://connect.microsoft.com/IE/feedback/details/797359/datatransfer-in-dragover-dragenter-events-is-not-accessible-in-ie10
+         * http://msdn.developer-works.com/article/12301904/IE+10+dragover+event%3A+clientX,+clientY,+pageX,+pageY,+dataTransfer.getData+are+not+refreshed
+         * 
+         * Note that this bug is *only* in IE10 (not 9, not 11 ... *only* 10).
          */
         if (matrixSolver.isIE10) {
             me.el.style.left = e.layerX + 'px';
@@ -720,7 +740,7 @@ var grid = new function () {
         
         e.dataTransfer.dropEffect = "move";
         me.coords = DragDropHelpers.getEventCoords(e); 
-        console.log('dragOverEvent ' + e.screenX); //DebugHelpers.getProperties(e));
+        
         //console.log('grid drag over event ' + me.draggingObject.id + ' ' + me.coords.x + ', ' + me.coords.y);
         switch (me.draggingObject.id) {
             case "o1Resizer":
@@ -728,16 +748,19 @@ var grid = new function () {
                 matrixSolver.o1.resizer.resize();
                 break;
             case "o1":
-                $('o2').style.visibility = 'hidden'
+                $('o2').style.visibility = 'hidden';
                 break;
             default:
-                $('o2').style.visibility = 'hidden' 
-                $('o2').style.zIndex = -1;
+                /* Need pointer-events */
+                if (!Modernizr.csspointerevents || matrixSolver.isIE11) {
+                    $('o2').style.visibility = 'hidden';
+                    $('o2').style.zIndex = -1;
+                } 
                 matrixSolver.setForm(me.coords);
         }
         
         
-        matrixSolver.submitEvent(e, true);
+        matrixSolver.submitEvent(e, false);
         
         
         EventHelpers.cancelBubble(e);
@@ -746,7 +769,8 @@ var grid = new function () {
     }
     
     me.dropEvent = function (e) {
-        console.log('grid drop event');
+        
+        
         switch (me.draggingObject.id) {
             case "o1Resizer":
             case "o1":
@@ -756,6 +780,7 @@ var grid = new function () {
                 }
                 break;
             default:
+            console.log(me.coords);
                 moveCoords = {
                     x: me.coords.x,
                     y: me.coords.y
