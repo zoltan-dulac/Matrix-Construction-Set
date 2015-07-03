@@ -7,6 +7,7 @@ body {
 
 form {
 	margin: 1em 1em 1em 1em;
+	position: relative;
 }
 
 h1 {
@@ -18,12 +19,30 @@ h1 {
 #input {
 	width: 20em;
 	margin: 0 0.8em 0.3em 0;
-	float: left;
+	left: 0;
+	position: absolute;
 }
 
 #answerFieldset {
 	margin-bottom: 0.3em;
-	
+	right: 0;
+	width: calc(100% - 24.4em);
+	min-width: 20px;
+	position: absolute;
+	overflow-x: hidden;
+}
+
+#answerFieldset pre {
+  width: 100%;
+  overflow-x: scroll;
+  height: 93%;
+  margin: 0;
+}
+
+#diagram {
+  position: relative;
+  top: 16em;
+  margin: 0;
 }
 
 #o1 {
@@ -179,5 +198,8 @@ html.no-csstransforms3d #no-3D {
 }
 
 dialog[open] {
+  position: fixed;
   top: 20px !important;
+  border: solid 1px #666;
+  box-shadow: 10px 10px 10px rgba(0,0,0,0.6);
 }

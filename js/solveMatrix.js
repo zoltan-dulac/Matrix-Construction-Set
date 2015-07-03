@@ -7,7 +7,7 @@
 
 var $ = function(s){
     return document.getElementById(s);
-}
+};
 
 var matrixSolver = new function () {
     var me = this;
@@ -59,25 +59,19 @@ var matrixSolver = new function () {
         
         if (me.form) {
             populateForm();
-            console.log(me.form.htmlContent.value);
             
             // populate dialog text areas
-            if (location.hash === '#' || location.hash === '') {
+            if (location.hash === '#') {
                 populateLinkDialogs();
             }
             
-            console.log(me.form.htmlContent.value);
             EventHelpers.addEvent(me.form, 'submit', me.submitEvent);
             EventHelpers.addEvent(me.form, 'reset', me.resetEvent);
             EventHelpers.addEvent(me.form['do3D'], 'change', me.to3D);
             EventHelpers.addEvent(window, 'hashchange', hashChangeEvent);
             me.submitEvent(null, false, true);
-            console.log(me.form.htmlContent.value);
+            
         }
-        
-        
-        
-        
         
         for (var i=0; i<dialogLinks.length; i++) {
             EventHelpers.addEvent(dialogLinks[i], 'click', setDialogVisibility);
@@ -106,12 +100,21 @@ var matrixSolver = new function () {
         if (!dialog.showModal) {
             dialogPolyfill.registerDialog(dialog);
         }
-    }
+    };
     
     function hashChangeEvent(e) {
-        console.log('hashchange');
+        
+        // uncheck do3D, just in case 
+        me.form.do3D.checked = false;
         populateForm();
+        
+        if (location.hash === '#' || location.hash === '') {
+            console.log('reset', me.form);
+            me.form.reset();
+            
+        }
         me.submitEvent(null, false, true);
+       
     }
     
     function pointsMutationObserver(mutations) {
@@ -138,7 +141,7 @@ var matrixSolver = new function () {
     
     function populateForm() {
         
-        if (location.hash === '#' || location.hash === '') {
+        if (location.hash === '#' ) {
             return;
         }
         
@@ -172,13 +175,17 @@ var matrixSolver = new function () {
     }
     
     /* From http://stackoverflow.com/questions/316781/how-to-build-query-string-with-javascript */
-    function generateQueryString(form) {
+    function generateQueryString(form, doEncode) {
       if (!form || !form.elements) return;
     
       var serial = [], i, j, first;
       var add = function (name, value) {
-        serial.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
-      }
+          if (doEncode) {
+              serial.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
+          } else {
+              serial.push(name + '=' + value);
+          }
+      };
     
       var elems = form.elements;
       for (i = 0; i < elems.length; i += 1, first = false) {
@@ -202,9 +209,11 @@ var matrixSolver = new function () {
       return serial.join('&');
     }
     
-    /* From https://lightignite.com/help-your-customers-fill-out-web-forms-with-url-query-strings/ */
-    function setFormFromQS(form, query) {
-        query = decodeURI(query);
+    /* Idea from https://lightignite.com/help-your-customers-fill-out-web-forms-with-url-query-strings/ */
+    function setFormFromQS(form, query, doDecode) {
+        if (!query) {
+            return;
+        }
         //extract each field/value pair
         query = query.split('&');
         
@@ -215,9 +224,20 @@ var matrixSolver = new function () {
           var field = query[i].split("=");
           
           //target the field and assign its value
-          var name = field[0], value=decodeURIComponent(decodeURIComponent(field[1])).replace(/\+/g,  " ");
+          var name = field[0], 
+              value=doDecode?decodeURIComponent(decodeURIComponent(field[1])).replace(/\+/g,  " "):field[1],
+              field = form[name];
+          
           //console.log(name, value);
-          form[field[0]].value = value;
+          if (field) {
+              if (field.type === 'radio' || field.type === 'checkbox') {
+                if (field.value === value) {
+                    field.checked = true;
+                }
+              } else {
+                field.value = value;
+              }
+          }
         
         }
     }
@@ -251,12 +271,6 @@ var matrixSolver = new function () {
         return null;
     }
     
-    
-    
-    
-    
-    
-    
     me.setForm = function (coords) {
         var id = grid.draggingObject.id;
         var xEl, yEl;
@@ -272,7 +286,7 @@ var matrixSolver = new function () {
             case "o1Resizer":
                 xEl = me.form['from2x'];
                 yEl = me.form['from1y'];
-                me.form['from2x'].value = coords.x
+                me.form['from2x'].value = coords.x;
                 me.form['from1y'].value = coords.y;
                 offset = 10;
                 break;
@@ -288,7 +302,7 @@ var matrixSolver = new function () {
         EventHelpers.fireEvent(me.form['from0x'], 'change');
         EventHelpers.fireEvent(me.form['from0y'], 'change');
         
-    }
+    };
     
     
     function formEl(name) {
@@ -296,10 +310,11 @@ var matrixSolver = new function () {
     }
     
     me.resetEvent = function (e) {
+        location.hash="";
         setTimeout(function(e) {
-            me.submitEvent(e);
-        }, 1)
-    }
+            me.submitEvent(e, false, true);
+        }, 1);
+    };
     
     
     
@@ -309,7 +324,7 @@ var matrixSolver = new function () {
         me.submitEvent(e);
     }
 
-    me.submitEvent = function (e, ignorePoints, isLoadEvent) {
+    me.submitEvent = function (e, ignorePoints, noSetHash) {
         var transform;
         
         if (e && e.type != 'reset') {
@@ -384,8 +399,7 @@ var matrixSolver = new function () {
             ]);
             
             
-            
-            if (!ignorePoints) { 
+            if (!ignorePoints) {
                 doTransform3D(transform);
                 drawPoints3D(transform);
             }
@@ -415,16 +429,16 @@ var matrixSolver = new function () {
                 doTransform(transform);
                 drawPoints(transform);
             }
-        }
+        };
         
     
         
          changeObjectHTMLandCSS();
          
-         if (!isLoadEvent) {   
+         if (!noSetHash) {   
             var qs = generateQueryString(me.form),
                 compress_qs = LZString.compressToEncodedURIComponent(qs);
-            console.log('setting hash');
+            
             EventHelpers.removeEvent(window, 'hashchange', hashChangeEvent);
             location.hash=compress_qs;
             EventHelpers.addEvent(window, 'hashchange', hashChangeEvent);
@@ -432,7 +446,7 @@ var matrixSolver = new function () {
         
         
             
-    }
+    };
     
     function doTransform(m) {
         var matrixCSS, webkitMatrixCSS;
@@ -440,7 +454,7 @@ var matrixSolver = new function () {
         matrixCSS = StringHelpers.sprintf(
             "matrix(%.3f, %.3f, %.3f, %.3f, %.3fpx, %.3fpx)", 
             m.e(1,1), m.e(2,1), m.e(1,2), m.e(2,2), m.e(1,3)  , m.e(2,3) 
-        )
+        );
         
         webkitMatrixCSS = matrixCSS.replace(/px/g, '');
         
@@ -482,7 +496,7 @@ var matrixSolver = new function () {
                 sb.append(StringHelpers.sprintf('%.8f', m.e(j, i)));
                 
                 if (i!=4 || j !=4) {
-                    sb.append(', ')
+                    sb.append(', ');
                 }
                 
                 if ( counter % 4 == 0 && counter != 16) {
@@ -508,7 +522,6 @@ var matrixSolver = new function () {
         o2.el.style[matrixSolver.transformOriginProp] = origin;
         
         
-        
     }
     
     
@@ -525,7 +538,7 @@ var matrixSolver = new function () {
         
         var toP1 = [];
         for (var i=0; i<3; i++) {
-            toP1[i] = transformMatrix.x(fromPts[i])
+            toP1[i] = transformMatrix.x(fromPts[i]);
             $('point' + (i+1)).style.left = toP1[i].e(1) + 'px';
             $('point' + (i+1)).style.top = toP1[i].e(2) + 'px';
             
@@ -534,40 +547,26 @@ var matrixSolver = new function () {
     }
     
     function drawPoints3D(transformMatrix) {
-        // Now vectors for the points
-        /* var fromPts = [ $V([formEl("from0x"), formEl("from0y"), 0, 1]),
-                        $V([formEl("from0x"), formEl("from1y"), 0, 1]),
-                        $V([formEl("from2x"), formEl("from0y"), 0, 1]),
-                        $V([formEl("from2x"), formEl("from1y"), 0, 1])];
-            
         
-        var toP1 = [];
-        for (var i=0; i<4; i++) {
-            toP1[i] = transformMatrix.x(fromPts[i])
-            $('point' + (i+1)).style.left = toP1[i].e(1) + 'px';
-            $('point' + (i+1)).style.top = toP1[i].e(2) + 'px'
-        } */
         
         for (var i=0; i<4; i++) {
             var pt = {
                 x: formEl("to" + i + "x"),
                 y: formEl("to" + i + "y")
-            }
+            };
             
             $('point' + (i+1)).style.left = pt.x + 'px';
             $('point' + (i+1)).style.top = pt.y + 'px'
         }
     }
-}
+};
 
 function Block (el) {
     var me = this;
     var para = el.getElementsByTagName('p')[0]
     me.el = el;
-    var zIndex;
+    var zIndex = 1;
     me.resizer = null;
-    
-    
     
     function init(){
         
@@ -599,8 +598,8 @@ function Block (el) {
         grid.draggingObject = me.el; //EventHelpers.getEventTarget(e);
         
         
-        var zIndex = CSSHelpers.getCurrentStyle(me.el).zIndex;
-        
+        //var zIndex = CSSHelpers.getComputedStyle(me.el).zIndex;
+        me.el.style.zIndex = -1000;
         CSSHelpers.addClass(me.el, 'top');
        
         
@@ -752,13 +751,11 @@ function Point(pointEl) {
    function dragEvent(e) {
         //CSSHelpers.removeClass($('gridBlocks'), 'hidden');
         
-        
    }
 
     
     function dragEndEvent(e) {
         //CSSHelpers.removeClass($('gridBlocks'), 'hidden');
-        console.log('dragEndEvent', e);
         grid.draggingObject.zIndex = '';
         
         /*
@@ -781,8 +778,9 @@ function Point(pointEl) {
                 x: e.layerX,
                 y: e.layerY
             });
-            matrixSolver.submitEvent(e, false);
+            
         }
+        matrixSolver.submitEvent(e, false);
         EventHelpers.preventDefault(e);
         EventHelpers.cancelBubble(e);
         
@@ -817,7 +815,7 @@ function Resizer(el, block) {
         CSSHelpers.addClass($('o1'), 'no-pointer-events');
         
         // you must set some data in order to drag an arbitrary block element like a <div>
-        e.dataTransfer.setData('Text', 'ffff')
+        e.dataTransfer.setData('Text', 'ffff');
         
         //matrixSolver.o1.el.style.left = '-1000px'
         grid.draggingObject = el;
@@ -858,9 +856,9 @@ function Resizer(el, block) {
         
         
         
-        matrixSolver.submitEvent();
+        //matrixSolver.submitEvent();
         
-    }
+    };
     
     init();
 }
@@ -874,19 +872,19 @@ var grid = new function () {
     me.hiddenObjects = [];
     me.coords = null;
     
-    me.init = function (){
+    me.init = function () {
         me.el = $('grid');
         
         /* These are events for the object to be dropped */
         EventHelpers.addEvent(me.el, 'dragover', me.dragOverEvent, true);
         EventHelpers.addEvent(me.el, 'dragenter', me.dragEnterEvent, true);
         EventHelpers.addEvent(me.el, 'drop', me.dropEvent, false);
-    }
+    };
     
     me.dragEnterEvent = function(e){
         //console.log('grid drag enter event');
         EventHelpers.preventDefault(e);
-    }
+    };
     
     me.dragOverEvent = function (e) {
         
@@ -908,17 +906,17 @@ var grid = new function () {
                     $('o2').style.visibility = 'hidden';
                     $('o2').style.zIndex = -1;
                 } 
-                matrixSolver.setForm(me.coords);
+                
         }
         
-        
-        matrixSolver.submitEvent(e, false);
+        matrixSolver.setForm(me.coords);
+        matrixSolver.submitEvent(e, false, true);
         
         
         EventHelpers.cancelBubble(e);
         EventHelpers.preventDefault(e);
 
-    }
+    };
     
     me.dropEvent = function (e) {
         
@@ -929,14 +927,13 @@ var grid = new function () {
                 moveCoords = {
                     x: me.coords.x - me.dragStartCoords.x,
                     y: me.coords.y - me.dragStartCoords.y
-                }
+                };
                 break;
             default:
-            console.log(me.coords);
                 moveCoords = {
                     x: me.coords.x,
                     y: me.coords.y
-                }
+                };
         }
         
          
@@ -953,6 +950,7 @@ var grid = new function () {
             obj.style.visibility = 'visible';
             //obj.style.zIndex = "";
         }
+        
         me.hiddenObjects = [];
         
         matrixSolver.setForm(moveCoords);
@@ -967,22 +965,22 @@ var grid = new function () {
         
         EventHelpers.cancelBubble(e);
         EventHelpers.preventDefault(e);
-    }
+    };
     
     me.hideAll = function () {
         $('o1').style.visibility = 'hidden';
         $('o2').style.visibility = 'hidden';
-    }
+    };
     
     me.showAll = function () {
         
         $('o1').style.visibility = 'visible';
         $('o2').style.visibility = 'visible';
         
-    }
+    };
     
     
-}
+};
 
 EventHelpers.addPageLoadEvent('matrixSolver.init');
 

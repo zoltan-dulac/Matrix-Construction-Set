@@ -51,7 +51,7 @@
 <div id="exampleBlurb">
 	<h1>The Matrix Construction Set</h1>
 		<p>
-				This tool will allow developer to do pixel perfect CSS3 Transforms by dragging and dropping
+				<a href="#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8iB2a2ywgFgCYA6ATgA5Ww9AKylshSkIBshHtzn96rQu2LcUNQgUK966kOKhDCIjNnYFhamuaiTWrPexbsr4ApJV6wE3lznzWRWVVFABnOABjAA0qMMiATVjwiIB1KhJkgAl0lABLYEIoAGUEACMsXJgAAgBhAAsAQwA7AHMkULzgdigAJXakaoAxEDgsFDqYLAAbGpAmmCR5qAAeAAcAPgAVOtzQqt2qqdyANyQqhbxq3KaqhqrSqZAIgGsqpCmkLEXqmEbqxr2pSQi3OcGaoTQIy+wCqCFC1xa5zqZywDXguTwYGAAAoAJRVNAIJoRGC5OacABQFOWpTgVQA9OsaXTGRTtgcDnMpuRblVgJ8QJwqlUICAqk0QNUgbcpg1RkhgFTlvSNigIqFQrN5t8oAAqKoAbwppRAeAAtPCAF4IgBc9xG-LgZpNeAA3BSAL5U+n6gCqxOwX3m+zQVXIIAQVQA7s0fmKQKc4HB8mdfmd+WgGggptVQjByB89rr6RSAMT6Q0U4WlBovFqYInAO2ltBoCLtiKuqrHXa5Uq5I75u07YD8prur1lkDsSvV2vPesRppNqqljsRVsT736qv6ooRODAm6hRqrM4pu6mLC7qoTGCrG30+lRl+cKNIUrwhYRED8mAIGhkwaKZQk4H8sHpH9+UgjUYNCC1T3aThVjqVYql3Ety0IAAaVdp1ne550XRs7QQOApmxAByO8HyfaFcgaMBOBaXIUPIMDsHpeiGnpNAAClCCQGoACEACssAAWRAABRY4EHpFi2OY3I0Eo-EHnnd1hR-R44DtKMdgWLSCTmGALVyS0kDta5kWTGBjKjfJfjtVgcBwVY3SrW8kFyFoJhctyPPdE04EdM0wWAXI4TtIQcAAUgZKpeDi90EyQOA0EeKM7R7eEHiQLcp0IG0gUhQ9cPLdgSqQMqziNKof21eY7QAIha91VhAL8ySaO0Gk-EApgAgqKRoB8kpS41JRoLA7WS91kz8mA7TNdhJo+NBlqqVbJprOsG2XaymlsypgoddLwoaSLoqqNbEtiybJyKqpVgq-C0Pql6usqHq+oGoajK8yF5jNTMKm5VrZjI3J0qqAA5JAoxa3CWqh5N0uRqosDmLrVlrEbhWBsyrSsqpXKCryjiaJAzWRXz-KqQhjLGu0ImAiJsQe7bGd4dy8FxZmkEuM1gN83qGu+dKHKcuo7WIeL3VROAWPFnBGb5wqOPmBprlhz68dHW11YpycfVqIoihMuk0yqet8iqYsyztmFPr2hcDpXMiKJa3JUTaUJ6RgY5OFE1YWha-EqjVtWDMqM4JXCpAzzRYyQsdO0JWp4y6aWuXJECzzhU67q5jtQ9ZVJU5jLSjKsuHfIx3dT0qS8zowGKMoKmqTJNgkgAZW5l3NoogA">This tool</a> will allow developer to do pixel perfect CSS3 Transforms by dragging and dropping
 				objects on the screen (or filling out the form below).  The red box is the object before transformation, the green one is the box after
 				transformaton.  You can drag the red box around as well as resize it using the resizer widget in the bottom
 				right corner.  You can also transform the green object by dragging the three control points
@@ -60,8 +60,8 @@
 			</p>
 		</div>
 
-
 <form id="matrixForm">
+
   <fieldset id="input">
   	<legend>Points</legend>
 
@@ -121,7 +121,7 @@
 	</table>
 
 	<input type="submit" value="Submit Changes" />
-	<input type="reset" id="reset" value="Reset Form" />
+	<input type="reset" id="resetButton" value="Reset Form" />
   <a data-dialog-id="content-dialog" class="dialog-link" href="#">Change Content</a>
   </fieldset>
 
@@ -132,7 +132,7 @@
   	</pre>
   </fieldset>
 
-  <fieldset >
+  <fieldset id="diagram">
   	<legend>Diagram</legend>
 	<div id="grid">
 
@@ -155,24 +155,8 @@
 	</div>
 
   </fieldset>
-  <dialog id="content-dialog" closed>
-    <table class="dataTable">
-    	<tbody>
-    		<tr>
-	    		<th>HTML Content</th>
-	    		<td><textarea class="visibleIf-submitIfInvisible" name="htmlContent" placeholder="Enter HTML for the content block here."></textarea></td>
-    		</tr>
-    		<tr>
-    			<th>CSS Content</th>
-    			<td><textarea class="visibleIf-submitIfInvisible" name="cssContent" placeholder="Enter CSS for the content block here."></textarea></td>
-    		</tr>
-    	</tbody>
-    </table>
-    
-    <input type="submit" data-dialog-id="content-dialog" class="dialog-link close visibleIf-submitIfInvisible" value="Submit HTML and CSS" />
-    <a href="#" data-dialog-id="content-dialog" class="dialog-link close">Cancel</a>
-  </dialog>
-</form>
+  
+
   <!-- Javascript at the bottom for fast page loading -->
 
 
@@ -208,6 +192,45 @@ transform-origin: @origin@;<br />
 	so IE will work.  Opera users will have to wait for HTML5 Drag and Drop support in the future.</p>
 </div>
 
+<dialog id="content-dialog" closed>
+    <table class="dataTable">
+    	<tbody>
+    		<tr>
+	    		<th>HTML Content</th>
+	    		<td><textarea class="visibleIf-submitIfInvisible" name="htmlContent" placeholder="Enter HTML for the content block here."><p>This is a block element.</p></textarea></td>
+    		</tr>
+    		<tr>
+    			<th>CSS Content</th>
+    			<td><textarea class="visibleIf-submitIfInvisible" name="cssContent" placeholder="Enter CSS for the content block here.">
+/* Uncomment if you want to override the default styles */
+#o1 {
+	background: #ffcccc;
+}
+
+#o2 {
+	background: #ccccff;
+}
+
+#o1, #o2 {
+	font-size: inherit;
+} 
+
+/* CSS for the grid */
+#grid {
+	background: url("images/background.gif") repeat scroll 0 0 white;
+	height: 800px;
+	position: relative;
+	overflow: hidden;
+
+}
+    			</textarea></td>
+    		</tr>
+    	</tbody>
+    </table>
+    
+    <input type="submit" data-dialog-id="content-dialog" class="dialog-link close visibleIf-submitIfInvisible" value="Submit HTML and CSS" />
+    <a href="#" data-dialog-id="content-dialog" class="dialog-link close">Cancel</a>
+  </dialog>
 	<script src="bower_components/html5Forms/shared/js/EventHelpers.js"></script>
   <script src="bower_components/config/js/config.js">
   </script>
@@ -238,6 +261,6 @@ transform-origin: @origin@;<br />
 
   <script src="js/solveMatrix.js">
   </script>
-
+</form>
 </body>
 </html>

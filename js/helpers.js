@@ -984,6 +984,83 @@ function RGBColor(color_string){
     
 }
 
+var BrowserHelpers = new function () {
+    var me = this;
+    
+    /**
+     * Get the the amount of pixels the window has been scrolled from the top.  If there is no
+     * vertical scrollbar, this function return 0.
+     *
+     * @return {int} - the amount of pixels the window has been scrolled to the right, in pixels.
+     */
+    me.getScrollX = function (myWindow)
+    {
+        var myDocument;
+        
+        if (myWindow) {
+            myDocument = myWindow.document;
+        } else {
+            myWindow = window;
+            myDocument = document;
+        }
+        
+        // All except that I know of except IE
+        if (myWindow.pageXOffset != null) {
+            return myWindow.pageXOffset;
+        // IE 6.x strict
+        } else if (myDocument.documentElement != null 
+                && myDocument.documentElement.scrollLeft !="0px" 
+                    && myDocument.documentElement.scrollLeft !=0)  {
+            return myDocument.documentElement.scrollLeft;
+        // all other IE
+        } else if (myDocument.body != null && 
+            myDocument.body.scrollLeft != null) {
+            return myDocument.body.scrollLeft;
+        // if for some reason none of the above work, this should.
+        } else if (myWindow.scrollX != null) {
+            return myWindow.scrollX;
+        } else {
+            return null;
+        }
+    };
+    
+    /**
+     * Get the the amount of pixels the window has been scrolled to the right.  If there is no
+     * horizontal scrollbar, this function return 0.
+     * 
+     * @return {int} - the amount of pixels the window has been scrolled to the right, in pixels.
+     */
+    me.getScrollY = function(myWindow)
+    {
+        var myDocument;
+        
+        if (myWindow) {
+            myDocument = myWindow.document;
+        } else {
+            myWindow = window;
+            myDocument = document;
+        }
+        
+        // All except that I know of except IE
+        if (myWindow.pageYOffset != null) {
+            return myWindow.pageYOffset;
+        // IE 6.x strict
+        } else if (myDocument.documentElement != null
+                && myDocument.documentElement.scrollTop !="0px" 
+                    && myDocument.documentElement.scrollTop !=0) {
+            return myDocument.documentElement.scrollTop;
+        // all other IE
+        } else if (myDocument.body && myDocument.body.scrollTop != null) { 
+            return myDocument.body.scrollTop;
+        // if for some reason none of the above work, this should.
+        } else if (myWindow.scrollY != null) { 
+            return myWindow.scrollY;
+        } else {
+            return null;
+        }
+    };
+};
+
 var DebugHelpers = new function () {
 
     var me = this;
