@@ -67,7 +67,8 @@ var matrixSolver = new function () {
             
             EventHelpers.addEvent(me.form, 'submit', me.submitEvent);
             EventHelpers.addEvent(me.form, 'reset', me.resetEvent);
-            EventHelpers.addEvent(me.form['do3D'], 'change', me.to3D);
+            EventHelpers.addEvent(me.form['do3D'], 'change', me.submitEvent);
+            EventHelpers.addEvent(me.form['showVendorPrefixes'], 'change', me.submitEvent);
             EventHelpers.addEvent(window, 'hashchange', hashChangeEvent);
             me.submitEvent(null, false, true);
             
@@ -96,23 +97,30 @@ var matrixSolver = new function () {
         
         
         // initialize dialogs in unsupported browsers
-        var dialog = document.querySelector('dialog');
-        if (!dialog.showModal) {
-            dialogPolyfill.registerDialog(dialog);
+        var dialog = document.querySelectorAll('dialog');
+        if (!dialog[0].showModal) {
+            for (var i=0; i<dialog.length; i++) {
+                dialogPolyfill.registerDialog(dialog[i]);
+            }
         }
     };
     
     function hashChangeEvent(e) {
-        
+        console.log('begin');
         // uncheck do3D, just in case 
         me.form.do3D.checked = false;
         populateForm();
+        
+        var dialog = $('info-dialog')
+        
+        
         
         if (location.hash === '#' || location.hash === '') {
             console.log('reset', me.form);
             me.form.reset();
             
         }
+        console.log('submit');
         me.submitEvent(null, false, true);
        
     }
@@ -453,7 +461,8 @@ var matrixSolver = new function () {
     };
     
     function doTransform(m) {
-        var matrixCSS, webkitMatrixCSS;
+        var matrixCSS, webkitMatrixCSS,
+            scriptedToken = me.form.showVendorPrefixes.checked?'solveMatrix.css.vendor':'solveMatrix.css.noVendor';
             
         matrixCSS = StringHelpers.sprintf(
             "matrix(%.3f, %.3f, %.3f, %.3f, %.3fpx, %.3fpx)", 
@@ -467,7 +476,7 @@ var matrixSolver = new function () {
         //origin = "0 0"
 
         $('answer').innerHTML = config.getScriptedValue(
-            'solveMatrix.css', 
+            scriptedToken, 
             {
                 mozCSS:    matrixCSS,
                 webkitCSS: webkitMatrixCSS,
@@ -490,7 +499,8 @@ var matrixSolver = new function () {
     function doTransform3D(m) {
         var matrixCSS;
         var sb = new StringBuffer(),
-            counter = 0;
+            counter = 0,
+            scriptedToken = me.form.showVendorPrefixes.checked?'solveMatrix3d.css.vendor':'solveMatrix3d.css.noVendor';
         
         sb.append('matrix3d(');
         
@@ -516,7 +526,7 @@ var matrixSolver = new function () {
         origin = StringHelpers.sprintf("%fpx %fpx 0px", - formEl('from0x'), - formEl('from0y'));
         
         $('answer').innerHTML = config.getScriptedValue(
-            'solveMatrix3d.css', 
+            scriptedToken, 
             {
                 mozCSS:    matrixCSS,
                 webkitCSS: matrixCSS,
@@ -996,6 +1006,48 @@ var grid = new function () {
     
 };
 
-EventHelpers.addPageLoadEvent('matrixSolver.init');
+var showhide = new function () {
+    var me = this,
+        els , links;
+        
+    me.init = function () {
+        els = document.getElementsByClassName('showhide');
+        links = document.querySelectorAll('.showhide-link');
+        
+        var i;
+        for (i=0; i<links.length; i++) {
+            EventHelpers.addEvent(links[i], 'click', linkClickEvent);
+        }
+    }
+    
+    function linkClickEvent(e) {
+        var target = e.currentTarget,
+            id = DOMHelpers.getAttributeValue(target, 'data-showhide-id'),
+            el = $(id);
+        console.log(target, id, el);
+        EventHelpers.preventDefault(e);
+        if (el) {
+            if (CSSHelpers.isMemberOfClass(el, 'show')) {
+                
+                CSSHelpers.addClass(el, 'hide');
+                CSSHelpers.removeClass(el, 'show');
+                
+                CSSHelpers.addClass(target, 'hide');
+                CSSHelpers.removeClass(target, 'show');
+            } else {
+                CSSHelpers.addClass(el, 'show');
+                CSSHelpers.removeClass(el, 'hide');
+                
+                CSSHelpers.addClass(target, 'show');
+                CSSHelpers.removeClass(target, 'hide');
+            }
+        }
+            
+        
+        
+    }
+};
 
+EventHelpers.addPageLoadEvent('matrixSolver.init');
+EventHelpers.addPageLoadEvent('showhide.init');
 

@@ -50,17 +50,17 @@
 <form id="matrixForm">
 	<header>
 		<h1>The Matrix Construction Set</h1>
-		<div id="no-3D">Your browser doesn't support 3D transforms.</div>
-		<label for="do3D"><input type="checkbox" name="do3D" id="do3D" value="true" /> I want to use 3D transforms.</label>
-		<a data-dialog-id="info-dialog" class="dialog-link" href="#">What is this?</a>
+		
+		<a href="#" class="showhide-link hide" data-showhide-id="input"><span class="show-label">Show Advanced Settings</span><span class="hide-label">Hide Advanced Settings</span></a>
+		<a href="#" data-dialog-id="info-dialog" class="dialog-link" href="#">What is this?</a>
 	</header>
 
 
   
-  <fieldset id="input">
+  <fieldset id="input" class="showhide hide">
   	<legend>Advanced</legend>
 
-	
+	  
 	
   
 	<table class="dataTable">
@@ -114,7 +114,9 @@
 
 
 	</table>
-
+	<div id="no-3D">Your browser doesn't support 3D transforms.</div>
+	<label for="do3D"><input type="checkbox" name="do3D" id="do3D" value="true" checked /> I want to use 3D transforms.</label>
+	<label for="showVendorPrefixes"><input type="checkbox" name="showVendorPrefixes" id="showVendorPrefixes" value="true" /> Show Vendor Prefixes</label>
 	<input type="submit" value="Submit Changes" />
 	<input type="reset" id="resetButton" value="Reset Form" />
   <a data-dialog-id="content-dialog" class="dialog-link" href="#">Change HTML and CSS</a>
@@ -160,7 +162,8 @@
 
 <config>
 	<solveMatrix>
-		<css><![CDATA[
+		<css>
+			<vendor><![CDATA[
 /* One transform entry for each different brower.  Firefox needs px in the last two entries */<br />
 -moz-transform:    @mozCSS@;<br />
 -webkit-transform: @webkitCSS@;<br />
@@ -174,10 +177,15 @@ transform:         @webkitCSS@;<br />
 -o-transform-origin:      @origin@;<br />
 -ms-transform-origin:     @origin@;<br />
 transform-origin:         @origin@;<br />
-		]]></css>
+			]]></vendor>
+			<noVendor><![CDATA[
+transform: @webkitCSS@;<br />
+transform-origin: @origin@;<br />
+		]]></noVendor></css>
 	</solveMatrix>
 	<solveMatrix3d>
-		<css><![CDATA[
+		<css>
+			<vendor><![CDATA[
 /* One transform entry for each different brower.      */<br />
 /* Note: there's no -ms-tranform entry, since IE9, which needs it, doesn't do 3D */<br />
 <br />
@@ -191,7 +199,11 @@ transform:         @webkitCSS@;<br />
 -webkit-transform-origin: @origin@;<br />
 -o-transform-origin:      @origin@;<br />
 transform-origin:         @origin@;<br />
-		]]></css>
+		]]></vendor>
+		<noVendor><![CDATA[
+transform: @webkitCSS@;<br />
+transform-origin: @origin@;<br />
+		]]></noVendor></css>
 	</solveMatrix3d>
 </config>
 -->
@@ -269,7 +281,13 @@ transform-origin:         @origin@;<br />
 						Fit HTML element inside a poster.
 					</a></li>
 				</ul>
-				<a href="http://www.useragentman.com/blog/2011/01/07/css3-matrix-transform-for-the-mathematically-challenged/">Back to User Agent Man CSS3 Matrrix Transform Article </a>
+				
+				<h2>References</h2>
+				<ul>
+					<li><a href="http://www.useragentman.com/blog/2011/01/07/css3-matrix-transform-for-the-mathematically-challenged/">CSS3 Matrix Transform For The Mathematically Challenged</a>
+				</li>
+				</ul>
+				<a href="#" data-dialog-id="info-dialog" class="dialog-link close">Close</a>
 			</p>
   </dialog>
 	<script src="bower_components/html5Forms/shared/js/EventHelpers.js"></script>

@@ -322,7 +322,7 @@ CSSHelpers = new function(){
         
         
         if (obj.className) {
-            obj.className = oldClassName.replace(re, '');
+            obj.className = oldClassName.replace(re, ' ');
         }
         
         
