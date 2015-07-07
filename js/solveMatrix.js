@@ -154,12 +154,14 @@ var matrixSolver = new function () {
     
     function populateLinkDialogs() {
         me.form.htmlContent.value = $('o1').innerHTML;
+        console.log('populate', $('custom-html').innerHTML);
         me.form.cssContent.value = $('custom-html').innerHTML;
     }
     
     function changeObjectHTMLandCSS() {
         
         $('o1').innerHTML = me.form.htmlContent.value;
+        console.log(me.form.htmlContent.value);
         $('o2').innerHTML = me.form.htmlContent.value;
         $('custom-html').innerHTML = me.form.cssContent.value;
     }
@@ -180,10 +182,11 @@ var matrixSolver = new function () {
     
       var serial = [], i, j, first;
       var add = function (name, value) {
+          var uriValue = value.replace(/&/g, '%26').replace(/=/g, '%3d');
           if (doEncode) {
-              serial.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
+              serial.push(encodeURIComponent(name) + '=' + encodeURIComponent(uriValue));
           } else {
-              serial.push(name + '=' + value);
+              serial.push(name + '=' + uriValue);
           }
       };
     
@@ -227,6 +230,9 @@ var matrixSolver = new function () {
           var name = field[0], 
               value=doDecode?decodeURIComponent(decodeURIComponent(field[1])).replace(/\+/g,  " "):field[1],
               field = form[name];
+              
+          // make sure the uriEncoded values are changed back
+          value=value.replace(/%26/g, '&').replace(/%3d/g, '=');
           
           //console.log(name, value);
           if (field) {
@@ -249,7 +255,7 @@ var matrixSolver = new function () {
         }
         
         var dialogID = e.target.getAttribute('data-dialog-id');
-        
+        console.log(dialogID);
         
         if (CSSHelpers.isMemberOfClass(e.target,'close')) {
             document.getElementById(dialogID).close();
@@ -319,8 +325,6 @@ var matrixSolver = new function () {
     
     
     me.to3D = function(e) {
-       
-        
         me.submitEvent(e);
     }
 
@@ -511,7 +515,15 @@ var matrixSolver = new function () {
         
         origin = StringHelpers.sprintf("%fpx %fpx 0px", - formEl('from0x'), - formEl('from0y'));
         
-        $('answer').innerHTML = StringHelpers.sprintf("transform: %s; <br />transform-origin: %s", matrixCSS, origin);
+        $('answer').innerHTML = config.getScriptedValue(
+            'solveMatrix3d.css', 
+            {
+                mozCSS:    matrixCSS,
+                webkitCSS: matrixCSS,
+                origin:    origin
+            }
+        );
+        //StringHelpers.sprintf("transform: %s; <br />transform-origin: %s", matrixCSS, origin);
         
         
         
@@ -600,6 +612,7 @@ function Block (el) {
         
         //var zIndex = CSSHelpers.getComputedStyle(me.el).zIndex;
         me.el.style.zIndex = -1000;
+        me.resizer.el.style.visibility = 'hidden';
         CSSHelpers.addClass(me.el, 'top');
        
         
@@ -619,6 +632,7 @@ function Block (el) {
         //grid.draggingO.style.zIndex = '';
         
         me.el.style.zIndex = zIndex;
+        me.resizer.el.style.visibility = 'visible';
         me.resizer.move();
         
     }
@@ -634,7 +648,7 @@ function Block (el) {
             case 'o1':
                 if (me.el.id == 'o2') {
                     me.el.style.visibility = 'hidden';
-                    
+                    matrixSolver.o1.resizer.el.style.visibility = 'hidden';
                 }
                 break;
         }

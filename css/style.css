@@ -1,8 +1,38 @@
-@import url("useragentmanExample.css");
+/*
+ * Matrix font from http://www.fontspace.com/gyusan/matrix
+ */
+@import "fonts/matrix/stylesheet.css";
 
-body {
+body, form {
 	font-family: "Arial", sans-serif;
+  padding: 0;
+  margin: 0 !important;
+}
 
+header {
+  margin: 0;
+  background: black;
+  color: white;
+  position: relative;
+}
+
+header h1 {
+    margin: 0;
+    padding: 5px;
+    font-weight: normal;
+    font-family: 'hinted-MATRIX', serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    text-shadow: 5px 0 15px #16fb16, -5px 0 15px #16fb16;
+    display: inline-block;
+    margin-right: 20px;
+    
+}
+
+header a, header label, header div {
+    color: #16fb16;
+    display: inline-block;
+    margin-right: 20px;
 }
 
 form {
@@ -10,39 +40,36 @@ form {
 	position: relative;
 }
 
+fieldset {
+  margin: 10px;
+}
+
+
 h1 {
 	margin-left: 10px;
 	margin-bottom: 0px;
 
 }
 
-#input {
-	width: 20em;
-	margin: 0 0.8em 0.3em 0;
-	left: 0;
-	position: absolute;
-}
+
 
 #answerFieldset {
 	margin-bottom: 0.3em;
 	right: 0;
-	width: calc(100% - 24.4em);
-	min-width: 20px;
-	position: absolute;
-	overflow-x: hidden;
+	
+	overflow: hidden;
+	padding-right: 0;
 }
 
 #answerFieldset pre {
-  width: 100%;
-  overflow-x: scroll;
+  overflow: scroll;
   height: 93%;
   margin: 0;
 }
 
 #diagram {
   position: relative;
-  top: 16em;
-  margin: 0;
+ 
 }
 
 #o1 {
@@ -52,7 +79,12 @@ h1 {
 
 
 #input, #answerFieldset {
-	height: 14em;
+	
+}
+
+#answerFieldset {
+  height: 7em;
+  
 }
 
 output {
@@ -72,13 +104,34 @@ output {
 
 #content-dialog input {
   width: 50em;
+  margin-right: 10px;
+}
+
+label, a {
+  font-size: 0.8em;
+  text-decoration: none;
+}
+
+a[data-dialog-id="content-dialog"] {
+  display: block;
+  margin-top: 1em;
 }
 
 table {
-	border: solid 1px black;
+  border: solid 1px black;
 	border-collapse: collapse;
-
+	
 }
+
+#input table {
+  float: left;
+  margin-right: 10px;
+}
+
+dialog table {
+  margin-bottom: 10px;
+}
+
 
 table th, table td {
 	padding: 0.3em;
@@ -93,8 +146,14 @@ table th {
 	color: white;
 }
 
+table tbody th {
+  text-align: right;
+  padding-right: 10px;
+}
+
 table tbody td {
 	border: solid 1px black;
+	text-align: center;
 }
 
 
