@@ -866,6 +866,7 @@ function Resizer(el, block) {
         
         grid.dropEvent(e);
         CSSHelpers.removeClass($('o1'), 'no-pointer-events');
+        $('o2').style.visibility = 'visible';
     }
     
     me.resize = function(){
@@ -893,7 +894,6 @@ var grid = new function () {
     me.draggingObject = null;
     me.el = null;
     me.dragStartCoords = null;
-    me.hiddenObjects = [];
     me.coords = null;
     
     me.init = function () {
@@ -969,13 +969,7 @@ var grid = new function () {
             me.draggingObject.style.zIndex = "";
         }
         
-        for (var i=0; i<me.hiddenObjects.length; i++) {
-            var obj=me.hiddenObjects[i];
-            obj.style.visibility = 'visible';
-            //obj.style.zIndex = "";
-        }
         
-        me.hiddenObjects = [];
         
         matrixSolver.setForm(moveCoords);
         
