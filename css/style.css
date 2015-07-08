@@ -20,7 +20,7 @@ header {
   position: relative;
 }
 
-header h1 {
+h1 {
   margin: 0;
   padding: 5px;
   font-weight: normal;
@@ -30,6 +30,13 @@ header h1 {
   text-shadow: 5px 0 15px #16fb16, -5px 0 15px #16fb16;
   display: inline-block;
   margin-right: 20px;
+}
+
+dialog h1 {
+  font-size: 40px;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
 }
 
 header a, header label, header div, header input {
@@ -309,7 +316,7 @@ dialog .close-button {
 }
 
 dialog#info-dialog input.close {
-  margin: 0 auto;
+  margin: 1em auto 1em auto;
   display: block;
 }
 
