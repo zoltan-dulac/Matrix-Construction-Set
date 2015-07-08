@@ -3,8 +3,12 @@
  */
 @import "fonts/matrix/stylesheet.css";
 
+* {
+  box-sizing: border-box;
+}
+
 body, form {
-	font-family: "Arial", sans-serif;
+  font-family: "Arial", sans-serif;
   padding: 0;
   margin: 0 !important;
 }
@@ -17,52 +21,50 @@ header {
 }
 
 header h1 {
-    margin: 0;
-    padding: 5px;
-    font-weight: normal;
-    font-family: 'hinted-MATRIX', serif;
-    font-size: 20px;
-    text-transform: uppercase;
-    text-shadow: 5px 0 15px #16fb16, -5px 0 15px #16fb16;
-    display: inline-block;
-    margin-right: 20px;
-    
+  margin: 0;
+  padding: 5px;
+  font-weight: normal;
+  font-family: 'hinted-MATRIX', serif;
+  font-size: 20px;
+  text-transform: uppercase;
+  text-shadow: 5px 0 15px #16fb16, -5px 0 15px #16fb16;
+  display: inline-block;
+  margin-right: 20px;
 }
 
-header a, header label, header div {
-    color: #16fb16;
-    display: inline-block;
-    margin-right: 20px;
+header a, header label, header div, header input {
+  color: #16fb16;
+  display: inline-block;
+  margin-right: 20px;
+  font-size: 0.8em;
+  background: none;
+  border: none;
 }
 
 label {
   display: block;
 }
 
+
 form {
-	margin: 1em 1em 1em 1em;
-	position: relative;
+  margin: 1em 1em 1em 1em;
+  position: relative;
 }
 
 fieldset {
   margin: 10px;
 }
 
-
 h1 {
-	margin-left: 10px;
-	margin-bottom: 0px;
-
+  margin-left: 10px;
+  margin-bottom: 0px;
 }
 
-
-
 #answerFieldset {
-	margin-bottom: 0.3em;
-	right: 0;
-	
-	overflow: hidden;
-	padding-right: 0;
+  margin-bottom: 0.3em;
+  right: 0;
+  overflow: hidden;
+  padding-right: 0;
 }
 
 #answerFieldset pre {
@@ -73,41 +75,35 @@ h1 {
 
 #diagram {
   position: relative;
- 
 }
 
 #o1 {
-	text-decoration: none;
+  text-decoration: none;
 }
 
-
-
 #input, #answerFieldset {
-	
+
 }
 
 #answerFieldset {
   height: 9em;
-  
 }
 
 output {
-	display: inline-block;
-
+  display: inline-block;
 }
 
 .dataTable input, output {
 
-	width: 3em;
+  width: 3em;
 }
 
 .dataTable textarea {
-  width: 50em;
+  width: 50vw;
   height: 10em;
 }
 
 #content-dialog input {
-  width: 50em;
   margin-right: 10px;
 }
 
@@ -127,8 +123,7 @@ a[data-dialog-id="content-dialog"].close {
 
 table {
   border: solid 1px black;
-	border-collapse: collapse;
-	
+  border-collapse: collapse;
 }
 
 #input table {
@@ -136,13 +131,47 @@ table {
   margin-right: 10px;
 }
 
+#input .form-elements {
+  float: left;
+  width: 400px;
+  margin-right: 20px;
+}
+
+#input label {
+  margin-bottom: 1em;
+}
+
+#input input[type="checkbox"] {
+  margin-right: 0.5em;
+  margin-bottom: 0.2em;
+  float: left;
+  position: relative;
+  top: -2px;
+}
+
+#input .form-elements a,
+#input .form-elements label,
+#input .form-elements input[type="submit"],
+#input .form-elements input[type="reset"],
+#input p {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+#input .information {
+  margin-left: 420px;
+}
+
+#input p {
+  margin: 0 0 1em 0;
+}
 dialog table {
   margin-bottom: 10px;
 }
 
-
 table th, table td {
-	padding: 0.3em;
+  padding: 0.3em;
 }
 
 table th, table td, table input {
@@ -150,8 +179,8 @@ table th, table td, table input {
 }
 
 table th {
-	background: #cccccc;
-	color: white;
+  background: #cccccc;
+  color: white;
 }
 
 table tbody th {
@@ -160,93 +189,79 @@ table tbody th {
 }
 
 table tbody td {
-	border: solid 1px black;
-	text-align: center;
+  border: solid 1px black;
+  text-align: center;
 }
 
-
-
 .resize {
-	position: absolute;
-	top: 90px;
-	left: 90px;
-	z-index: 100;
-	cursor: se-resize !important;
-
+  position: absolute;
+  top: 90px;
+  left: 90px;
+  z-index: 100;
+  cursor: se-resize !important;
 }
 
 .block .resize img {
-	border: 0;
-	z-index: 10;
+  border: 0;
+  z-index: 10;
 }
 
 .block {
 
-	background: #ffcccc;
-	color: black;
-	position: absolute;
-	overflow: hidden;
-	z-index: 1;
+  background: #ffcccc;
+  color: black;
+  position: absolute;
+  overflow: hidden;
+  z-index: 1;
 }
 
 .top {
-	z-index: 10;
+  z-index: 10;
 }
 
 .hidden #o2 {
-	display: none;
+  display: none;
 }
 
 #o2 {
-	background: #ccffcc;
-	pointer-events: none;
+  pointer-events: none;
 }
 
 .block p {
-	margin: 0;
-	padding: 10px;
+  margin: 0;
+  padding: 10px;
 }
 
-
-
 #points {
-	border: solid 1px green;
-	height: 800px;
-	position: relative;
-
+  height: 800px;
+  position: relative;
 }
 
 .point {
 
-	background-image: url(../images/crosshair.png);
-	width: 35px;
-	height: 35px;
-
-	margin-left: -17px;
-	margin-top: -17px;
-	position: absolute;
-	display: block;
-	z-index: 100;
+  background-image: url(../images/crosshair.png);
+  width: 35px;
+  height: 35px;
+  margin-left: -17px;
+  margin-top: -17px;
+  position: absolute;
+  display: block;
+  z-index: 100;
 }
 
-body.ie6 #matrixForm,
-body.ie7 #matrixForm,
-body.ie8 #matrixForm
-html.no-draganddrop #matrixForm
- {
-	display: none;
+body.ie6 #matrixForm, body.ie7 #matrixForm, body.ie8 #matrixForm
+html.no-draganddrop #matrixForm {
+  display: none;
 }
 
 #unSupportedMessage {
-	display: none;
+  display: none;
 }
 
-body.ie6 #unSupportedMessage,
-body.ie7 #unSupportedMessage,
-body.ie8 #unSupportedMessage
+body.ie6 #unSupportedMessage, body.ie7 #unSupportedMessage, body.ie8 #unSupportedMessage
 html.no-draganddrop #unSupportedMessage {
-	display: block;
-	margin: 1em;
+  display: block;
+  margin: 1em;
 }
 
 .no-pointer-events {
@@ -257,10 +272,10 @@ html.no-csstransforms3d [for=do3D] {
   display: none;
 }
 
-#no-3D {
-    display: none;
+.no-3D {
+  display: none;
 }
-html.no-csstransforms3d #no-3D {
+html.no-csstransforms3d .no-3D {
   display: block;
 }
 
@@ -270,10 +285,41 @@ dialog[open] {
   top: 20px !important;
   border: solid 1px #666;
   box-shadow: 10px 10px 10px rgba(0,0,0,0.6);
+  overflow: visible;
+  max-height: 80vh;
+  padding: 0;
+}
+
+dialog .content {
+  overflow-y: scroll;
+  max-height: -webkit-calc(80vh - 3px);
+  max-height: calc(80vh - 3px);
+  
+  padding: 1em;
+}
+
+dialog .close-button {
+  display: block;
+  width: 22px;
+  height: 22px;
+  top: -11px;
+  right: -11px;
+  background-image: url('../images/close-button.png');
+  position: absolute;
+}
+
+dialog#info-dialog input.close {
+  margin: 0 auto;
+  display: block;
 }
 
 #content-dialog {
   text-align: center;
+}
+
+#content-dialog p {
+  margin: 0 auto 20px auto;
+  max-width: 580px;
 }
 
 dialog .dataTable {
@@ -291,7 +337,7 @@ dialog .dataTable {
 }
 
 .showhide.show {
-   max-height: 1000px;
+  max-height: 1000px;
 }
 
 .showhide.hide {
@@ -311,6 +357,6 @@ dialog .dataTable {
   display: none;
 }
 
-.showhide-link.show .show-label, .showhide-link.hide .hide-label {
+.showhide-link.show .hide-label, .showhide-link.hide .show-label {
   display: inline;
 }

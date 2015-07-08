@@ -244,7 +244,70 @@ XMLHelpers = new function(){
         
         return req;
     }
-}
+    
+    /**
+     * Given an XML node, return the XML inside as a string.  Similar to innerHTML except
+     * it is for XML, not HTML.
+     * 
+     * @author - Phillip Perkins, http://www.zdnetasia.com/techguide/webdev/printfriendly.htm?AT=39304134-39001232c
+     * @param {Object} node - a DOM object.
+     * @return {String} - the XML String inside the object.
+     */
+    me.getInnerXML = function (node, options) {
+        var s = "";
+        
+        for (var i = 0; i < node.childNodes.length; i++) {
+            s+= me.getOuterXML(node.childNodes[i], options);
+        }
+        
+        return s;
+    };
+
+
+    
+    /**
+     * Given an XML node, return the XML inside as a string and the XML string of the node itself.
+     * Similar to Internet Explorer's outerHTML property, except it is for XML, not HTML.
+     * Created with information from http://www.codingforums.com/showthread.php?t=31489
+     * and http://www.mercurytide.co.uk/whitepapers/issues-working-with-ajax/       
+     * 
+     * @param {Object} node - a DOM object.
+     * @param {Object} options - a JS object containing options.  To date,
+     *      the only one supported is "insertClosingTags", when set to
+     *      true, converts self closing tags, like <td />, to <td></td>.
+     * @return {String} - the XML String inside the object.
+     */
+    me.getOuterXML = function (node, options) {
+        var r;
+            // Internet Explorer
+            if (node.xml) {
+                r = node.xml;
+                
+            // Everyone else 
+            } else if (node.outerHTML) { 
+                r = node.outerHTML;
+            } else if (window.XMLSerializer) {
+            
+                var serializer = new XMLSerializer();
+                var text = serializer.serializeToString(node);
+                r = text;
+            } else {
+                return null;
+            }
+            
+            /*
+             * If the XML is actually HTML and you are inserting it into an HTML
+             * document, you must use the "insertClosingTags" option, otherwise
+             * Opera will not like you, especially if you have empty <td> tags.
+             */
+            if (options) {
+                if (options.insertClosingTags) {
+                    r = r.replace(selfClosingTagRe, "<$1></$1>");
+                }
+            }
+            return r;
+    };
+};
 }
 
 

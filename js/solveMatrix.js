@@ -11,13 +11,15 @@ var $ = function(s){
 
 var matrixSolver = new function () {
     var me = this;
+    me.isIE10lower = false;
     me.isIE10 = document.documentMode ? document.documentMode === 10 : false;
     me.isIE11 = document.documentMode ? document.documentMode === 11 : false;
     me.blankImage = new Image();
     me.blankImage.src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     
     var o2, resizer, prop, pointsContainer, dialogLinks,
-        maxURLLength = 2083;
+        maxURLLength = 2083, sanitize = new Sanitize(Sanitize.Config.MATRIX), 
+        dummyNode = document.createElement('div');
     
     me.points = [];
     me.form = null;
@@ -25,14 +27,24 @@ var matrixSolver = new function () {
     me.transformProp = Modernizr.prefixed('transform');
     me.transformOriginProp = Modernizr.prefixed('transformOrigin');
     
-    
+    // This is not a commnent. Do not remove
+    /*@cc_on
+    @if (@_jscript_version <= 10)
+        me.isIE10lower = true;
+    @end
+    @*/
+   
     me.init = function () {
         if (EventHelpers.hasPageLoadHappened(arguments)) {
             return;
         }
             
         //DragDropHelpers.fixVisualCues=true;
-
+        
+        if (me.isIE10lower) {
+            alert("Sorry, this tool requires a modern browser.  Please update your browser to the latest build");
+        }
+        
         
         
         
@@ -55,6 +67,16 @@ var matrixSolver = new function () {
         
         grid.init();
         me.form = $('matrixForm');
+        
+        // if the browser doesn't support 3D transforms, don't 
+        // allow it to be checked
+        if (!Modernizr.csstransforms3d) {
+            me.form.do3D.checked=false;
+            visibleIf.refreshPage();
+        }
+        
+        
+        
         dialogLinks = document.getElementsByClassName('dialog-link');
         
         if (me.form) {
@@ -106,7 +128,6 @@ var matrixSolver = new function () {
     };
     
     function hashChangeEvent(e) {
-        console.log('begin');
         // uncheck do3D, just in case 
         me.form.do3D.checked = false;
         populateForm();
@@ -116,11 +137,10 @@ var matrixSolver = new function () {
         
         
         if (location.hash === '#' || location.hash === '') {
-            console.log('reset', me.form);
             me.form.reset();
             
         }
-        console.log('submit');
+        
         me.submitEvent(null, false, true);
        
     }
@@ -162,16 +182,28 @@ var matrixSolver = new function () {
     
     function populateLinkDialogs() {
         me.form.htmlContent.value = $('o1').innerHTML;
-        console.log('populate', $('custom-html').innerHTML);
         me.form.cssContent.value = $('custom-html').innerHTML;
     }
     
+    function getSanitizedHTML(s) {
+        var r;
+        dummyNode.innerHTML = s;
+        r = XMLHelpers.getInnerXML(sanitize.clean_node(dummyNode));
+        dummyNode.innerHTML = '';
+        return r;
+    }
+    
     function changeObjectHTMLandCSS() {
+       // we first take any potential nasty stuff out of the HTML
+       var html = getSanitizedHTML(me.form.htmlContent.value);
         
-        $('o1').innerHTML = me.form.htmlContent.value;
-        console.log(me.form.htmlContent.value);
-        $('o2').innerHTML = me.form.htmlContent.value;
-        $('custom-html').innerHTML = me.form.cssContent.value;
+       $('o1').innerHTML = html;
+       $('o2').innerHTML = html;
+       
+       // then we stick it back into the form
+       me.form.htmlContent.value = html;
+       
+       $('custom-html').innerHTML = me.form.cssContent.value;
     }
     
     function getStylesheetContent(node) {
@@ -200,23 +232,24 @@ var matrixSolver = new function () {
     
       var elems = form.elements;
       for (i = 0; i < elems.length; i += 1, first = false) {
-        if (elems[i].name.length > 0) { /* don't include unnamed elements */
-          switch (elems[i].type) {
+        var elem = elems[i];
+        if (elem.nodeName != 'FIELDSET' && elem.name.length > 0) { /* don't include unnamed elements */
+          switch (elem.type) {
             case 'select-one': first = true;
             case 'select-multiple':
-              for (j = 0; j < elems[i].options.length; j += 1)
-                if (elems[i].options[j].selected) {
-                  add(elems[i].name, elems[i].options[j].value);
+              for (j = 0; j < elem.options.length; j += 1)
+                if (elem.options[j].selected) {
+                  add(elem.name, elem.options[j].value);
                   if (first) break; /* stop searching for select-one */
                 }
               break;
             case 'checkbox':
-            case 'radio': if (!elems[i].checked) break; /* else continue */
-            default: add(elems[i].name, elems[i].value); break;
+            case 'radio': if (!elem.checked) break; /* else continue */
+            default: add(elem.name, elem.value); break;
           }
         }
       }
-    
+      
       return serial.join('&');
     }
     
@@ -232,17 +265,17 @@ var matrixSolver = new function () {
         for (var i = 0; i < query.length; i++) {
         
           //split up the field/value pair into an array
-          var field = query[i].split("=");
+          var qsfield = query[i].split("=");
           
           //target the field and assign its value
-          var name = field[0], 
-              value=doDecode?decodeURIComponent(decodeURIComponent(field[1])).replace(/\+/g,  " "):field[1],
+          var name = qsfield[0], 
+              value=doDecode?decodeURIComponent(decodeURIComponent(qsfield[1])).replace(/\+/g,  " "):qsfield[1],
               field = form[name];
               
           // make sure the uriEncoded values are changed back
           value=value.replace(/%26/g, '&').replace(/%3d/g, '=');
           
-          //console.log(name, value);
+          
           if (field) {
               if (field.type === 'radio' || field.type === 'checkbox') {
                 if (field.value === value) {
@@ -257,13 +290,11 @@ var matrixSolver = new function () {
     }
     
     function setDialogVisibility(e) {
-        
-        if (e.target.nodeName === 'A') {
+        if ((e.target.nodeName === 'A' || e.target.nodeName == 'INPUT') && e.target.getAttribute('data-allow-submit') !== 'true') {
             EventHelpers.preventDefault(e);
         }
         
         var dialogID = e.target.getAttribute('data-dialog-id');
-        console.log(dialogID);
         
         if (CSSHelpers.isMemberOfClass(e.target,'close')) {
             document.getElementById(dialogID).close();
@@ -602,12 +633,11 @@ function Block (el) {
     
     function dragStartEvent(e) {
         
-        console.log('dragStartTarget', e.target);
         e.dataTransfer.effectAllowed="move"; 
         
         // you must set some data in order to drag an arbitrary block element like a <div>
-        e.dataTransfer.setData('Text', 'ffff')
-        var coords = DragDropHelpers.getEventCoords(e);
+        e.dataTransfer.setData('Text', 'ffff');
+        var coords = {x: e.offsetX, y: e.offsetY}; //DragDropHelpers.getEventCoords(e);
         var dt = e.dataTransfer;
         
         
@@ -630,16 +660,13 @@ function Block (el) {
     
     
    function dragEvent(e) {
-    
+        
         // do nothing
-        EventHelpers.preventDefault(e);
-        EventHelpers.cancelBubble(e);
+        
    }
 
     
     function dragEndEvent(e) {
-        
-        //grid.draggingO.style.zIndex = '';
         
         me.el.style.zIndex = zIndex;
         me.resizer.el.style.visibility = 'visible';
@@ -648,11 +675,15 @@ function Block (el) {
     }
     
     function dragOverEvent(e) {
-        console.log('block drag over');
+        
         e.dataTransfer.dropEffect = "move";
         
         switch(grid.draggingObject.id) {
             case 'o1Resizer':
+            case 'point1':
+            case 'point2':
+            case 'point3':
+            case 'point4':
                 grid.dragOverEvent(e);
                 break;
             case 'o1':
@@ -738,10 +769,13 @@ function Point(pointEl) {
             EventHelpers.addEvent(pointEl, 'drag', dragEvent);
             EventHelpers.addEvent(pointEl, 'dragend', dragEndEvent);
             
+            EventHelpers.addEvent(pointEl, 'mousedown', mousedownEvent);
+            
     }
     
     function mousedownEvent(e) {
-        $('o2').style.visibility = 'hidden'
+        //$('o2').style.visibility = 'hidden'
+        
     }
     
     function mouseupEvent(e) {
@@ -749,6 +783,7 @@ function Point(pointEl) {
     }
     
     function dragStartEvent(e) {
+        
         var coords = DragDropHelpers.getEventCoords(e);
         // you must set some data in order to drag an arbitrary block element like a <div>
         e.dataTransfer.setData('Text', 'ffff');
@@ -763,7 +798,7 @@ function Point(pointEl) {
         //CSSHelpers.addClass($('gridBlocks'), 'hidden');
         grid.dragStartCoords = coords;
         // Need pointer-events? 
-        if (!Modernizr.csspointerevents || matrixSolver.isIE11) {
+        if (!Modernizr.csspointerevents ) {
             $('o2').style.visibility = 'hidden'
             grid.draggingObject.style.zIndex = '-1';
         }
@@ -781,6 +816,7 @@ function Point(pointEl) {
     function dragEndEvent(e) {
         //CSSHelpers.removeClass($('gridBlocks'), 'hidden');
         grid.draggingObject.zIndex = '';
+        grid.dropEvent(e);
         
         /*
          * IE10 has a bug which can't grab the coordinates from the grid's
@@ -835,7 +871,6 @@ function Resizer(el, block) {
     }
     
     function dragStartEvent(e) {
-        console.log('resizer dragStart')
         CSSHelpers.addClass($('o1'), 'no-pointer-events');
         
         // you must set some data in order to drag an arbitrary block element like a <div>
@@ -849,22 +884,34 @@ function Resizer(el, block) {
         e.dataTransfer.effectAllowed="move";
         
         EventHelpers.cancelBubble(e);
-         console.log('dragStartEvent end')
+         
+        /* Need pointer-events? */
+        if (!Modernizr.csspointerevents ) {
+            $('o1').style.visibility = 'hidden'
+            grid.draggingObject.style.zIndex = '-1';
+        }
     }
     
     function dragEvent(e) {
-        console.log('resizer drag');
+        var oldcoords = grid.coords;
+        
+        
         // do nothing
         //EventHelpers.preventDefault(e);
+        
         grid.coords = DragDropHelpers.getEventCoords(e);
+        
+        if (grid.coords === null) {
+            grid.coords = oldcoords;
+        }
+        
     }
     
     function dragEndEvent(e) {
-        console.log('resizer dragend' ,e);
         //matrixSolver.o1.el.style.visibility = 'visible'
+        
         grid.draggingObject.style.zIndex = '';
         
-        grid.dropEvent(e);
         CSSHelpers.removeClass($('o1'), 'no-pointer-events');
         $('o2').style.visibility = 'visible';
     }
@@ -906,27 +953,33 @@ var grid = new function () {
     };
     
     me.dragEnterEvent = function(e){
-        //console.log('grid drag enter event');
         EventHelpers.preventDefault(e);
     };
     
     me.dragOverEvent = function (e) {
-        
+        var oldcoords = me.coords;
         e.dataTransfer.dropEffect = "move";
-        me.coords = DragDropHelpers.getEventCoords(e); 
+        me.coords = DragDropHelpers.getEventCoords(e);
         
-        //console.log('grid drag over event ' + me.draggingObject.id + ' ' + me.coords.x + ', ' + me.coords.y);
+        
+        if (me.coords === null || me.coords.x > me.el.offsetWidth) {
+            me.coords = oldcoords;
+        }
+        
+        
+        
         switch (me.draggingObject.id) {
             case "o1Resizer":
-            
-                matrixSolver.o1.resizer.resize();
+                if (me.draggingObject === e.target) {
+                    matrixSolver.o1.resizer.resize();
+                }
                 break;
             case "o1":
                 $('o2').style.visibility = 'hidden';
                 break;
             default:
                 /* Need pointer-events */
-                if (!Modernizr.csspointerevents || matrixSolver.isIE11) {
+                if (!Modernizr.csspointerevents ) {
                     $('o2').style.visibility = 'hidden';
                     $('o2').style.zIndex = -1;
                 } 
@@ -943,11 +996,20 @@ var grid = new function () {
     };
     
     me.dropEvent = function (e) {
+        EventHelpers.cancelBubble(e);
+        EventHelpers.preventDefault(e);
         
         
         switch (me.draggingObject.id) {
-            case "o1Resizer":
-            case "o1":
+            case 'o1Resizer':
+            case 'point1':
+            case 'point2':
+            case 'point3':
+            case 'point4':
+                me.draggingObject.style.zIndex = '';
+                
+                return;
+            case 'o1':
                 moveCoords = {
                     x: me.coords.x - me.dragStartCoords.x,
                     y: me.coords.y - me.dragStartCoords.y
@@ -960,7 +1022,6 @@ var grid = new function () {
                 };
         }
         
-         
         
         if (me.draggingObject.id != 'o1Resizer') {
             //alert(DebugHelpers.getProperties(moveCoords))
@@ -968,7 +1029,6 @@ var grid = new function () {
             me.draggingObject.style.top = moveCoords.y + 'px';
             me.draggingObject.style.zIndex = "";
         }
-        
         
         
         matrixSolver.setForm(moveCoords);
@@ -981,8 +1041,7 @@ var grid = new function () {
         $('o2').style.visibility = 'visible';
         $('o2').style.zIndex = '';
         
-        EventHelpers.cancelBubble(e);
-        EventHelpers.preventDefault(e);
+        
     };
     
     me.hideAll = function () {
@@ -1018,7 +1077,7 @@ var showhide = new function () {
         var target = e.currentTarget,
             id = DOMHelpers.getAttributeValue(target, 'data-showhide-id'),
             el = $(id);
-        console.log(target, id, el);
+        
         EventHelpers.preventDefault(e);
         if (el) {
             if (CSSHelpers.isMemberOfClass(el, 'show')) {

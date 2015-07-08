@@ -1,169 +1,196 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
+  
+  <!-- If you don't use HTML5 Tidy, you should. -->
+  <!-- https://github.com/htacg/tidy-html5      -->
+  <meta name="generator" content=
+  "HTML Tidy for HTML5 for Mac OS X version 5.0.0.RC1">
+  
   <meta charset="utf-8">
-
-  <!-- www.phpied.com/conditional-comments-block-downloads/ -->
-  <!--[if IE]><![endif]-->
-
+  
   <title>The CSS3 Matrix Construction Set</title>
-
-
   <!-- CSS : implied media="all" -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/visibleIf.css">
-  <link rel="stylesheet" href="bower_components/dialog-polyfill/dialog-polyfill.css">
+  <link rel="stylesheet" href=
+  "bower_components/dialog-polyfill/dialog-polyfill.css">
+  <style id="custom-html">
+  /*
+  * Feel free to edit any of the styles below.
+  */
 
-<style id="custom-html">
-/* Uncomment if you want to override the default styles */
-#o1 {
-	background: #ffcccc;
-}
+  /* The object before it is transformed */
+  #o1 {
+        background: #ffcccc;
+  }
 
-#o2 {
-	background: #ccccff;
-}
+  /* The object after it has been transformed */
+  #o2 {
+        background: #ccccff;
+  }
 
-#o1, #o2 {
-	font-size: inherit;
-} 
+  /* Common styles for box objects. */
+  #o1, #o2 {
+        font-size: inherit;
+  } 
 
-/* CSS for the grid */
-#grid {
-	background: url("images/background.gif") repeat scroll 0 0 white;
-	height: 800px;
-	position: relative;
-	overflow: hidden;
+  /* CSS for the grid */
+  #grid {
+        background: url("images/background.gif") repeat scroll 0 0 white;
+        height: 800px;
+        position: relative;
+        overflow: hidden;
 
-}
-</style>
-
+  }
+  </style>
 </head>
-
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-
 <!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
 <!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
 <!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
 <!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
-<form id="matrixForm">
-	<header>
-		<h1>The Matrix Construction Set</h1>
-		
-		<a href="#" class="showhide-link hide" data-showhide-id="input"><span class="show-label">Show Advanced Settings</span><span class="hide-label">Hide Advanced Settings</span></a>
-		<a href="#" data-dialog-id="info-dialog" class="dialog-link" href="#">What is this?</a>
-	</header>
+<!--[if (gt IE 9)|!(IE)]><!-->
+<body>
+  <!--<![endif]-->
+  <form id="matrixForm" name="matrixForm">
+    <header>
+      <h1>The Matrix Construction Set</h1><input value="Reset Form"
+      type="reset" id="resetButton2" name="resetButton2"> <a href=
+      "#" class="showhide-link hide" data-showhide-id=
+      "input"><span class="show-label">Show Advanced
+      Settings</span><span class="hide-label">Hide Advanced
+      Settings</span></a> <a href="#" data-dialog-id="info-dialog"
+      class="dialog-link">What is this?</a>
+    </header>
+    <fieldset id="input" class="showhide hide">
+      <legend>Advanced</legend>
+      <div class="form-elements">
+        <table class="dataTable">
+          <thead>
+            <tr>
+              <th></th>
+              <th>From</th>
+              <th>To</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Point</th>
+              <td>(<input required="required" name="from0x" type=
+              "text" value="0">, <input required="required" name=
+              "from0y" type="text" value="0">)</td>
+              <td>(<input required="required" name="to0x" type=
+              "text" value="100">, <input required="required" name=
+              "to0y" type="text" value="100">)</td>
+            </tr>
+            <tr>
+              <th>Point</th>
+              <td>(<output onforminput=
+              "this.value = from0x.value">-</output>,
+              <input required="required" name="from1y" type="text"
+              value="100">)</td>
+              <td>(<input required="required" name="to1x" type=
+              "text" value="100">, <input required="required" name=
+              "to1y" type="text" value="400">)</td>
+            </tr>
+            <tr>
+              <th>Point</th>
+              <td>(<input required="required" name="from2x" type=
+              "text" value="100">, <output onforminput=
+              "this.value = from0y.value">-</output>)</td>
+              <td>(<input required="required" name="to2x" type=
+              "text" value="400">, <input required="required" name=
+              "to2y" type="text" value="100">)</td>
+            </tr>
+            <tr class="visibleIf visibleIf-doNotReset"
+            data-visibleif-rule="do3D == 'true'">
+              <th>Point</th>
+              <td>(<output onforminput=
+              "this.value = from2x.value">-</output>,
+              <output onforminput=
+              "this.value = from1y.value">-</output>)</td>
+              <td>(<input class="visibleIf-doNotReset" required=
+              "required" name="to3x" type="text" value="400">,
+              <input class="visibleIf-doNotReset" required=
+              "required" name="to3y" type="text" value="400">)</td>
+            </tr>
+          </tbody>
+          
+        </table>
+        <label for="do3D"><input type="checkbox" name="do3D"
+        id="do3D" value="true" checked> I want to use 3D
+        transforms.</label> 
+        
+        <label for=
+        "showVendorPrefixes"><input type="checkbox" name=
+        "showVendorPrefixes" id="showVendorPrefixes" value="true">
+        Show Vendor Prefixes</label> 
+        
+        <input type="submit" value="Submit"> 
+        
+        <input type="reset" id="resetButton" value=
+        "Reset"> <a data-dialog-id="content-dialog" class=
+        "dialog-link" href="#">Change HTML and CSS</a>
+      </div>
+      <div class="information">
+        <p>Using <strong>3D transforms</strong> will allow greater
+        control over the transform, but fonts may appear blocky
+        compared to 2D transforms unless the object you are
+        transforming is physically bigger that the size you are
+        transforming to. The <strong>show vendor prefixes</strong>
+        option will guarentee your transforms will work even on
+        older browsers and devices (e.g. old iPhone and Android
+        browsers). <strong>Change HTML and CSS</strong> will allow
+        you to customize the HTML and CSS of the transformed
+        objects.</p>
+        
+        <p class="no-3D">
+          Unfortunately, your browser doesn't support 3D transforms, so
+          you will not be able to use this tool to manipulate them.  
+          <a href="http://caniuse.com/#search=3d%20transform">Please
+          upgrade your browser</a> if you want to use this feature.
+        </p>
+      </div>
+    </fieldset>
+    <fieldset id="answerFieldset">
+      <legend>CSS Transform Code</legend>
+      <pre id="answer">
 
-
-  
-  <fieldset id="input" class="showhide hide">
-  	<legend>Advanced</legend>
-
-	  
-	
-  
-	<table class="dataTable">
-		<thead>
-			<tr>
-				<th></th>
-				<th>From</th>
-				<th>To</th>
-			</tr>
-
-		</thead>
-		
-		<tbody>
-			<tr>
-				<th>Point</th>
-				<td>(<input required="required" name="from0x" type="text" value="0">, <input required="required" name="from0y" type="text" value="0">)</td>
-				<td>(<input required="required" name="to0x" type="text" value="100">, <input required="required" name="to0y" type="text" value="100">)</td>
-			</tr><tr>
-
-				<th>Point</th>
-				<td>(<output onforminput="this.value = from0x.value">-</output>, <input required="required" name="from1y" type="text" value="100">)</td>
-				<td>(<input required="required" name="to1x" type="text" value="100">, <input required="required" name="to1y" type="text" value="400">)</td>
-			</tr><tr>
-				<th>Point</th>
-
-				<td>(<input required="required" name="from2x" type="text" value="100">, <output onforminput="this.value = from0y.value">-</output>)</td>
-				<td>(<input required="required" name="to2x" type="text" value="400">, <input required="required" name="to2y" type="text" value="100">)</td>
-			</tr>
-			<tr class="visibleIf visibleIf-doNotReset" data-visibleif-rule="do3D == 'true'">
-				<th>Point</th>
-				<td>(<output onforminput="this.value = from2x.value">-</output>, <output onforminput="this.value = from1y.value">-</output>)</td>
-				<td>(<input class="visibleIf-doNotReset" required="required" name="to3x" type="text" value="400">, <input class="visibleIf-doNotReset" required="required" name="to3y" type="text" value="400">)</td>
-			</tr>
-		</tbody>
-	
-		<thead>
-			<tr>
-				<th></th>
-				<th>Location</th>
-				<th>Dimensions</th>
-			</tr>
-
-		</thead>
-		<tbody>
-			<tr>
-				<th>Source</th>
-				<td>(<input required="required" name="srcX" type="text" value="10">, <input required="required" name="srcY" type="text" value="10">)</td>
-				<td><input required="required" name="srcW" type="text" value="100">, <input required="required" name="srcH" type="text" value="100"></td>
-			</tr>
-		</tbody>
-
-
-	</table>
-	<div id="no-3D">Your browser doesn't support 3D transforms.</div>
-	<label for="do3D"><input type="checkbox" name="do3D" id="do3D" value="true" checked /> I want to use 3D transforms.</label>
-	<label for="showVendorPrefixes"><input type="checkbox" name="showVendorPrefixes" id="showVendorPrefixes" value="true" /> Show Vendor Prefixes</label>
-	<input type="submit" value="Submit Changes" />
-	<input type="reset" id="resetButton" value="Reset Form" />
-  <a data-dialog-id="content-dialog" class="dialog-link" href="#">Change HTML and CSS</a>
-  </fieldset>
-
-  <fieldset id="answerFieldset">
-  	<legend>Answer</legend>
-  	<pre id="answer">
-
-  	</pre>
-  </fieldset>
-
-  <fieldset id="diagram">
-  	<legend>Diagram</legend>
-	<div id="grid">
-
-		<!-- Begin original box -->
-		<div class="block" draggable="true" id="o1"><p>This is a block element.</p></div>
-		<img draggable="true" id="o1Resizer" class="resize" src="images/corner_resize.gif" />
-		<!-- End original box -->
-
-		<div id="gridBlocks">
-			<div href="#" class="block"  id="o2"><p>This is a block element.</p></div>
-		</div>
-
-		<div id="points">
-			<a id="point1" draggable="true" class="point"></a>
-			<a id="point2" draggable="true" class="point"></a>
-			<a id="point3" draggable="true" class="point"></a>
-			<a id="point4" draggable="true" class="point visibleIf" data-visibleif-rule="do3D == 'true'"></a>
-		</div>
-
-	</div>
-
-  </fieldset>
-  
-
-  <!-- Javascript at the bottom for fast page loading -->
-
-
-<div id="config">
-<!--
+        
+</pre>
+    </fieldset>
+    <fieldset id="diagram">
+      <legend>Diagram</legend>
+      <div id="grid">
+        <!-- Begin original box -->
+        <div class="block" draggable="true" id="o1">
+          <p>This is a block element.</p>
+        </div><img draggable="true" id="o1Resizer" class="resize"
+        src="images/corner_resize.gif" alt="↘"> 
+        <!-- End original box -->
+        <div id="gridBlocks">
+          <div class="block" id="o2">
+            <p>This is a block element.</p>
+          </div>
+        </div>
+        <div id="points">
+          <a id="point1" draggable="true" class="point"></a> <a id=
+          "point2" draggable="true" class="point"></a> <a id=
+          "point3" draggable="true" class="point"></a> <a id=
+          "point4" draggable="true" class="point visibleIf"
+          data-visibleif-rule="do3D == 'true'"></a>
+        </div>
+      </div>
+    </fieldset>
+    <!-- Javascript at the bottom for fast page loading -->
+    <div id="config">
+      <!--
 
 <config>
-	<solveMatrix>
-		<css>
-			<vendor><![CDATA[
+        <solveMatrix>
+                <css>
+                        <vendor><![CDATA[
 /* One transform entry for each different brower.  Firefox needs px in the last two entries */<br />
 -moz-transform:    @mozCSS@;<br />
 -webkit-transform: @webkitCSS@;<br />
@@ -177,15 +204,15 @@ transform:         @webkitCSS@;<br />
 -o-transform-origin:      @origin@;<br />
 -ms-transform-origin:     @origin@;<br />
 transform-origin:         @origin@;<br />
-			]]></vendor>
-			<noVendor><![CDATA[
+                        ]]></vendor>
+                        <noVendor><![CDATA[
 transform: @webkitCSS@;<br />
 transform-origin: @origin@;<br />
-		]]></noVendor></css>
-	</solveMatrix>
-	<solveMatrix3d>
-		<css>
-			<vendor><![CDATA[
+                ]]></noVendor></css>
+        </solveMatrix>
+        <solveMatrix3d>
+                <css>
+                        <vendor><![CDATA[
 /* One transform entry for each different brower.      */<br />
 /* Note: there's no -ms-tranform entry, since IE9, which needs it, doesn't do 3D */<br />
 <br />
@@ -199,127 +226,185 @@ transform:         @webkitCSS@;<br />
 -webkit-transform-origin: @origin@;<br />
 -o-transform-origin:      @origin@;<br />
 transform-origin:         @origin@;<br />
-		]]></vendor>
-		<noVendor><![CDATA[
+                ]]></vendor>
+                <noVendor><![CDATA[
 transform: @webkitCSS@;<br />
 transform-origin: @origin@;<br />
-		]]></noVendor></css>
-	</solveMatrix3d>
+                ]]></noVendor></css>
+        </solveMatrix3d>
 </config>
 -->
-</div>
-
-
-  <!--[if lt IE 7 ]>
+    </div><!--[if lt IE 7 ]>
     <script src="js/dd_belatedpng.js?v=1"></script>
   <![endif]-->
+    <div id="unSupportedMessage">
+      <p>Unfortunately, this tool only works in browsers that
+      support <code>transform-origin</code> (which doesn't include
+      any present version of IE) and HTML5 Drag and Drop (which
+      excludes Opera at the moment). When I update <a href=
+      "http://www.useragentman.com/blog/csssandpaper-a-css3-javascript-library/">
+      cssSandpaper</a> with a <code>transform-origin</code>
+      polyfill, I'll refactor this tool to use it so IE will work.
+      Opera users will have to wait for HTML5 Drag and Drop support
+      in the future.</p>
+    </div>
+    <dialog id="content-dialog" closed="">
+      <div class="content">
+        <p><strong>Note:</strong> we only allow basic HTML here 
+        (e.g. no &lt;script&gt; tags) to avoid XSS attacks. 
+        <a href="js/sanitize.js/sanitize/config/matrix.js">See the Sanitize.js recipe we use</a>
+        for more information.</p>
+        <table class="dataTable">
+          <tbody>
+            <tr>
+              <th>HTML Content</th>
+              <td>
+              <textarea class="visibleIf-submitIfInvisible" name=
+              "htmlContent" placeholder=
+              "Enter HTML for the content block here.">
+&lt;p&gt;This is a block element.&lt;/p&gt;
+</textarea></td>
+            </tr>
+            <tr>
+              <th>CSS Content</th>
+              <td>
+              <textarea class="visibleIf-submitIfInvisible" name=
+              "cssContent" placeholder=
+              "Enter CSS for the content block here.">
+/*
+ * Feel free to edit any of the styles below.
+ */
 
-<div id="unSupportedMessage">
-	<p>Unfortunately, this tool only works in browsers that support <code>transform-origin</code>
-	(which doesn't include any present version of IE) and HTML5 Drag and Drop (which excludes Opera at the moment).
-	When I update <a href="http://www.useragentman.com/blog/csssandpaper-a-css3-javascript-library/">cssSandpaper</a> with a <code>transform-origin</code> polyfill, I'll refactor this tool to use it
-	so IE will work.  Opera users will have to wait for HTML5 Drag and Drop support in the future.</p>
-</div>
-
-<dialog id="content-dialog" closed>
-    <table class="dataTable">
-    	<tbody>
-    		<tr>
-	    		<th>HTML Content</th>
-	    		<td><textarea class="visibleIf-submitIfInvisible" name="htmlContent" placeholder="Enter HTML for the content block here."><p>This is a block element.</p></textarea></td>
-    		</tr>
-    		<tr>
-    			<th>CSS Content</th>
-    			<td><textarea class="visibleIf-submitIfInvisible" name="cssContent" placeholder="Enter CSS for the content block here.">
-/* Uncomment if you want to override the default styles */
+/* The object before it is transformed */
 #o1 {
-	background: #ffcccc;
+        background: #ffcccc;
 }
 
+/* The object after it has been transformed */
 #o2 {
-	background: #ccccff;
+        background: #ccccff;
 }
 
+/* Common styles for box objects. */
 #o1, #o2 {
-	font-size: inherit;
+        font-size: inherit;
 } 
 
 /* CSS for the grid */
 #grid {
-	background: url("images/background.gif") repeat scroll 0 0 white;
-	height: 800px;
-	position: relative;
-	overflow: hidden;
+        background: url("images/background.gif") repeat scroll 0 0 white;
+        height: 800px;
+        position: relative;
+        overflow: hidden;
 
 }
-    			</textarea></td>
-    		</tr>
-    	</tbody>
-    </table>
+                       
+</textarea></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <input type="submit" data-allow-submit="true" data-dialog-id=
+        "content-dialog" class=
+        "dialog-link close visibleIf-submitIfInvisible" value=
+        "Submit HTML and CSS">
+        
+        <input type="submit" value="Cancal"
+        data-dialog-id="content-dialog" class=
+        "dialog-link close visibleIf-submitIfInvisible"> <a href=
+        "#" data-dialog-id="content-dialog" class=
+        "dialog-link close-button close"></a>
+      </div>
+    </dialog>
+    <dialog id="info-dialog" closed="">
+      <div class="content">
+        <p>This tool allows developers to create pixel perfect CSS3
+        Transforms by dragging and dropping objects on the screen
+        (or filling out the form below). The red box is the object
+        before transformation, the purple one is the box after
+        transformaton. You can drag the red box around as well as
+        resize it using the resizer widget in the bottom right
+        corner. You can also transform the green object by dragging
+        the three control points around the grid.
+
+        <p><strong>Made a mistake?</strong> Click on your browser's 
+        back button!</p>
+        
+        <p><strong>Want to share your creation?</strong>  
+        Share the whole URL! The hashtag
+        contains all of your layour data using LZW compression)</p>
+        <h2>Examples</h2>
+        <ul>
+          <li>
+            <a href=
+            "#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8iB2a2ywgFgCYA6ATgA5Ww9AKylshSkIBshHtzn96rQu2LcUNQgUK966kOKhDCIjNnYFhamuaiTWrPexbsr4ApJV6wE3lznzWRWVVFABnOABjAA0qMMiATVjwiIB1KhJkgAl0lABLYEIoAGUEACMsXJgAAgBhAAsAQwA7AHMkULzgdigAJXakaoAxEDgsFDqYLAAbGpAmmCR5qAAeAAcAPgAVOtzQqt2qqdyANyQqhbxq3KaqhqrSqZAIgGsqpCmkLEXqmEbqxr2pSQi3OcGaoTQIy+wCqCFC1xa5zqZywDXguTwYGAAAoAJRVNAIJoRGC5OacABQFOWpTgVQA9OsaXTGRTtgcDnMpuRblVgJ8QJwqlUICAqk0QNUgbcpg1RkhgFTlvSNigIqFQrN5t8oAAqKoAbwppRAeAAtPCAF4IgBc9xG-LgZpNeAA3BSAL5U+n6gCqxOwX3m+zQVXIIAQVQA7s0fmKQKc4HB8mdfmd+WgGggptVQjByB89rr6RSAMT6Q0U4WlBovFqYInAO2ltBoCLtiKuqrHXa5Uq5I75u07YD8prur1lkDsSvV2vPesRppNqqljsRVsT736qv6ooRODAm6hRqrM4pu6mLC7qoTGCrG30+lRl+cKNIUrwhYRED8mAIGhkwaKZQk4H8sHpH9+UgjUYNCC1T3aThVjqVYql3Ety0IAAaVdp1ne550XRs7QQOApmxAByO8HyfaFcgaMBOBaXIUPIMDsHpeiGnpNAAClCCQGoACEACssAAWRAABRY4EHpFi2OY3I0Eo-EHnnd1hR-R44DtKMdgWLSCTmGALVyS0kDta5kWTGBjKjfJfjtVgcBwVY3SrW8kFyFoJhctyPPdE04EdM0wWAXI4TtIQcAAUgZKpeDi90EyQOA0EeKM7R7eEHiQLcp0IG0gUhQ9cPLdgSqQMqziNKof21eY7QAIha91VhAL8ySaO0Gk-EApgAgqKRoB8kpS41JRoLA7WS91kz8mA7TNdhJo+NBlqqVbJprOsG2XaymlsypgoddLwoaSLoqqNbEtiybJyKqpVgq-C0Pql6usqHq+oGoajK8yF5jNTMKm5VrZjI3J0qqAA5JAoxa3CWqh5N0uRqosDmLrVlrEbhWBsyrSsqpXKCryjiaJAzWRXz-KqQhjLGu0ImAiJsQe7bGd4dy8FxZmkEuM1gN83qGu+dKHKcuo7WIeL3VROAWPFnBGb5wqOPmBprlhz68dHW11YpycfVqIoihMuk0yqet8iqYsyztmFPr2hcDpXMiKJa3JUTaUJ6RgY5OFE1YWha-EqjVtWDMqM4JXCpAzzRYyQsdO0JWp4y6aWuXJECzzhU67q5jtQ9ZVJU5jLSjKsuHfIx3dT0qS8zowGKMoKmqTJNgkgAZW5l3NoogA">
+            Fit HTML element onto retro television screen.</a>
+          </li>
+          <li>
+            <a href=
+            "#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8oAWMMFGnS+kjbQygVgA5+LEIQIAmMADZhPKAHYmpbGIL0BwlVF4BOaTTGUw24WAJyFJygrEoAznADGADSgl7DgJqu7jgOpU3RwAJAJIAS2BCKABlBAAjLDCYAAIAYQALAEMAOwBzJFsUCLEoACUCpBSAMRA4LBR0mCwAG1SQbJgkDqgAHgAHAD5fJGTbLL6RkAQ4ZJ7bPpzkh2bM21sAUjBgACI4hDDm4DC8222BvYOjk4BuHoB6eZyB2cfspZW1zZ2YdKQ4JEyaE6cDOPz+AKBf3ur2ecwWb2Wqw2W22YPIAFoxpkJqDfuRRuMkND4bDXu8kV9tghTgNqcSngAoe6DFAONZtDpdGBQAACYSwfVqKW2bNsdzQ7RgYriSDiqweMHIzQKv0qADpRdtrgyGQAqZIAbwZcRAeExYQAXsdcgAuZImuDAP7ok14bUAXx1asFxxSRru+rlDgA1rlMAhssB0Q4QM1anb-sBrsldXcGZ6dQHkgBVbIxrBYLnJMJoZLkKbJADuORSNGSIAAbn84BERmDkk60JkEM0UrZFcrbCm0wBiESGhnJe2ZENhqaRu0jtBoByrhzJhthWxhOIHJLkO3pCJO7IenVjsQTqdB0PhhfJeA5R7-DpnhlZyf66IOf5dAnYkZW0yZIuCwT9kkaGA+htO47kreC1UrWVt06GMnRgBAaBbTJmlsDVsDuNCkEItYSNsTFCTwvp0j6ZJP1HEQABpkgvK8QMldEu0SZoD2SbYACFZVWAA5JBkC1Sd2I6dEkLCXJGjtE1Dm1KcYzjOA7UrI9Om1To8BgCjMlASs7TAPo8GSMyLJwe0VhDFSlljeMq20pAHMkysIh+O0OBwcyHN+OSFOSXz-J1DMx0IZI+mY1jaKNKdmmOJB0UC+SYDtHA1W0BysEyOBcmOO1iDCqc9IMnC5OyO0ACtqRgEtyG1CVpO3C0kDtfg5DC8r0UfbJbAlOo7QQPoJkcVY3IZdJyGorpbDtbsaDffCOkyZKZgS6KjKuW1khKt100zfVUmiaJ2JmdswwiYcGRHa7gDYrMAHkW0K7IcJAsgIJgKCFtgtAkocNVgzgO4+nBvowGiGqAHFbuvGdb3nYARrgZoAAptn5TJ8mlfZDmtNUar6XJtgASinGybK0pIRmyEB0X+CZMhgBybznCMozajr9pwMR6HM5I5EkfhSvtWonQ05IGeyKapzS4LCEkHA-MOqdBRQsJ2gTJAVgapsHMbP5AZAEyIOPLptSOhk1QuQmTgnFqDJ54qxF4MKMzVMF-kBYEnY412+e6w6vbRQyJgD1rLV5wgDpW6ko5dmO7QFqyHKOeYVl444krll043syT+sG2osDtWwHBwpAMbENUwGYwhyYckuhqwdFajkoq+aFnA30kopgDAGJ4kSFIggAFQAWQAGWSHJHtO6IgA">
+            Fit HTML element on front of building</a>
+          </li>
+          <li>
+            <a href=
+            "http://localhost/Matrix-Construction-Set/#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKHdTXAT0JRhHygCYAWS68gVgE5jsBGcrlgDiZcCtLkPIA2eowzZaBfvTFV5UCWBZNa5MKKZgC6zVTDklYgM5wAxgA0oXIlesBNB05sB1dx+sAJHxQAS2AuKABlBAAjLCCYAAIAYQALAEMAOwBzJAtg4FooACUcpASAMRA4LBRkmCwAG0SQdJgkFqgAHgAHAD4AUVSEmGSkeNiWgEIOgHpelGsLCyaWtpgoAAEgrC7KhIAiBYtptGaYI6ikKNSjixhSepyR0oA6Q72AbgAob+mAKniAKrpazYLCreJBNDxUggBDxADuGSGIHiIAAbkg4HAQqNhqNgEg0KkEPUErd7jl4r9pp8AMQgLjxADenwAkGighYglEgvU4qQAFzxZIhAnpL4AX2+9NozLZV2sAGtMpgEOlgABaEH1SpC+AZCxdVJwVZfbW6hEi1qS6UMgA08RlcqNwGAQSyQpwX1ZJxaGq5AC8kELaDgcF08F9fTANUTYvVBfE9gAhS7XABySGQH0+0Y18KQQUytSFURA9WANs+zyiOqV8S6coeMFacH9Rus7synueOH4SCwXxdbo98S9nywxsy7s9X316QsJyqergBvqgyQtgAFOG8ABKL4ZLaDILNIWkJD1erxFgWeJIa5IDWwmCH9LHmCn9IauKYk-NLVYRaIV3TQd1fy+Pl0ifEYixLeIuC+eErSfQ1UmsYN4nSEB4VXLpPilT4-iScJwniJd4jxeIVRCKkaVpGjgDlVkFWVVV1SFBA4HqLc9mPbIjgvK9ngAKy6TI9j3eILGsTArzHBTkN-LCQA1E0ugfV82R2LlPzPeITXXT8MW9dFMTQHV4SFEVXTaKt1kVJBSAwVIwTvITrxZHAAFI5XnRdKiwFc1w3bdHDDCMDwI75wt8ll-KXILKNXBcjM3LcNT4CL9xteI8viVlCryMAImiWIEj8AAVABZAAZeIMiYxJSKAA">
+            Fit HTML element inside a poster.</a>
+          </li>
+        </ul>
+        <h2>References</h2>
+        <ul>
+          <li>
+            <a href=
+            "http://www.useragentman.com/blog/2011/01/07/css3-matrix-transform-for-the-mathematically-challenged/">
+            CSS3 Matrix Transform For The Mathematically
+            Challenged</a>
+          </li>
+        </ul><input type="submit" data-dialog-id="info-dialog"
+        class="dialog-link close visibleIf-submitIfInvisible"
+        value="close"> <a href="#" data-dialog-id="info-dialog"
+        class="dialog-link close-button close"></a>
+      </div>
+    </dialog>
     
-    <input type="submit" data-dialog-id="content-dialog" class="dialog-link close visibleIf-submitIfInvisible" value="Submit HTML and CSS" />
-    <a href="#" data-dialog-id="content-dialog" class="dialog-link close">Cancel</a>
-  </dialog>
-  
-  <dialog id="info-dialog" closed>
-  	<p>
-				This tool allows developers to create pixel perfect CSS3 Transforms by dragging and dropping
-				objects on the screen (or filling out the form below).  The red box is the object before transformation, the green one is the box after
-				transformaton.  You can drag the red box around as well as resize it using the resizer widget in the bottom
-				right corner.  You can also transform the green object by dragging the three control points
-				around the grid.
-				
-				<h2>Examples</h2>
-				<ul>
-					<li><a href="#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8iB2a2ywgFgCYA6ATgA5Ww9AKylshSkIBshHtzn96rQu2LcUNQgUK966kOKhDCIjNnYFhamuaiTWrPexbsr4ApJV6wE3lznzWRWVVFABnOABjAA0qMMiATVjwiIB1KhJkgAl0lABLYEIoAGUEACMsXJgAAgBhAAsAQwA7AHMkULzgdigAJXakaoAxEDgsFDqYLAAbGpAmmCR5qAAeAAcAPgAVOtzQqt2qqdyANyQqhbxq3KaqhqrSqZAIgGsqpCmkLEXqmEbqxr2pSQi3OcGaoTQIy+wCqCFC1xa5zqZywDXguTwYGAAAoAJRVNAIJoRGC5OacABQFOWpTgVQA9OsaXTGRTtgcDnMpuRblVgJ8QJwqlUICAqk0QNUgbcpg1RkhgFTlvSNigIqFQrN5t8oAAqKoAbwppRAeAAtPCAF4IgBc9xG-LgZpNeAA3BSAL5U+n6gCqxOwX3m+zQVXIIAQVQA7s0fmKQKc4HB8mdfmd+WgGggptVQjByB89rr6RSAMT6Q0U4WlBovFqYInAO2ltBoCLtiKuqrHXa5Uq5I75u07YD8prur1lkDsSvV2vPesRppNqqljsRVsT736qv6ooRODAm6hRqrM4pu6mLC7qoTGCrG30+lRl+cKNIUrwhYRED8mAIGhkwaKZQk4H8sHpH9+UgjUYNCC1T3aThVjqVYql3Ety0IAAaVdp1ne550XRs7QQOApmxAByO8HyfaFcgaMBOBaXIUPIMDsHpeiGnpNAAClCCQGoACEACssAAWRAABRY4EHpFi2OY3I0Eo-EHnnd1hR-R44DtKMdgWLSCTmGALVyS0kDta5kWTGBjKjfJfjtVgcBwVY3SrW8kFyFoJhctyPPdE04EdM0wWAXI4TtIQcAAUgZKpeDi90EyQOA0EeKM7R7eEHiQLcp0IG0gUhQ9cPLdgSqQMqziNKof21eY7QAIha91VhAL8ySaO0Gk-EApgAgqKRoB8kpS41JRoLA7WS91kz8mA7TNdhJo+NBlqqVbJprOsG2XaymlsypgoddLwoaSLoqqNbEtiybJyKqpVgq-C0Pql6usqHq+oGoajK8yF5jNTMKm5VrZjI3J0qqAA5JAoxa3CWqh5N0uRqosDmLrVlrEbhWBsyrSsqpXKCryjiaJAzWRXz-KqQhjLGu0ImAiJsQe7bGd4dy8FxZmkEuM1gN83qGu+dKHKcuo7WIeL3VROAWPFnBGb5wqOPmBprlhz68dHW11YpycfVqIoihMuk0yqet8iqYsyztmFPr2hcDpXMiKJa3JUTaUJ6RgY5OFE1YWha-EqjVtWDMqM4JXCpAzzRYyQsdO0JWp4y6aWuXJECzzhU67q5jtQ9ZVJU5jLSjKsuHfIx3dT0qS8zowGKMoKmqTJNgkgAZW5l3NoogA">
-						Fit HTML element onto retro television screen.
-					</a></li>
-					<li><a href="#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8oAWMMFGnS+kjbQygVgA5+LEIQIAmMADZhPKAHYmpbGIL0BwlVF4BOaTTGUw24WAJyFJygrEoAznADGADSgl7DgJqu7jgOpU3RwAJAJIAS2BCKABlBAAjLDCYAAIAYQALAEMAOwBzJFsUCLEoACUCpBSAMRA4LBR0mCwAG1SQbJgkDqgAHgAHAD5fJGTbLL6RkAQ4ZJ7bPpzkh2bM21sAUjBgACI4hDDm4DC8222BvYOjk4BuHoB6eZyB2cfspZW1zZ2YdKQ4JEyaE6cDOPz+AKBf3ur2ecwWb2Wqw2W22YPIAFoxpkJqDfuRRuMkND4bDXu8kV9tghTgNqcSngAoe6DFAONZtDpdGBQAACYSwfVqKW2bNsdzQ7RgYriSDiqweMHIzQKv0qADpRdtrgyGQAqZIAbwZcRAeExYQAXsdcgAuZImuDAP7ok14bUAXx1asFxxSRru+rlDgA1rlMAhssB0Q4QM1anb-sBrsldXcGZ6dQHkgBVbIxrBYLnJMJoZLkKbJADuORSNGSIAAbn84BERmDkk60JkEM0UrZFcrbCm0wBiESGhnJe2ZENhqaRu0jtBoByrhzJhthWxhOIHJLkO3pCJO7IenVjsQTqdB0PhhfJeA5R7-DpnhlZyf66IOf5dAnYkZW0yZIuCwT9kkaGA+htO47kreC1UrWVt06GMnRgBAaBbTJmlsDVsDuNCkEItYSNsTFCTwvp0j6ZJP1HEQABpkgvK8QMldEu0SZoD2SbYACFZVWAA5JBkC1Sd2I6dEkLCXJGjtE1Dm1KcYzjOA7UrI9Om1To8BgCjMlASs7TAPo8GSMyLJwe0VhDFSlljeMq20pAHMkysIh+O0OBwcyHN+OSFOSXz-J1DMx0IZI+mY1jaKNKdmmOJB0UC+SYDtHA1W0BysEyOBcmOO1iDCqc9IMnC5OyO0ACtqRgEtyG1CVpO3C0kDtfg5DC8r0UfbJbAlOo7QQPoJkcVY3IZdJyGorpbDtbsaDffCOkyZKZgS6KjKuW1khKt100zfVUmiaJ2JmdswwiYcGRHa7gDYrMAHkW0K7IcJAsgIJgKCFtgtAkocNVgzgO4+nBvowGiGqAHFbuvGdb3nYARrgZoAAptn5TJ8mlfZDmtNUar6XJtgASinGybK0pIRmyEB0X+CZMhgBybznCMozajr9pwMR6HM5I5EkfhSvtWonQ05IGeyKapzS4LCEkHA-MOqdBRQsJ2gTJAVgapsHMbP5AZAEyIOPLptSOhk1QuQmTgnFqDJ54qxF4MKMzVMF-kBYEnY412+e6w6vbRQyJgD1rLV5wgDpW6ko5dmO7QFqyHKOeYVl444krll043syT+sG2osDtWwHBwpAMbENUwGYwhyYckuhqwdFajkoq+aFnA30kopgDAGJ4kSFIggAFQAWQAGWSHJHtO6IgA">
-						Fit HTML element on front of building
-					</a></li>
-					<li><a href="http://localhost/Matrix-Construction-Set/#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKHdTXAT0JRhHygCYAWS68gVgE5jsBGcrlgDiZcCtLkPIA2eowzZaBfvTFV5UCWBZNa5MKKZgC6zVTDklYgM5wAxgA0oXIlesBNB05sB1dx+sAJHxQAS2AuKABlBAAjLCCYAAIAYQALAEMAOwBzJAtg4FooACUcpASAMRA4LBRkmCwAG0SQdJgkFqgAHgAHAD4AUVSEmGSkeNiWgEIOgHpelGsLCyaWtpgoAAEgrC7KhIAiBYtptGaYI6ikKNSjixhSepyR0oA6Q72AbgAob+mAKniAKrpazYLCreJBNDxUggBDxADuGSGIHiIAAbkg4HAQqNhqNgEg0KkEPUErd7jl4r9pp8AMQgLjxADenwAkGighYglEgvU4qQAFzxZIhAnpL4AX2+9NozLZV2sAGtMpgEOlgABaEH1SpC+AZCxdVJwVZfbW6hEi1qS6UMgA08RlcqNwGAQSyQpwX1ZJxaGq5AC8kELaDgcF08F9fTANUTYvVBfE9gAhS7XABySGQH0+0Y18KQQUytSFURA9WANs+zyiOqV8S6coeMFacH9Rus7synueOH4SCwXxdbo98S9nywxsy7s9X316QsJyqergBvqgyQtgAFOG8ABKL4ZLaDILNIWkJD1erxFgWeJIa5IDWwmCH9LHmCn9IauKYk-NLVYRaIV3TQd1fy+Pl0ifEYixLeIuC+eErSfQ1UmsYN4nSEB4VXLpPilT4-iScJwniJd4jxeIVRCKkaVpGjgDlVkFWVVV1SFBA4HqLc9mPbIjgvK9ngAKy6TI9j3eILGsTArzHBTkN-LCQA1E0ugfV82R2LlPzPeITXXT8MW9dFMTQHV4SFEVXTaKt1kVJBSAwVIwTvITrxZHAAFI5XnRdKiwFc1w3bdHDDCMDwI75wt8ll-KXILKNXBcjM3LcNT4CL9xteI8viVlCryMAImiWIEj8AAVABZAAZeIMiYxJSKAA">
-						Fit HTML element inside a poster.
-					</a></li>
-				</ul>
-				
-				<h2>References</h2>
-				<ul>
-					<li><a href="http://www.useragentman.com/blog/2011/01/07/css3-matrix-transform-for-the-mathematically-challenged/">CSS3 Matrix Transform For The Mathematically Challenged</a>
-				</li>
-				</ul>
-				<a href="#" data-dialog-id="info-dialog" class="dialog-link close">Close</a>
-			</p>
-  </dialog>
-	<script src="bower_components/html5Forms/shared/js/EventHelpers.js"></script>
-  <script src="bower_components/config/js/config.js">
-  </script>
-  <script src="js/modernizr.com/modernizr.custom.71427.js">
-  </script>
-
-
-  <script src="bower_components/visibleIf/shared/js/visibleIf.js">
-  </script>
-
-  <script src="bower_components/html5Forms/shared/js/weston.ruter.net/webforms2/webforms2_src.js">
-  </script>
-
-  <script src="bower_components/html5Forms/shared/js/html5Widgets.js">
-  </script>
-
-  <script src="js/jcoglan.com/sylvester.js">
-  </script>
-  <script src="js/helpers.js">
-  </script>
-
-
-
-  <script src="js/DragDropHelpers-1.1.js"></script>
-  <script src="bower_components/lz-string/libs/lz-string.js"></script>
-  <script src="bower_components/dialog-polyfill/dialog-polyfill.js"></script>
-
-
-  <script src="js/solveMatrix.js">
-  </script>
-</form>
+    <script src="js/kmewhort/pointer_events_polyfill.js"></script>
+    
+    <script src=
+    "bower_components/html5Forms/shared/js/EventHelpers.js">
+    </script> 
+    
+    <script src="bower_components/config/js/config.js">
+    </script> 
+             
+    <script src="js/modernizr.com/modernizr.custom.71427.js">
+    </script> 
+    <script src=
+    "bower_components/visibleIf/shared/js/visibleIf.js">
+    </script> 
+    <script src=
+    "bower_components/html5Forms/shared/js/weston.ruter.net/webforms2/webforms2_src.js">
+    </script> 
+    <script src=
+    "bower_components/html5Forms/shared/js/html5Widgets.js">
+    </script> 
+    <script src="js/jcoglan.com/sylvester.js">
+    </script> 
+    <script src="js/helpers.js">
+    </script> 
+    <script type="text/javascript" src=
+    "js/sanitize.js/sanitize.js">
+    </script> 
+    <script type="text/javascript" src=
+    "js/sanitize.js/sanitize/config/matrix.js">
+    </script> 
+    <script src="js/DragDropHelpers-1.1.js">
+    </script> 
+    <script src="bower_components/lz-string/libs/lz-string.js">
+    </script> 
+    <script src=
+    "bower_components/dialog-polyfill/dialog-polyfill.js">
+    </script> 
+    <script src="js/solveMatrix.js">
+    </script>
+  </form>
 </body>
 </html>

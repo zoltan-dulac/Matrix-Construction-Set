@@ -83,6 +83,13 @@ var DragDropHelpers = new function () {
 				}
 				
 				/*
+				 * This is needed for IE11, or nodes will need to be dragged twice to 
+				 * initiate the dragStart event.  Taken from 
+				 * http://stackoverflow.com/questions/16750180/ie-10-dragstart-event-doesnt-get-fired-if-img-is-wrapped-by-a
+				 */
+				EventHelpers.addEvent(draggableNode, 'selectstart', selectStartEvent);
+				
+				/*
 				 * This sets up events that will give visual cues in IE and 
 				 * Chrome.  On dragstart, it will clone the draggable object 
 				 * and make it transpararent.  On dragend, it will destroy 
@@ -107,7 +114,11 @@ var DragDropHelpers = new function () {
 		
 	}
 	
-	
+	function selectStartEvent(e) {
+	    EventHelpers.preventDefault(e);
+	    this.dragDrop && this.dragDrop();  //activates DnD for IE  
+        return false;
+	}
 	
 	function dragStartEvent(e) {
 		if (!doesShowVisualCues(e)) {
@@ -209,7 +220,7 @@ var DragDropHelpers = new function () {
 			
 			
 		} else {
-			r = null;
+		    r = null;
 		}
 		
 		if (r && e.currentTarget != e.target) {
