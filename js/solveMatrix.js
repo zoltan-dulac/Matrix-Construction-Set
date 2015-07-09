@@ -1,7 +1,6 @@
 /**
  * @author Zoltan Hawryluk
  * 
- * BUGS: IE10 needs to do a mutation event hack like the IE11 mutation events fix.
  */
 
 
@@ -92,6 +91,9 @@ var matrixSolver = new function () {
             EventHelpers.addEvent(me.form['do3D'], 'change', me.submitEvent);
             EventHelpers.addEvent(me.form['showVendorPrefixes'], 'change', me.submitEvent);
             EventHelpers.addEvent(window, 'hashchange', hashChangeEvent);
+            EventHelpers.addEvent(me.form['hideUI'], 'change', me.hideUIChangeEvent);
+            
+            me.hideUIChangeEvent();
             me.submitEvent(null, false, true);
             
         }
@@ -126,6 +128,18 @@ var matrixSolver = new function () {
             }
         }
     };
+    
+    me.hideUIChangeEvent = function (e) {
+        var hideUI = me.form['hideUI'];
+        
+        if (hideUI.checked) {
+            $('o1').style.display ='none';
+            $('points').style.display='none';
+        } else {
+            $('o1').style.display ='block';
+            $('points').style.display='block';
+        }
+    }
     
     function hashChangeEvent(e) {
         // uncheck do3D, just in case 
@@ -367,12 +381,14 @@ var matrixSolver = new function () {
         me.submitEvent(e);
     }
 
-    me.submitEvent = function (e, ignorePoints, noSetHash) {
+    me.submitEvent = function (e, ignorePoints, noSetHash, o1Hidden) {
         var transform;
         
         if (e && e.type != 'reset') {
                 EventHelpers.preventDefault(e);
         }
+        
+        
         
         if (me.form['do3D'] && me.form['do3D'].checked) {
             /* Uses info from http://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/ */
@@ -443,7 +459,7 @@ var matrixSolver = new function () {
             
             
             if (!ignorePoints) {
-                doTransform3D(transform);
+                doTransform3D(transform, o1Hidden);
                 drawPoints3D(transform);
             }
         // do nothin;
@@ -469,7 +485,7 @@ var matrixSolver = new function () {
             ]);
             
             if (!ignorePoints) { 
-                doTransform(transform);
+                doTransform(transform, o1Hidden);
                 drawPoints(transform);
             }
         };
@@ -491,7 +507,7 @@ var matrixSolver = new function () {
             
     };
     
-    function doTransform(m) {
+    function doTransform(m, o1Hidden) {
         var matrixCSS, webkitMatrixCSS,
             scriptedToken = me.form.showVendorPrefixes.checked?'solveMatrix.css.vendor':'solveMatrix.css.noVendor';
             
@@ -516,8 +532,12 @@ var matrixSolver = new function () {
         )
         
         
+        if (o1Hidden) {
+            me.o1.el.style.top = '-1000px';
+        } else {
+            me.o1.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
+        }
         
-        me.o1.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         o2.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         
         
@@ -527,7 +547,7 @@ var matrixSolver = new function () {
         
     }
     
-    function doTransform3D(m) {
+    function doTransform3D(m, o1Hidden) {
         var matrixCSS;
         var sb = new StringBuffer(),
             counter = 0,
@@ -567,8 +587,14 @@ var matrixSolver = new function () {
         //StringHelpers.sprintf("transform: %s; <br />transform-origin: %s", matrixCSS, origin);
         
         
+        if (o1Hidden) {
+            console.log('haaa');
+            me.o1.el.style.top = '-1000px';
+        } else {
+            console.log('hmmm');
+            me.o1.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
+        }
         
-        me.o1.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         o2.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         
         o2.el.style[matrixSolver.transformProp] = matrixCSS;
@@ -651,9 +677,9 @@ function Block (el) {
         
         
         //var zIndex = CSSHelpers.getComputedStyle(me.el).zIndex;
-        me.el.style.zIndex = -1000;
+        //me.el.style.zIndex = -1000;
         me.resizer.el.style.visibility = 'hidden';
-        CSSHelpers.addClass(me.el, 'top');
+        //CSSHelpers.addClass(me.el, 'top');
        
         
     }
@@ -662,7 +688,9 @@ function Block (el) {
    function dragEvent(e) {
         
         // do nothing
-        
+        if (grid.draggingObject.id === 'o1' && me.el.id === 'o1') {
+            grid.draggingObject.style.top = '-1000px';
+        }
    }
 
     
@@ -797,6 +825,7 @@ function Point(pointEl) {
         grid.draggingObject = EventHelpers.getEventTarget(e);
         //CSSHelpers.addClass($('gridBlocks'), 'hidden');
         grid.dragStartCoords = coords;
+        
         // Need pointer-events? 
         if (!Modernizr.csspointerevents ) {
             $('o2').style.visibility = 'hidden'
@@ -975,6 +1004,7 @@ var grid = new function () {
                 }
                 break;
             case "o1":
+                $('o1').style.top = '-1000px';
                 $('o2').style.visibility = 'hidden';
                 break;
             default:
@@ -987,7 +1017,10 @@ var grid = new function () {
         }
         
         matrixSolver.setForm(me.coords);
-        matrixSolver.submitEvent(e, false, true);
+        
+        var o1Hidden = (me.draggingObject.id === 'o1');
+        
+        matrixSolver.submitEvent(e, false, true, o1Hidden);
         
         
         EventHelpers.cancelBubble(e);
