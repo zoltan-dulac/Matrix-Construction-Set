@@ -17,6 +17,7 @@ Sanitize.Config.MATRIX = {
      'a'         : ['href'],
      'blockquote': ['cite'],
      'q'         : ['cite'],
+     'img'       : ['src', 'width', 'height'],
      '__ALL__': ['class', 'id'],
    },
 
