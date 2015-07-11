@@ -359,6 +359,7 @@ html.no-draganddrop #unSupportedMessage {
 
 .no-pointer-events {
   pointer-events: none;
+  
 }
 
 html.no-csstransforms3d [for=do3D] {

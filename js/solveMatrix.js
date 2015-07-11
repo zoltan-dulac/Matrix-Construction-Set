@@ -929,7 +929,7 @@ function Resizer(el, block) {
         
         grid.coords = DragDropHelpers.getEventCoords(e);
         
-        if (grid.coords === null) {
+        if (grid.coords === null || grid.coords.x > grid.el.offsetWidth) {
             grid.coords = oldcoords;
         }
         
