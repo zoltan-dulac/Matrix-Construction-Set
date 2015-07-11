@@ -16,7 +16,7 @@ var matrixSolver = new function () {
     me.blankImage = new Image();
     me.blankImage.src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     
-    var o2, resizer, prop, pointsContainer, dialogLinks,
+    var resizer, prop, pointsContainer, dialogLinks,
         maxURLLength = 2083, sanitize = new Sanitize(Sanitize.Config.MATRIX), 
         dummyNode = document.createElement('div');
     
@@ -52,7 +52,7 @@ var matrixSolver = new function () {
         
         me.o1 = new Block($('o1'));
         
-        o2 = new Block($('o2'));
+        me.o2 = new Block($('o2'));
         
         resizer = new Resizer($('o1Resizer'), me.o1);
         me.o1.resizer = resizer;
@@ -61,7 +61,7 @@ var matrixSolver = new function () {
         
         var pointEls = document.getElementsByClassName('point');
         for (var i=0; i<pointEls.length; i++) {
-            me.points = new Point(pointEls[i]);
+            me.points.push(new Point(pointEls[i]));
         }
         
         grid.init();
@@ -133,10 +133,10 @@ var matrixSolver = new function () {
         var hideUI = me.form['hideUI'];
         
         if (hideUI.checked) {
-            $('o1').style.display ='none';
+            me.o1.el.style.display ='none';
             $('points').style.display='none';
         } else {
-            $('o1').style.display ='block';
+            me.o1.el.style.display ='block';
             $('points').style.display='block';
         }
     }
@@ -195,7 +195,7 @@ var matrixSolver = new function () {
     }
     
     function populateLinkDialogs() {
-        me.form.htmlContent.value = $('o1').innerHTML;
+        me.form.htmlContent.value = me.o1.el.innerHTML;
         me.form.cssContent.value = $('custom-html').innerHTML;
     }
     
@@ -211,8 +211,8 @@ var matrixSolver = new function () {
        // we first take any potential nasty stuff out of the HTML
        var html = getSanitizedHTML(me.form.htmlContent.value);
         
-       $('o1').innerHTML = html;
-       $('o2').innerHTML = html;
+       me.o1.el.innerHTML = html;
+       me.o2.el.innerHTML = html;
        
        // then we stick it back into the form
        me.form.htmlContent.value = html;
@@ -538,10 +538,10 @@ var matrixSolver = new function () {
             me.o1.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         }
         
-        o2.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
+        me.o2.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         
         
-        o2.setTransform(origin, webkitMatrixCSS)
+        me.o2.setTransform(origin, webkitMatrixCSS)
         
         
         
@@ -595,10 +595,10 @@ var matrixSolver = new function () {
             me.o1.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         }
         
-        o2.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
+        me.o2.setDimensions(formEl("from0x"), formEl("from0y"), formEl("from2x") - formEl("from0x"), formEl("from1y") - formEl("from0y"));
         
-        o2.el.style[matrixSolver.transformProp] = matrixCSS;
-        o2.el.style[matrixSolver.transformOriginProp] = origin;
+        me.o2.el.style[matrixSolver.transformProp] = matrixCSS;
+        me.o2.el.style[matrixSolver.transformOriginProp] = origin;
         
         
     }
@@ -676,11 +676,9 @@ function Block (el) {
         grid.draggingObject = me.el; //EventHelpers.getEventTarget(e);
         
         
-        //var zIndex = CSSHelpers.getComputedStyle(me.el).zIndex;
-        //me.el.style.zIndex = -1000;
+        
         me.resizer.el.style.visibility = 'hidden';
-        //CSSHelpers.addClass(me.el, 'top');
-       
+        
         
     }
     
@@ -696,7 +694,7 @@ function Block (el) {
     
     function dragEndEvent(e) {
         
-        me.el.style.zIndex = zIndex;
+       
         me.resizer.el.style.visibility = 'visible';
         me.resizer.move();
         
@@ -802,12 +800,12 @@ function Point(pointEl) {
     }
     
     function mousedownEvent(e) {
-        //$('o2').style.visibility = 'hidden'
+        //matrixSolver.o2.el.style.visibility = 'hidden'
         
     }
     
     function mouseupEvent(e) {
-        $('o2').style.visibility = 'visible'
+        matrixSolver.o2.el.style.visibility = 'visible'
     }
     
     function dragStartEvent(e) {
@@ -819,32 +817,25 @@ function Point(pointEl) {
         // get rid of drag effect
         var dt = e.dataTransfer;
         if (dt.setDragImage) {
-            dt.setDragImage(matrixSolver.blankImage, 0, 0);
+            dt.setDragImage(me.el, coords.x, coords.y);
         }
         
         grid.draggingObject = EventHelpers.getEventTarget(e);
-        //CSSHelpers.addClass($('gridBlocks'), 'hidden');
         grid.dragStartCoords = coords;
         
-        // Need pointer-events? 
-        if (!Modernizr.csspointerevents ) {
-            $('o2').style.visibility = 'hidden'
-            grid.draggingObject.style.zIndex = '-1';
-        }
+        
         //grid.draggingObject.style.marginTop = '-1px';
         e.dataTransfer.effectAllowed="move"; 
     }
     
     
    function dragEvent(e) {
-        //CSSHelpers.removeClass($('gridBlocks'), 'hidden');
         
    }
 
     
     function dragEndEvent(e) {
-        //CSSHelpers.removeClass($('gridBlocks'), 'hidden');
-        grid.draggingObject.zIndex = '';
+        
         grid.dropEvent(e);
         
         /*
@@ -900,25 +891,21 @@ function Resizer(el, block) {
     }
     
     function dragStartEvent(e) {
-        CSSHelpers.addClass($('o1'), 'no-pointer-events');
+        CSSHelpers.addClass(matrixSolver.o1.el, 'no-pointer-events');
         
         // you must set some data in order to drag an arbitrary block element like a <div>
         e.dataTransfer.setData('Text', 'ffff');
         
         //matrixSolver.o1.el.style.left = '-1000px'
+        CSSHelpers.addClass(matrixSolver.o1.el, 'on-top-of-facade');
         grid.draggingObject = el;
         
-        $('o2').style.visibility = 'hidden';
         grid.dragStartCoords = DragDropHelpers.getEventCoords(e);
         e.dataTransfer.effectAllowed="move";
         
         EventHelpers.cancelBubble(e);
-         
-        /* Need pointer-events? */
-        if (!Modernizr.csspointerevents ) {
-            $('o1').style.visibility = 'hidden'
-            grid.draggingObject.style.zIndex = '-1';
-        }
+        //matrixSolver.o2.el.style.top = '-1000px';
+        
     }
     
     function dragEvent(e) {
@@ -939,10 +926,12 @@ function Resizer(el, block) {
     function dragEndEvent(e) {
         //matrixSolver.o1.el.style.visibility = 'visible'
         
-        grid.draggingObject.style.zIndex = '';
+        CSSHelpers.removeClass(matrixSolver.o1.el, 'on-top-of-facade');
         
-        CSSHelpers.removeClass($('o1'), 'no-pointer-events');
-        $('o2').style.visibility = 'visible';
+        CSSHelpers.removeClass(matrixSolver.o1.el, 'no-pointer-events');
+        matrixSolver.o2.el.style.visibility = 'visible';
+        
+        matrixSolver.submitEvent(e);
     }
     
     me.resize = function(){
@@ -965,7 +954,8 @@ function Resizer(el, block) {
 }
 
 var grid = new function () {
-    var me = this;
+    var me = this,
+        i;
     
     me.draggingObject = null;
     me.el = null;
@@ -973,13 +963,16 @@ var grid = new function () {
     me.coords = null;
     
     me.init = function () {
-        me.el = $('grid');
+        me.el = $('grid-facade');
+        
         
         /* These are events for the object to be dropped */
         EventHelpers.addEvent(me.el, 'dragover', me.dragOverEvent, true);
         EventHelpers.addEvent(me.el, 'dragenter', me.dragEnterEvent, true);
         EventHelpers.addEvent(me.el, 'drop', me.dropEvent, false);
+        
     };
+    
     
     me.dragEnterEvent = function(e){
         EventHelpers.preventDefault(e);
@@ -1004,15 +997,10 @@ var grid = new function () {
                 }
                 break;
             case "o1":
-                $('o1').style.top = '-1000px';
-                $('o2').style.visibility = 'hidden';
+                matrixSolver.o1.el.style.top = '-1000px';
                 break;
             default:
-                /* Need pointer-events */
-                if (!Modernizr.csspointerevents ) {
-                    $('o2').style.visibility = 'hidden';
-                    $('o2').style.zIndex = -1;
-                } 
+                
                 
         }
         
@@ -1071,21 +1059,21 @@ var grid = new function () {
         matrixSolver.submitEvent(e);
         
         
-        $('o2').style.visibility = 'visible';
-        $('o2').style.zIndex = '';
+        matrixSolver.o2.el.style.visibility = 'visible';
+        
         
         
     };
     
     me.hideAll = function () {
-        $('o1').style.visibility = 'hidden';
-        $('o2').style.visibility = 'hidden';
+        matrixSolver.o1.el.style.visibility = 'hidden';
+        matrixSolver.o2.el.style.visibility = 'hidden';
     };
     
     me.showAll = function () {
         
-        $('o1').style.visibility = 'visible';
-        $('o2').style.visibility = 'visible';
+        matrixSolver.o1.el.style.visibility = 'visible';
+        matrixSolver.o2.el.style.visibility = 'visible';
         
     };
     

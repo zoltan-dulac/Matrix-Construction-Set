@@ -200,17 +200,80 @@ table tbody td {
   text-align: center;
 }
 
+#grid {
+  position: relative !important;
+ 
+}
+
+#grid-facade {
+  width: 100%;
+  height: 100%;
+  border: solid 1px red;
+  position: absolute;
+  top: 0;
+  left: 0;
+   z-index: 3;
+}
+
+/* Draggable object should be above the facade ... */
+[draggable="true"] {
+  z-index: 4;
+}
+
+/* 
+ * Except when an object is dragging and it's not
+ * itself.  It *must* override every other rule.
+ */
+[draggable="true"].notCurrentlyDragging {
+  z-index: 0 !important;
+}
+
+/* o2 should always be above o1 */
+#o2 {
+  z-index: 5;
+}
+
+/* .points should be above all objects except the resizer */
+.point {
+  z-index: 6;
+}
+
+/* o1Resizer should alway be above o2 and points*/
+#o1Resizer {
+  z-index: 7;
+}
+
+
+/* Style for when something is not currently dragging, but still on top of facade */
+[draggable="true"].on-top-of-facade {
+  z-index: 1;
+}
+
+
+/* Points, though, should still be above other non-dragging objects */
+.point.notCurrentlyDragging {
+  z-index: 2;
+}
+
+[draggable="true"].currentlyDragging {
+  transform: translateX(-10000px);
+}
+
+#o1.currentlyDragging {
+  transform: none;
+}
+
+
 .resize {
   position: absolute;
   top: 90px;
   left: 90px;
-  z-index: 100;
   cursor: se-resize !important;
 }
 
 .block .resize img {
   border: 0;
-  z-index: 10;
+  z-index: 3;
 }
 
 .block {
@@ -219,11 +282,10 @@ table tbody td {
   color: black;
   position: absolute;
   overflow: hidden;
-  z-index: 1;
 }
 
 .top {
-  z-index: 10;
+  z-index: 2;
 }
 
 .hidden #o2 {
@@ -253,7 +315,6 @@ table tbody td {
   margin-top: -17px;
   position: absolute;
   display: block;
-  z-index: 100;
 }
 
 body.ie6 #matrixForm, body.ie7 #matrixForm, body.ie8 #matrixForm
