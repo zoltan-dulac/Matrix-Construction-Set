@@ -16,33 +16,6 @@
   <link rel="stylesheet" href=
   "bower_components/dialog-polyfill/dialog-polyfill.css">
   <style id="custom-html">
-  /*
-  * Feel free to edit any of the styles below.
-  */
-
-  /* The object before it is transformed */
-  #o1 {
-        background: #ffcccc;
-  }
-
-  /* The object after it has been transformed */
-  #o2 {
-        background: #ccccff;
-  }
-
-  /* Common styles for box objects. */
-  #o1, #o2 {
-        font-size: inherit;
-  } 
-
-  /* CSS for the grid */
-  #grid {
-        background: url("images/background.gif") repeat scroll 0 0 white;
-        height: 800px;
-        position: relative;
-        overflow: hidden;
-
-  }
   </style>
 </head>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -196,6 +169,7 @@
         <solveMatrix>
                 <css>
                         <vendor><![CDATA[
+
 /* One transform entry for each different brower.  Firefox needs px in the last two entries */<br />
 -moz-transform:    @mozCSS@;<br />
 -webkit-transform: @webkitCSS@;<br />
@@ -209,10 +183,19 @@ transform:         @webkitCSS@;<br />
 -o-transform-origin:      @origin@;<br />
 -ms-transform-origin:     @origin@;<br />
 transform-origin:         @origin@;<br />
+<br />
+/* Need to make sure you define the width and height */<br />
+width: @width@;<br />
+height: @height@;<br />
                         ]]></vendor>
                         <noVendor><![CDATA[
 transform: @webkitCSS@;<br />
 transform-origin: @origin@;<br />
+<br />
+/* Need to make sure you define the width and height */<br />
+width: @width@;<br />
+height: @height@;<br />
+
                 ]]></noVendor></css>
         </solveMatrix>
         <solveMatrix3d>
@@ -231,10 +214,18 @@ transform:         @webkitCSS@;<br />
 -webkit-transform-origin: @origin@;<br />
 -o-transform-origin:      @origin@;<br />
 transform-origin:         @origin@;<br />
+<br />
+/* Need to make sure you define the width and height */<br />
+width: @width@;<br />
+height: @height@;<br />
                 ]]></vendor>
                 <noVendor><![CDATA[
 transform: @webkitCSS@;<br />
 transform-origin: @origin@;<br />
+<br />
+/* Need to make sure you define the width and height */<br />
+width: @width@;<br />
+height: @height@;<br />
                 ]]></noVendor></css>
         </solveMatrix3d>
 </config>
@@ -280,41 +271,44 @@ transform-origin: @origin@;<br />
  * Feel free to edit any of the styles below.
  */
 
+/* ensure all the elements styled below use border-box */
+.block, #grid {
+    box-sizing: border-box;
+}
+
 /* The object before it is transformed */
 #o1 {
-        background: #ffcccc;
+    background: #ffcccc;
 }
 
 /* The object after it has been transformed */
 #o2 {
-        background: #ccccff;
+    background: #ccccff;
 }
 
 /* Common styles for box objects. */
-#o1, #o2 {
-        font-size: inherit;
+.block {
+    font-size: inherit;
 } 
 
 /* CSS for the grid */
 #grid {
-        background: url("images/background.gif") repeat scroll 0 0 white;
-        height: 800px;
-        position: relative;
-        overflow: hidden;
-
+    background: url("images/background.gif") repeat scroll 0 0 white;
+    height: 800px;
+    position: relative;
+    overflow: hidden;
 }
-                       
 </textarea></td>
             </tr>
           </tbody>
         </table>
         
-        <input type="submit" data-allow-submit="true" data-dialog-id=
+        <input type="submit" data-allow-default="true" data-dialog-id=
         "content-dialog" class=
         "dialog-link close visibleIf-submitIfInvisible" value=
         "Submit HTML and CSS">
         
-        <input type="submit" value="Cancal"
+        <input type="submit" value="Cancel"
         data-dialog-id="content-dialog" class=
         "dialog-link close visibleIf-submitIfInvisible"> <a href=
         "#" data-dialog-id="content-dialog" class=
@@ -347,22 +341,22 @@ transform-origin: @origin@;<br />
         <ul>
           <li>
             <a data-allow-default="true" data-dialog-id="info-dialog" class="dialog-link close" href=
-            "#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8iB2a2ywgFgCYA6ATgA5Ww9AKylshSkIBshHtzn96rQu2LcUNQgUK966kOKhDCIjNnYFhamuaiTWrPexbsr4ApJV6wE3lznzWRWVVFABnOABjAA0qMMiATVjwiIB1KhJkgAl0lABLYEIoAGUEACMsXJgAAgBhAAsAQwA7AHMkULzgdigAJXakaoAxEDgsFDqYLAAbGpAmmCR5qAAeAAcAPgAVOtzQqt2qqdyANyQqhbxq3KaqhqrSqZAIgGsqpCmkLEXqmEbqxr2pSQi3OcGaoTQIy+wCqCFC1xa5zqZywDXguTwYGAAAoAJRVNAIJoRGC5OacABQFOWpTgVQA9OsaXTGRTtgcDnMpuRblVgJ8QJwqlUICAqk0QNUgbcpg1RkhgFTlvSNigIqFQrN5t8oAAqKoAbwppRAeAAtPCAF4IgBc9xG-LgZpNeAA3BSAL5U+n6gCqxOwX3m+zQVXIIAQVQA7s0fmKQKc4HB8mdfmd+WgGggptVQjByB89rr6RSAMT6Q0U4WlBovFqYInAO2ltBoCLtiKuqrHXa5Uq5I75u07YD8prur1lkDsSvV2vPesRppNqqljsRVsT736qv6ooRODAm6hRqrM4pu6mLC7qoTGCrG30+lRl+cKNIUrwhYRED8mAIGhkwaKZQk4H8sHpH9+UgjUYNCC1T3aThVjqVYql3Ety0IAAaVdp1ne550XRs7QQOApmxAByO8HyfaFcgaMBOBaXIUPIMDsHpeiGnpNAAClCCQGoACEACssAAWRAABRY4EHpFi2OY3I0Eo-EHnnd1hR-R44DtKMdgWLSCTmGALVyS0kDta5kWTGBjKjfJfjtVgcBwVY3SrW8kFyFoJhctyPPdE04EdM0wWAXI4TtIQcAAUgZKpeDi90EyQOA0EeKM7R7eEHiQLcp0IG0gUhQ9cPLdgSqQMqziNKof21eY7QAIha91VhAL8ySaO0Gk-EApgAgqKRoB8kpS41JRoLA7WS91kz8mA7TNdhJo+NBlqqVbJprOsG2XaymlsypgoddLwoaSLoqqNbEtiybJyKqpVgq-C0Pql6usqHq+oGoajK8yF5jNTMKm5VrZjI3J0qqAA5JAoxa3CWqh5N0uRqosDmLrVlrEbhWBsyrSsqpXKCryjiaJAzWRXz-KqQhjLGu0ImAiJsQe7bGd4dy8FxZmkEuM1gN83qGu+dKHKcuo7WIeL3VROAWPFnBGb5wqOPmBprlhz68dHW11YpycfVqIoihMuk0yqet8iqYsyztmFPr2hcDpXMiKJa3JUTaUJ6RgY5OFE1YWha-EqjVtWDMqM4JXCpAzzRYyQsdO0JWp4y6aWuXJECzzhU67q5jtQ9ZVJU5jLSjKsuHfIx3dT0qS8zowGKMoKmqTJNgkgAZW5l3NoogA">
+            "#tv">
             An HTML element superimposed on a retro television screen.</a>
           </li>
           <li>
             <a data-allow-default="true" data-dialog-id="info-dialog" class="dialog-link close" href=
-            "#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8oAWMMFGnS+kjbQygVgA5+LEIQIAmMADZhPKAHYmpbGIL0BwlVF4BOaTTGUw24WAJyFJygrEoAznADGADSgl7DgJqu7jgOpU3RwAJAJIAS2BCKABlBAAjLDCYAAIAYQALAEMAOwBzJFsUCLEoACUCpBSAMRA4LBR0mCwAG1SQbJgkDqgAHgAHAD5fJGTbLL6RkAQ4ZJ7bPpzkh2bM21sAUjBgACI4hDDm4DC8222BvYOjk4BuHoB6eZyB2cfspZW1zZ2YdKQ4JEyaE6cDOPz+AKBf3ur2ecwWb2Wqw2W22YPIAFoxpkJqDfuRRuMkND4bDXu8kV9tghTgNqcSngAoe6DFAONZtDpdGBQAACYSwfVqKW2bNsdzQ7RgYriSDiqweMHIzQKv0qADpRdtrgyGQAqZIAbwZcRAeExYQAXsdcgAuZImuDAP7ok14bUAXx1asFxxSRru+rlDgA1rlMAhssB0Q4QM1anb-sBrsldXcGZ6dQHkgBVbIxrBYLnJMJoZLkKbJADuORSNGSIAAbn84BERmDkk60JkEM0UrZFcrbCm0wBiESGhnJe2ZENhqaRu0jtBoByrhzJhthWxhOIHJLkO3pCJO7IenVjsQTqdB0PhhfJeA5R7-DpnhlZyf66IOf5dAnYkZW0yZIuCwT9kkaGA+htO47kreC1UrWVt06GMnRgBAaBbTJmlsDVsDuNCkEItYSNsTFCTwvp0j6ZJP1HEQABpkgvK8QMldEu0SZoD2SbYACFZVWAA5JBkC1Sd2I6dEkLCXJGjtE1Dm1KcYzjOA7UrI9Om1To8BgCjMlASs7TAPo8GSMyLJwe0VhDFSlljeMq20pAHMkysIh+O0OBwcyHN+OSFOSXz-J1DMx0IZI+mY1jaKNKdmmOJB0UC+SYDtHA1W0BysEyOBcmOO1iDCqc9IMnC5OyO0ACtqRgEtyG1CVpO3C0kDtfg5DC8r0UfbJbAlOo7QQPoJkcVY3IZdJyGorpbDtbsaDffCOkyZKZgS6KjKuW1khKt100zfVUmiaJ2JmdswwiYcGRHa7gDYrMAHkW0K7IcJAsgIJgKCFtgtAkocNVgzgO4+nBvowGiGqAHFbuvGdb3nYARrgZoAAptn5TJ8mlfZDmtNUar6XJtgASinGybK0pIRmyEB0X+CZMhgBybznCMozajr9pwMR6HM5I5EkfhSvtWonQ05IGeyKapzS4LCEkHA-MOqdBRQsJ2gTJAVgapsHMbP5AZAEyIOPLptSOhk1QuQmTgnFqDJ54qxF4MKMzVMF-kBYEnY412+e6w6vbRQyJgD1rLV5wgDpW6ko5dmO7QFqyHKOeYVl444krll043syT+sG2osDtWwHBwpAMbENUwGYwhyYckuhqwdFajkoq+aFnA30kopgDAGJ4kSFIggAFQAWQAGWSHJHtO6IgA">
+            "#building">
             Live text in front of building</a>
           </li>
           <li>
             <a data-allow-default="true" data-dialog-id="info-dialog" class="dialog-link close" href=
-            "#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKHdTXAT0JRhHygCYAWS68gVgE5jsBGcrlgDiZcCtLkPIA2eowzZaBfvTFV5UCWBZNa5MKKZgC6zVTDklYgM5wAxgA0oXIlesBNB05sB1dx+sAJHxQAS2AuKABlBAAjLCCYAAIAYQALAEMAOwBzJAtg4FooACUcpASAMRA4LBRkmCwAG0SQdJgkFqgAHgAHAD4AUVSEmGSkeNiWgEIOgHpelGsLCyaWtpgoAAEgrC7KhIAiBYtptGaYI6ikKNSjixhSepyR0oA6Q72AbgAob+mAKniAKrpazYLCreJBNDxUggBDxADuGSGIHiIAAbkg4HAQqNhqNgEg0KkEPUErd7jl4r9pp8AMQgLjxADenwAkGighYglEgvU4qQAFzxZIhAnpL4AX2+9NozLZV2sAGtMpgEOlgABaEH1SpC+AZCxdVJwVZfbW6hEi1qS6UMgA08RlcqNwGAQSyQpwX1ZJxaGq5AC8kELaDgcF08F9fTANUTYvVBfE9gAhS7XABySGQH0+0Y18KQQUytSFURA9WANs+zyiOqV8S6coeMFacH9Rus7synueOH4SCwXxdbo98S9nywxsy7s9X316QsJyqergBvqgyQtgAFOG8ABKL4ZLaDILNIWkJD1erxFgWeJIa5IDWwmCH9LHmCn9IauKYk-NLVYRaIV3TQd1fy+Pl0ifEYixLeIuC+eErSfQ1UmsYN4nSEB4VXLpPilT4-iScJwniJd4jxeIVRCKkaVpGjgDlVkFWVVV1SFBA4HqLc9mPbIjgvK9ngAKy6TI9j3eILGsTArzHBTkN-LCQA1E0ugfV82R2LlPzPeITXXT8MW9dFMTQHV4SFEVXTaKt1kVJBSAwVIwTvITrxZHAAFI5XnRdKiwFc1w3bdHDDCMDwI75wt8ll-KXILKNXBcjM3LcNT4CL9xteI8viVlCryMAImiWIEj8AAVABZAAZeIMiYxJSKAA">
+            "#mint">
             Animated text inside a Rodchenko poster.</a>
           </li>
           <li>
             <a data-allow-default="true" data-dialog-id="info-dialog" class="dialog-link close" href=
-            "http://localhost/Matrix-Construction-Set/#E4UwziAuBCCumQPYDsBMBeASuKACAYosALYBkAZsIsQAwAe6qAnBVbQJ6OqlL3oCsANho9ENTs36tqARgkAOACyiZDALQBmVCKRz0Adn4jK1VAy0skZ9II3KrC-aI0NBqec85LuAE0QaAEXRIYFgQUgBLHxl0AGVYACNiCMhcAGEACwBDZABzcEifDGwIVMISUgzIYgAbNJRIEGRIdAAeAAcAPjgImshWhOBO8oGh2PaQEB8AQgAoVoB6LtIAYzAweuamloABCOJ2olSAIjWwBfIG86ziEGAIlZy1R-bILIjkBbBIdhrwDMmkAAdGdjgBuWazABUuAA3rMEog6GowBEAF4fXIALlwiOAPjuakRdAhAF9IUDDh9UvCFjCElkVgBrXJUWDIHzPRA1Ig40A+MG4KELWbkyF03AAVWQK2ot2auAi5Fw7EQsFwAHccqkkLhEAA3O73Am4SAA3AE8hZWB9XDfX7gIUigDEiBkcNmuFxjJZbI5OOd5HIKxDKzJkNdqA9XoZzNZav9puAOTA7SyoGa4YjboANLhI9HcJdmmorckauwcccMtSpmoAIK3e6PZBpLKvd7IcGeosNNQakARXJVHGImoCnuynnAHEhFNpjOQCFexp0SAo7J+DU4mi4XcyGjtOj5oPkZe4P4IQmpxmYndAjQgYjnjVRM04xQ0Q8knsAocj3BP2-CFRWzd12jzAt2kLGoPhANQ-2HSB7yYc80x8Hw7z3CFiHTXIPh3c9V3XLJYNyZAcRWbY7ghYt11RNEQBxeR9CPCFiLUOdkDAS4SBxWB2gmYBHggCEMnYdoAW4nFrSQLMQQaTs7kLdDMLyHEDzY0DZglNJYliXtgFNc1WSiJ1ZmdUyfELCUAHl7nw5BSKLNhcCqSB2jALEFguWCViBJlgCWBZBEQQQADUMgAWXMmMfXjdkfH44AagACmOfYsnyc5kEmTleJRCYplQIEACt2lyY4AEovV3XcNRrRpcGQRA1FACYsiXHtY19BNOQYpjcAPVBFCPXBhGA7qiAJGdmpQEBz0QgCZAmrSvUOVFIAiFA+RAGpOoiQ1zwNO5yB5bc3KiAlkBAsVZkKDQ4kSZJUgACQAFSigAZXAcmsvTYkKRR0DbGVSMKfh0BWHkIEKQQoZhkAgA">
+            "#speed">
             Blurry text (using CSS text-shadow) on road from a fast moving car.
             </a>
           </li>

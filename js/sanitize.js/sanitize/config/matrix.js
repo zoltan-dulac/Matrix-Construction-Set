@@ -10,7 +10,10 @@ Sanitize.Config.MATRIX = {
     'colgroup', 'dd', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'i', 'img', 'li', 'ol', 'p', 'pre', 'q', 'small', 'strike', 'strong',
     'sub', 'sup', 'span', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'u',
-    'ul'],
+    'ul',
+    'svg', 'defs', 'path', 'text', 'textpath', 'tspan'
+    
+    ],
 
    /* These are the attributes allowed. */
    attributes: {
@@ -18,6 +21,10 @@ Sanitize.Config.MATRIX = {
      'blockquote': ['cite'],
      'q'         : ['cite'],
      'img'       : ['src', 'width', 'height'],
+     'svg'       : ['xmlns', 'xmlns:xlink',  'viewBox'],
+     'path'      : ['d'],
+     'textpath'  : ['xlink:href'],
+     'tspan'     : ['dy'],
      '__ALL__': ['class', 'id'],
    },
 

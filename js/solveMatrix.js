@@ -92,6 +92,8 @@ var matrixSolver = new function () {
             EventHelpers.addEvent(me.form['showVendorPrefixes'], 'change', me.submitEvent);
             EventHelpers.addEvent(window, 'hashchange', hashChangeEvent);
             EventHelpers.addEvent(me.form['hideUI'], 'change', me.hideUIChangeEvent);
+            EventHelpers.addEvent(window, 'scroll', me.repaintEvent);
+            EventHelpers.addEvent(window, 'resize', me.repaintEvent);
             
             me.hideUIChangeEvent();
             me.submitEvent(null, false, true);
@@ -129,6 +131,18 @@ var matrixSolver = new function () {
         }
     };
     
+    me.repaintEvent = function(e) {
+        
+        // This prevents the "streaking" of transforms
+        // inside of Firefox 39 and lower by forcing a 
+        // repaint.
+        grid.el.style.opacity = 0.99;
+        setTimeout(function() {
+            grid.el.style.opacity = 1;
+        }, 10);
+        
+    }
+    
     me.hideUIChangeEvent = function (e) {
         var hideUI = me.form['hideUI'];
         
@@ -149,11 +163,26 @@ var matrixSolver = new function () {
         var dialog = $('info-dialog')
         
         
-        
-        if (location.hash === '#' || location.hash === '') {
-            me.form.reset();
-            
+        switch (location.hash) {
+            case '#':
+            case '':
+                me.form.reset();
+                break;
+            case '#tv':
+                location.hash = '#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8iB2a2ywgFgCYA6ATgA5Ww9AKylshSkIBshHtzn96rQu2LcUNQgUK966kOKhDCIjNnYFhamuaiTWrPexbsr4ApJV6wE3lznzWRWVVFABnOABjAA0qMMiATVjwiIB1KhJkgAl0lABLYEIoAGUEACMsXJgAAgBhAAsAQwA7AHMkULzgdigAJXakaoAxEDgsFDqYLAAbGpAmmCR5qAAeAAcAPgAVOtzQqt2qqdyANyQqhbxq3KaqhqrSqZAIgGsqpCmkLEXqmEbqxr2pSQi3OcGaoTQIy+wCqCFC1xa5zqZywDXguTwYGAAAoAJRVNAIJoRGC5OacABQFOWpTgVQA9OsaXTGRTtgcDnMpuRblVgJ8QJwqlUICAqk0QNUgbcpg1RkhgFTlvSNigIqFQrN5t8oAAqKoAbwppRAeAAtPCAF4IgBc9xG-LgZpNeAA3BSAL5U+n6gCqxOwX3m+zQVXIIAQVQA7s0fmKQKc4HB8mdfmd+WgGggptVQjByB89rr6RSAMT6Q0U4WlBovFqYInAO2ltBoCLtiKuqrHXa5Uq5I75u07YD8prur1lkDsSvV2vPesRppNqqljsRVsT736qv6ooRODAm6hRqrM4pu6mLC7qoTGCrG30+lRl+cKNIUrwhYRED8mAIGhkwaKZQk4H8sHpH9+UgjUYNCC1T3aThVjqVYql3Ety0IAAaVdp1ne550XRs7QQOApmxAByO8HyfaFcgaMBOBaXIUPIMDsHpeiGnpNAAClCCQGoACEACssAAWRAABRY4EHpFi2OY3I0Eo-EHnnd1hR-R44DtKMdgWLSCTmGALVyS0kDta5kWTGBjKjfJfjtVgcBwVY3SrW8kFyFoJhctyPPdE04EdM0wWAXI4TtIQcAAUgZKpeDi90EyQOA0EeKM7R7eEHiQLcp0IG0gUhQ9cPLdgSqQMqziNKof21eY7QAIha91VhAL8ySaO0Gk-EApgAgqKRoB8kpS41JRoLA7WS91kz8mA7TNdhJo+NBlqqVbJprOsG2XaymlsypgoddLwoaSLoqqNbEtiybJyKqpVgq-C0Pql6usqHq+oGoajK8yF5jNTMKm5VrZjI3J0qqAA5JAoxa3CWqh5N0uRqosDmLrVlrEbhWBsyrSsqpXKCryjiaJAzWRXz-KqQhjLGu0ImAiJsQe7bGd4dy8FxZmkEuM1gN83qGu+dKHKcuo7WIeL3VROAWPFnBGb5wqOPmBprlhz68dHW11YpycfVqIoihMuk0yqet8iqYsyztmFPr2hcDpXMiKJa3JUTaUJ6RgY5OFE1YWha-EqjVtWDMqM4JXCpAzzRYyQsdO0JWp4y6aWuXJECzzhU67q5jtQ9ZVJU5jLSjKsuHfIx3dT0qS8zowGKMoKmqTJNgkgAZW5l3NoogA';
+                return;
+            case '#building':
+                location.hash = '#CYewzAIgvALgTgVwKYDIBmcQFsAMAPKARh3U1wE8iSYR8oAWMMFGnS+kjbQygVgA5+LEIQIAmMADZhPKAHYmpbGIL0BwlVF4BOaTTGUw24WAJyFJygrEoAznADGADSgl7DgJqu7jgOpU3RwAJAJIAS2BCKABlBAAjLDCYAAIAYQALAEMAOwBzJFsUCLEoACUCpBSAMRA4LBR0mCwAG1SQbJgkDqgAHgAHAD5fJGTbLL6RkAQ4ZJ7bPpzkh2bM21sAUjBgACI4hDDm4DC8222BvYOjk4BuHoB6eZyB2cfspZW1zZ2YdKQ4JEyaE6cDOPz+AKBf3ur2ecwWb2Wqw2W22YPIAFoxpkJqDfuRRuMkND4bDXu8kV9tghTgNqcSngAoe6DFAONZtDpdGBQAACYSwfVqKW2bNsdzQ7RgYriSDiqweMHIzQKv0qADpRdtrgyGQAqZIAbwZcRAeExYQAXsdcgAuZImuDAP7ok14bUAXx1asFxxSRru+rlDgA1rlMAhssB0Q4QM1anb-sBrsldXcGZ6dQHkgBVbIxrBYLnJMJoZLkKbJADuORSNGSIAAbn84BERmDkk60JkEM0UrZFcrbCm0wBiESGhnJe2ZENhqaRu0jtBoByrhzJhthWxhOIHJLkO3pCJO7IenVjsQTqdB0PhhfJeA5R7-DpnhlZyf66IOf5dAnYkZW0yZIuCwT9kkaGA+htO47kreC1UrWVt06GMnRgBAaBbTJmlsDVsDuNCkEItYSNsTFCTwvp0j6ZJP1HEQABpkgvK8QMldEu0SZoD2SbYACFZVWAA5JBkC1Sd2I6dEkLCXJGjtE1Dm1KcYzjOA7UrI9Om1To8BgCjMlASs7TAPo8GSMyLJwe0VhDFSlljeMq20pAHMkysIh+O0OBwcyHN+OSFOSXz-J1DMx0IZI+mY1jaKNKdmmOJB0UC+SYDtHA1W0BysEyOBcmOO1iDCqc9IMnC5OyO0ACtqRgEtyG1CVpO3C0kDtfg5DC8r0UfbJbAlOo7QQPoJkcVY3IZdJyGorpbDtbsaDffCOkyZKZgS6KjKuW1khKt100zfVUmiaJ2JmdswwiYcGRHa7gDYrMAHkW0K7IcJAsgIJgKCFtgtAkocNVgzgO4+nBvowGiGqAHFbuvGdb3nYARrgZoAAptn5TJ8mlfZDmtNUar6XJtgASinGybK0pIRmyEB0X+CZMhgBybznCMozajr9pwMR6HM5I5EkfhSvtWonQ05IGeyKapzS4LCEkHA-MOqdBRQsJ2gTJAVgapsHMbP5AZAEyIOPLptSOhk1QuQmTgnFqDJ54qxF4MKMzVMF-kBYEnY412+e6w6vbRQyJgD1rLV5wgDpW6ko5dmO7QFqyHKOeYVl444krll043syT+sG2osDtWwHBwpAMbENUwGYwhyYckuhqwdFajkoq+aFnA30kopgDAGJ4kSFIggAFQAWQAGWSHJHtO6IgA';
+                return;
+            case '#mint':
+                location.hash = '#E4UwziAuBCCumQPYDsBMBeASuKACAYosALYBkAZsIsQAwAe6NFVtAno6UveqgCyeIa7AKwBOZtQCM7ScIAcAyQ1STF7AGy9+laqgZzeqpHvTqAzMIGp2ZlQLMNzlpGfaHVAE0RmAIukjAsCCkAJYekugAyrAARsQhkLgAwgAWAIbIAObgoR4Y2BCJhCSkKZDEADZJKJAgyJDoADwADgB8AKJpiZApILjx9QCEjQD0baQAxmBg1fV1DQACIcTNRIkARFNgI+Q12zEgMWnbYJCsFeC9UAB0W+sA3ABQzyMAVLgAqsgT1MTzuCFyLhWIhYLgAO4ZbqIXCIABuIGAwDCfR6fQ8IHIaVgFUSp3O4FwrxGjwAxIhJLgAN6PACQcJCYBCMRCFQSrAAXLgUmEMcgngBfZ7k1DUulHCYAa0yVFgyA8AFofhUiFyAhkwM00qB6k9laqITzaoLhRSADS4EVirUeDwhLJcmhPWm7eoKpkALxAXNQNBozToT1dkAVWPiFU5uHW0EOxwAciAgg9HsGFeCQCFMmUuTFEBUPCbHtcYiqpbhmmKLghEe6tRN7ZlHdcaHIQMQnja7Q7cE7HsRtZl7Y6nurkGBdiQ1cANRUuiAABoACn9dAAlE8MssuiEUFzWCAKhVcMIwLgQMcQArQZAN8gt5Ad8gFQlEduUErQfUufbyPaX082WQS9ekzbNcEkJ5wSNS9NTSCZvVwZBEHBadmkeIVHjeZJIkiXAJ1wNFcBlMIiRJUliI8MVaQlaVZXlLlYGACpF3WLdsm2fdD2uAArZpMnWVdcDACYqEPHtxKgl9EMQBVQGac8bzpVYmQfXdcFAWcHwRZ14URcgVXBLkeVtOpILCHouUkMwzEkAMnhArNIC5OQ-Ts9DngWSUQFYSg0j+U9OKPGkaAAUjFUdxyIYgpxnOcl0kP0V3XdzHgS0LwunMcJ2igjMrATSF0XBVZFctcTVwCrcFparcjMKJYniRIAAkABUAFkABlcAySikhw3JeHQJIMngipcmEdAJhVCBcnUSbppAIA'
+                return;
+            case '#speed':
+                location.hash = '#E4UwziAuBCCumQPYDsBMBeASuKACAYosALYBkAZsIsQAwAe6qAnBVbQJ6OqlL3oCsANho9ENTs36tqARgkAOACyiZDALQBmVCKRz0Adn4jK1VAy0skZ9II3KrC-aI0NBqec85LuAE0QaAEXRIYFgQUgBLHxl0AGVYACNiCMhcAGEACwBDZABzcEifDGwIVMISUgzIYgAbNJRIEGRIdAAeAAcAPjgImshWhOBO8oGh2PaQEB8AQgAoVoB6LtIAYzAweuamloABCOJ2olSAIjWwBfIG86ziEGAIlZy1R-bILIjkBbBIdhrwDMmkAAdGdjgBuWazABUuAA3rMEog6GowBEAF4fXIALlwiOAPjuakRdAhAF9IUDDh9UvCFjCElkVgBrXJUWDIHzPRA1Ig40A+MG4KELWbkyF03AAVWQK2ot2auAi5Fw7EQsFwAHccqkkLhEAA3O73Am4SAA3AE8hZWB9XDfX7gIUigDEiBkcNmuFxjJZbI5OOd5HIKxDKzJkNdqA9XoZzNZav9puAOTA7SyoGa4YjboANLhI9HcJdmmorckauwcccMtSpmoAIK3e6PZBpLKvd7IcGeosNNQakARXJVHGImoCnuynnAHEhFNpjOQCFexp0SAo7J+DU4mi4XcyGjtOj5oPkZe4P4IQmpxmYndAjQgYjnjVRM04xQ0Q8knsAocj3BP2-CFRWzd12jzAt2kLGoPhANQ-2HSB7yYc80x8Hw7z3CFiHTXIPh3c9V3XLJYNyZAcRWbY7ghYt11RNEQBxeR9CPCFiLUOdkDAS4SBxWB2gmYBHggCEMnYdoAW4nFrSQLMQQaTs7kLdDMLyHEDzY0DZglNJYliXtgFNc1WSiJ1ZmdUyfELCUAHl7nw5BSKLNhcCqSB2jALEFguWCViBJlgCWBZBEQQQADUMgAWXMmMfXjdkfH44AagACmOfYsnyc5kEmTleJRCYplQIEACt2lyY4AEovV3XcNRrRpcGQRA1FACYsiXHtY19BNOQYpjcAPVBFCPXBhGA7qiAJGdmpQEBz0QgCZAmrSvUOVFIAiFA+RAGpOoiQ1zwNO5yB5bc3KiAlkBAsVZkKDQ4kSZJUgACQAFSigAZXAcmsvTYkKRR0DbGVSMKfh0BWHkIEKQQoZhkAgA';
+                return;
         }
+        
+        
         
         me.submitEvent(null, false, true);
        
@@ -509,25 +538,31 @@ var matrixSolver = new function () {
     
     function doTransform(m, o1Hidden) {
         var matrixCSS, webkitMatrixCSS,
-            scriptedToken = me.form.showVendorPrefixes.checked?'solveMatrix.css.vendor':'solveMatrix.css.noVendor';
+            scriptedToken = me.form.showVendorPrefixes.checked?'solveMatrix.css.vendor':'solveMatrix.css.noVendor',
+            style, width, height;
             
         matrixCSS = StringHelpers.sprintf(
-            "matrix(%.3f, %.3f, %.3f, %.3f, %.3fpx, %.3fpx)", 
+            "matrix(%.3g, %.3g, %.3g, %.3g, %.3gpx, %.3gpx)", 
             m.e(1,1), m.e(2,1), m.e(1,2), m.e(2,2), m.e(1,3)  , m.e(2,3) 
         );
+        
+        style = CSSHelpers.getComputedStyle(matrixSolver.o2.el);
+        width = style.width;
+        height = style.height;
         
         webkitMatrixCSS = matrixCSS.replace(/px/g, '');
         
         
-        origin = StringHelpers.sprintf("%0.1fpx %0.1fpx", - formEl('from0x'), - formEl('from0y'));
-        //origin = "0 0"
-
+        origin = StringHelpers.sprintf("%0.1gpx %0.1gpx", - formEl('from0x'), - formEl('from0y'));
+        
         $('answer').innerHTML = config.getScriptedValue(
             scriptedToken, 
             {
                 mozCSS:    matrixCSS,
                 webkitCSS: webkitMatrixCSS,
-                origin:    origin
+                origin:    origin,
+                width:     width,
+                height:    height
             }
         )
         
@@ -558,7 +593,7 @@ var matrixSolver = new function () {
         for (var i=1; i<=4; i++) {
             for (var j=1; j<=4; j++) {
                 counter++;
-                sb.append(StringHelpers.sprintf('%.8f', m.e(j, i)));
+                sb.append(StringHelpers.sprintf('%.8g', m.e(j, i)));
                 
                 if (i!=4 || j !=4) {
                     sb.append(', ');
@@ -574,14 +609,20 @@ var matrixSolver = new function () {
         matrixCSS=sb.toString();
                 
         
-        origin = StringHelpers.sprintf("%fpx %fpx 0px", - formEl('from0x'), - formEl('from0y'));
+        origin = StringHelpers.sprintf("%gpx %gpx 0px", - formEl('from0x'), - formEl('from0y'));
+        
+        style = CSSHelpers.getComputedStyle(matrixSolver.o2.el);
+        width = style.width;
+        height = style.height;
         
         $('answer').innerHTML = config.getScriptedValue(
             scriptedToken, 
             {
                 mozCSS:    matrixCSS,
                 webkitCSS: matrixCSS,
-                origin:    origin
+                origin:    origin,
+                width:     width,
+                height:    height
             }
         );
         //StringHelpers.sprintf("transform: %s; <br />transform-origin: %s", matrixCSS, origin);
@@ -675,7 +716,6 @@ function Block (el) {
         grid.draggingObject = me.el; //EventHelpers.getEventTarget(e);
         
         
-        //var zIndex = CSSHelpers.getComputedStyle(me.el).zIndex;
         //me.el.style.zIndex = -1000;
         me.resizer.el.style.visibility = 'hidden';
         //CSSHelpers.addClass(me.el, 'top');

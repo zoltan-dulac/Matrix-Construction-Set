@@ -121,6 +121,10 @@ StringHelpers = new function(){
             if (rsf.indexOf('.') < 0 && flags.indexOf('#') >= 0) 
                 rsf = rsf + '.';
             rs = rse.length < rsf.length ? rse : rsf;
+            
+            // removes pesky exponential notation
+            rs = eval(rs);
+            
             return processFlags(flags, width, rs, arg);
         }
         converters['o'] = function(flags, width, precision, arg){
@@ -320,7 +324,7 @@ CSSHelpers = new function(){
     /*
      * getComputedStyle: code from http://blog.stchur.com/2006/06/21/css-computed-style/
      */
-    me.getComputedStyle = function(elem, style)
+    me.getComputedStyle = function(elem)
     {
       var computedStyle;
       if (typeof elem.currentStyle != 'undefined')
@@ -328,7 +332,7 @@ CSSHelpers = new function(){
       else
         { computedStyle = document.defaultView.getComputedStyle(elem, null); }
     
-      return computedStyle[style];
+      return computedStyle;
     }
     
     
