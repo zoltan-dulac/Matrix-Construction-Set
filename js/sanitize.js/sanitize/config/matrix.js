@@ -7,11 +7,10 @@ Sanitize.Config.MATRIX = {
  /* These are the allowed tags */
  elements: [
     'a', 'b', 'blockquote', 'br', 'caption', 'cite', 'code', 'col',
-    'colgroup', 'dd', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'colgroup', 'dd', 'div', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'i', 'img', 'li', 'ol', 'p', 'pre', 'q', 'small', 'strike', 'strong',
     'sub', 'sup', 'span', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'u',
-    'ul',
-    'svg', 'defs', 'path', 'text', 'textpath', 'tspan'
+    'ul'
     
     ],
 
