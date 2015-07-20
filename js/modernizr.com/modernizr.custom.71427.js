@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.0.0-alpha.3
- * Build http://v3.modernizr.com/download/#-capture-csspointerevents-csstransforms-csstransforms3d-directory-draganddrop-fileinput-formattribute-input-inputformaction-inputformenctype-inputformmethod-inputformtarget-inputtypes-localizednumber-oninput-preserve3d-search-domprefixes-prefixed-prefixedcss-prefixes-shiv-dontmin
+ * Build http://v3.modernizr.com/download/#-capture-csspointerevents-csstransforms-csstransforms3d-directory-draganddrop-fileinput-formattribute-input-inputformaction-inputformenctype-inputformmethod-inputformtarget-inputtypes-localizednumber-oninput-preserve3d-search-touchevents-domprefixes-prefixed-prefixedcss-prefixes-shiv-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -554,30 +554,6 @@
   var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
   ModernizrProto._domPrefixes = domPrefixes;
   
-/*!
-{
-  "name": "CSS Supports",
-  "property": "supports",
-  "caniuse": "css-featurequeries",
-  "tags": ["css"],
-  "builderAliases": ["css_supports"],
-  "notes": [{
-    "name": "W3 Spec",
-    "href": "http://dev.w3.org/csswg/css3-conditional/#at-supports"
-  },{
-    "name": "Related Github Issue",
-    "href": "github.com/Modernizr/Modernizr/issues/648"
-  },{
-    "name": "W3 Info",
-    "href": "http://dev.w3.org/csswg/css3-conditional/#the-csssupportsrule-interface"
-  }]
-}
-!*/
-
-  var newSyntax = 'CSS' in window && 'supports' in window.CSS;
-  var oldSyntax = 'supportsCSS' in window;
-  Modernizr.addTest('supports', newSyntax || oldSyntax);
-
 
   var createElement = function() {
     if (typeof document.createElement !== 'function') {
@@ -589,6 +565,39 @@
     }
   };
   
+/*!
+{
+  "name": "CSS Pointer Events",
+  "caniuse": "pointer-events",
+  "property": "csspointerevents",
+  "authors": ["ausi"],
+  "tags": ["css"],
+  "builderAliases": ["css_pointerevents"],
+  "notes": [
+    {
+      "name": "MDN Docs",
+      "href": "http://developer.mozilla.org/en/CSS/pointer-events"
+    },{
+      "name": "Test Project Page",
+      "href": "http://ausi.github.com/Feature-detection-technique-for-pointer-events/"
+    },{
+      "name": "Test Project Wiki",
+      "href": "http://github.com/ausi/Feature-detection-technique-for-pointer-events/wiki"
+    },
+    {
+      "name": "Related Github Issue",
+      "href": "http://github.com/Modernizr/Modernizr/issues/80"
+    }
+  ]
+}
+!*/
+
+  Modernizr.addTest('csspointerevents', function() {
+    var element = createElement('x');
+    element.style.cssText = 'pointer-events:auto';
+    return element.style.pointerEvents === 'auto';
+  });
+
 /*!
 {
   "name": "Drag & Drop",
@@ -822,36 +831,27 @@ E.g. IE 10 (and below), don't support this
 
 /*!
 {
-  "name": "CSS Pointer Events",
-  "caniuse": "pointer-events",
-  "property": "csspointerevents",
-  "authors": ["ausi"],
+  "name": "CSS Supports",
+  "property": "supports",
+  "caniuse": "css-featurequeries",
   "tags": ["css"],
-  "builderAliases": ["css_pointerevents"],
-  "notes": [
-    {
-      "name": "MDN Docs",
-      "href": "http://developer.mozilla.org/en/CSS/pointer-events"
-    },{
-      "name": "Test Project Page",
-      "href": "http://ausi.github.com/Feature-detection-technique-for-pointer-events/"
-    },{
-      "name": "Test Project Wiki",
-      "href": "http://github.com/ausi/Feature-detection-technique-for-pointer-events/wiki"
-    },
-    {
-      "name": "Related Github Issue",
-      "href": "http://github.com/Modernizr/Modernizr/issues/80"
-    }
-  ]
+  "builderAliases": ["css_supports"],
+  "notes": [{
+    "name": "W3 Spec",
+    "href": "http://dev.w3.org/csswg/css3-conditional/#at-supports"
+  },{
+    "name": "Related Github Issue",
+    "href": "github.com/Modernizr/Modernizr/issues/648"
+  },{
+    "name": "W3 Info",
+    "href": "http://dev.w3.org/csswg/css3-conditional/#the-csssupportsrule-interface"
+  }]
 }
 !*/
 
-  Modernizr.addTest('csspointerevents', function() {
-    var element = createElement('x');
-    element.style.cssText = 'pointer-events:auto';
-    return element.style.pointerEvents === 'auto';
-  });
+  var newSyntax = 'CSS' in window && 'supports' in window.CSS;
+  var oldSyntax = 'supportsCSS' in window;
+  Modernizr.addTest('supports', newSyntax || oldSyntax);
 
 
   var inputElem = createElement('input');
@@ -1150,6 +1150,56 @@ Modernizr.input.step
 
   var testStyles = ModernizrProto.testStyles = injectElementWithStyles;
   
+/*!
+{
+  "name": "Touch Events",
+  "property": "touchevents",
+  "caniuse" : "touch",
+  "tags": ["media", "attribute"],
+  "notes": [{
+    "name": "Touch Events spec",
+    "href": "http://www.w3.org/TR/2013/WD-touch-events-20130124/"
+  }],
+  "warnings": [
+    "Indicates if the browser supports the Touch Events spec, and does not necessarily reflect a touchscreen device"
+  ],
+  "knownBugs": [
+    "False-positive on some configurations of Nokia N900",
+    "False-positive on some BlackBerry 6.0 builds – https://github.com/Modernizr/Modernizr/issues/372#issuecomment-3112695"
+  ]
+}
+!*/
+/* DOC
+Indicates if the browser supports the W3C Touch Events API.
+
+This *does not* necessarily reflect a touchscreen device:
+
+* Older touchscreen devices only emulate mouse events
+* Modern IE touch devices implement the Pointer Events API instead: use `Modernizr.pointerevents` to detect support for that
+* Some browsers & OS setups may enable touch APIs when no touchscreen is connected
+* Future browsers may implement other event models for touch interactions
+
+See this article: [You Can't Detect A Touchscreen](http://www.stucox.com/blog/you-cant-detect-a-touchscreen/).
+
+It's recommended to bind both mouse and touch/pointer events simultaneously – see [this HTML5 Rocks tutorial](http://www.html5rocks.com/en/mobile/touchandmouse/).
+
+This test will also return `true` for Firefox 4 Multitouch support.
+*/
+
+  // Chrome (desktop) used to lie about its support on this, but that has since been rectified: http://crbug.com/36415
+  Modernizr.addTest('touchevents', function() {
+    var bool;
+    if(('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+      bool = true;
+    } else {
+      var query = ['@media (',prefixes.join('touch-enabled),('),'heartz',')','{#modernizr{top:9px;position:absolute}}'].join('');
+      testStyles(query, function( node ) {
+        bool = node.offsetTop === 9;
+      });
+    }
+    return bool;
+  });
+
 /*!
 {
   "name": "Form Validation",

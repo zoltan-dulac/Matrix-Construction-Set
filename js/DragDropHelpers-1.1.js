@@ -155,7 +155,6 @@ var DragDropHelpers = new function () {
         /* Allows us to style objects that are/anen't currently dragging */
         for (i=0; i<draggableNodes.length; i++) {
             var draggableNode = draggableNodes[i];
-            console.log(CSSHelpers);
             if (draggableNode === el) {
                 CSSHelpers.addClass(draggableNode, 'currentlyDragging');
             } else {
@@ -248,6 +247,12 @@ var DragDropHelpers = new function () {
                 x: e.layerX,
                 y: e.layerY
             }
+        } else if (e.pageX) {
+            var target = e.currentTarget;   
+            r = {
+                x: e.pageX - CSSHelpers.getAbsoluteLeft(target),
+                y: e.pageY - CSSHelpers.getAbsoluteTop(target)
+            }
         } else if (e.offsetX) {
             r = {
                 x: e.offsetX,
@@ -255,7 +260,8 @@ var DragDropHelpers = new function () {
             }
             
             
-        } else {
+        
+        }else {
             r = null;
         }
         

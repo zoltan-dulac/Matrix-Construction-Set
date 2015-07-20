@@ -17,6 +17,11 @@
   "bower_components/dialog-polyfill/dialog-polyfill.css">
   <style id="custom-html">
   </style>
+  
+  <script>
+    var iosDragDropShim = { enableEnterLeave: true }
+  </script>
+  
 </head>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
@@ -406,7 +411,7 @@ height: @height@;<br />
     
     <script src="bower_components/config/js/config.js">
     </script> 
-             
+             <script src="js/ios-html5-drag-drop-shim/ios-drag-drop.js"></script>
     <script src="js/modernizr.com/modernizr.custom.71427.js">
     </script> 
     <script src=
