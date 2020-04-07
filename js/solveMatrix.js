@@ -703,7 +703,6 @@ function Block (el) {
     me.resizer = null;
     
     function init(){
-        
             EventHelpers.addEvent(el, 'dragstart', dragStartEvent, true);
             EventHelpers.addEvent(el, 'drag', dragEvent);
             EventHelpers.addEvent(el, 'dragend', dragEndEvent);
@@ -712,13 +711,24 @@ function Block (el) {
             EventHelpers.addEvent(el, 'drop', dropEvent, false)
     }
     
+    
+    
     function dragStartEvent(e) {
+        var coords;
         
         e.dataTransfer.effectAllowed="move"; 
         
         // you must set some data in order to drag an arbitrary block element like a <div>
         e.dataTransfer.setData('Text', 'ffff');
-        var coords = {x: e.offsetX, y: e.offsetY}; //DragDropHelpers.getEventCoords(e);
+        console.log('ping', e.layerX, e.offsetX);
+        if (e.offsetX !== undefined) {
+            coords = {x: e.offsetX, y: e.offsetY};
+        } else {
+            coords = {x: e.layerX, y: e.layerY}
+        }
+        
+        console.log('drag start', coords.x, coords.y);
+         //DragDropHelpers.getEventCoords(e);
         var dt = e.dataTransfer;
         
         
@@ -867,6 +877,7 @@ function Point(pointEl) {
     function dragStartEvent(e) {
         
         var coords = DragDropHelpers.getEventCoords(e);
+        console.log('coords', coords.x, coords.y);
         // you must set some data in order to drag an arbitrary block element like a <div>
         e.dataTransfer.setData('Text', 'ffff');
         
@@ -1127,7 +1138,7 @@ var grid = new function () {
             me.draggingObject.style.zIndex = "";
         }
         
-        
+        console.log('drop: ', moveCoords.x, moveCoords.y);
         matrixSolver.setForm(moveCoords);
         
         

@@ -24,7 +24,7 @@
 
     doc.addEventListener("touchstart", touchstart);
   }
-
+  
   function DragDrop(event, el) {
 
     this.dragData = {};
@@ -32,6 +32,10 @@
     this.dragImage = null;
     this.dragImageTransform = null;
     this.dragImageWebKitTransform = null;
+    this.layerX = event.layerX;
+    this.layerY = event.layerY;
+    this.pageX = event.pageX;
+    this.pageY = event.pageY;
     this.el = el || event.target;
 
     log("dragstart");
@@ -228,6 +232,7 @@
       var evt = doc.createEvent("Event"),
           self = this;
       evt.initEvent("dragstart", true, true);
+      console.log('this', this);
       evt.dataTransfer = {
         setData: function(type, val) {
           this.dragData[type] = val;
@@ -247,6 +252,10 @@
                self.primeOfDragImage = img;
         }
       };
+      evt.layerX = this.layerX;
+      evt.layerY = this.layerY;
+      evt.pageX = this.pageX;
+      evt.pageY = this.pageY;
       this.el.dispatchEvent(evt);
     },
     createDragImage: function() {
@@ -287,7 +296,6 @@
 
       this.translateDragImage(-9999, -9999);
 
-      console.log('appending ', this.dragImage.outerHTML);
       doc.body.appendChild(this.dragImage);
     }
   }
